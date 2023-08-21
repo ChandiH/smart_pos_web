@@ -39,7 +39,7 @@ class App extends Component {
               <Route path="/inventory/discounts" component={Discount} />
               <Route path="/inventory" component={Inventory} />
               {/* Customer Management */}
-              <Route path="/customers/new" component={CustomerForm} />
+              <Route path="/customers/:id" component={CustomerForm} />
               <Route path="/customers" component={Customers} />
               {/* Common */}
               <Route path="/dashboard" component={Dashboard} />

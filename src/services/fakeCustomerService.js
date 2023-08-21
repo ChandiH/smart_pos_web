@@ -93,12 +93,12 @@ export function saveCustomer(customer) {
   let customerInDb = customers.find((c) => c.id === customer.id) || {};
   customerInDb.name = customer.name;
   customerInDb.contact = customer.contact;
-  customerInDb.visitCount = customer.visitCount;
-  customerInDb.totalSpent = customer.totalSpent;
-  customerInDb.pointCount = customer.pointCount;
+  customerInDb.visitCount = 0;
+  customerInDb.totalSpent = 0;
+  customerInDb.pointCount = 0;
 
   if (!customerInDb.id) {
-    customerInDb.id = Date.now().toString();
+    customerInDb.id = customers.length + 1;
     customers.push(customerInDb);
   }
 
