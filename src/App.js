@@ -1,20 +1,21 @@
 import React, { Component } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
-// import Movies from "./components/movies";
-import Login from "./screens/login";
-import Dashboard from "./screens/dashboard";
-import Customers from "./screens/customer/customer";
-import Inventory from "./screens/inventory/inventory";
-import NotFound from "./screens/notFound";
+import {
+  Login,
+  Dashboard,
+  NotFound,
+  Customers,
+  CustomerForm,
+  Inventory,
+  ProductForm,
+  Discount,
+  Categories,
+  EmployeeList,
+  EmployeeForm,
+  UserRoles,
+} from "./screens";
 import NavBar from "./components/NavBar/navBar";
 import "./App.css";
-import EmployeeList from "./screens/employee/employee";
-import UserRoles from "./screens/employee/userRoles";
-import Discount from "./screens/inventory/discount";
-import Categories from "./screens/inventory/categories";
-import CustomerForm from "./screens/customer/customerForm";
-import EmployeeForm from "./screens/employee/employeeForm";
-import ProductForm from "./screens/inventory/productForm";
 
 class App extends Component {
   render() {

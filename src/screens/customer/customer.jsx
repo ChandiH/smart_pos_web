@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import CustomerTable from "../../components/customer/customerTable";
-import ListGroup from "../../components/common/listGroup";
 import Pagination from "../../components/common/pagination";
 import {
   getCustomers,
@@ -60,7 +59,7 @@ class Customers extends Component {
       filtered = allCustomers.filter(
         (m) =>
           m.name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
-          m.id == searchQuery
+          m.id.toString() === searchQuery
       );
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
