@@ -30,7 +30,7 @@ class App extends Component {
           >
             <Switch>
               {/* Employees Management */}
-              <Route path="/employee/new" component={EmployeeForm} />
+              <Route path="/employee/:id" component={EmployeeForm} />
               <Route path="/employee/roles" component={UserRoles} />
               <Route path="/employee" component={EmployeeList} />
               {/* Inventory Management */}
