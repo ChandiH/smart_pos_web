@@ -43,16 +43,16 @@ function App() {
             >
               <Switch>
                 {/* Employees Management */}
-                <Route path="/employee/new" component={EmployeeForm} />
+                <Route path="/employee/:id" component={EmployeeForm} />
                 <Route path="/employee/roles" component={UserRoles} />
                 <Route path="/employee" component={EmployeeList} />
                 {/* Inventory Management */}
-                <Route path="/inventory/new" component={ProductForm} />
+                <Route path="/inventory/:id" component={ProductForm} />
                 <Route path="/inventory/categories" component={Categories} />
                 <Route path="/inventory/discounts" component={Discount} />
                 <Route path="/inventory" component={Inventory} />
                 {/* Customer Management */}
-                <Route path="/customers/new" component={CustomerForm} />
+                <Route path="/customers/:id" component={CustomerForm} />
                 <Route path="/customers" component={Customers} />
                 {/* Common */}
                 <Route path="/dashboard" component={Dashboard} />
