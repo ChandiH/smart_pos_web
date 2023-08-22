@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import UserContext from "../../context/UserContext";
 
 const NavBar = () => {
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <Link className="navbar-brand mx-3" to="/">
@@ -12,7 +15,7 @@ const NavBar = () => {
           Welcome,
         </span>
         <span className="row" style={{ color: "black", fontSize: 15 }}>
-          Kumar Sangakkara
+          {currentUser.name}
         </span>
       </div>
 
@@ -71,13 +74,19 @@ const NavBar = () => {
         </span>
       </div>
 
-      <span style={{ color: "black", fontSize: 15 }}>Employee Name</span>
+      <span style={{ color: "black", fontSize: 15 }}>{currentUser.name}</span>
       <img
         src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
         style={{ width: 40, aspectRatio: 1, marginLeft: 10, marginRight: 10 }}
         className="rounded-circle shadow-4"
         alt="Avatar"
       />
+      <button
+        className="btn btn-primary mx-3"
+        onClick={() => setCurrentUser(null)}
+      >
+        LogOut
+      </button>
     </nav>
   );
 };
