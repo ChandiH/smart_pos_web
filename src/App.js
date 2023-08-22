@@ -34,7 +34,7 @@ class App extends Component {
               <Route path="/employee/roles" component={UserRoles} />
               <Route path="/employee" component={EmployeeList} />
               {/* Inventory Management */}
-              <Route path="/inventory/new" component={ProductForm} />
+              <Route path="/inventory/:id" component={ProductForm} />
               <Route path="/inventory/categories" component={Categories} />
               <Route path="/inventory/discounts" component={Discount} />
               <Route path="/inventory" component={Inventory} />
