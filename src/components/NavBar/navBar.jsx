@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   return (
@@ -75,7 +75,7 @@ const NavBar = () => {
       <img
         src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
         style={{ width: 40, aspectRatio: 1, marginLeft: 10, marginRight: 10 }}
-        class="rounded-circle shadow-4"
+        className="rounded-circle shadow-4"
         alt="Avatar"
       />
     </nav>
