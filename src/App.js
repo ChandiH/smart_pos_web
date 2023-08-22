@@ -15,19 +15,18 @@ import {
   UserRoles,
 } from "./screens";
 import NavBar from "./components/NavBar/navBar";
+import SideBar from "./components/NavBar/sideBar";
 import "./App.css";
+import "./components/NavBar/sideBar.css";
 
 class App extends Component {
   render() {
     return (
       <React.Fragment>
         <NavBar />
-        <div className="row" style={{ backgroundColor: "#282C35" }}>
-          {/* <div className="col-3"><SideBar /></div> */}
-          <div
-            className="col"
-            style={{ backgroundColor: "white", borderWidth: 5 }}
-          >
+        <div className="row" style={{ height: "100hv" }}>
+          <SideBar />
+          <div className="container-fluid col">
             <Switch>
               {/* Employees Management */}
               <Route path="/employee/new" component={EmployeeForm} />
