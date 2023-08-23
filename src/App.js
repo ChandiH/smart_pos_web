@@ -6,21 +6,23 @@ import {
   NotFound,
   Customers,
   CustomerForm,
-  Inventory,
+  ProductCatalog,
   ProductForm,
   Discount,
   Categories,
   EmployeeList,
   EmployeeForm,
   UserRoles,
+  UpdateInventory,
+  StockUpdateForm,
 } from "./screens";
 import NavBar from "./components/NavBar/navBar";
 import UserContext from "./context/UserContext";
 import "./App.css";
 
 function App() {
-  // const [currentUser, setCurrentUser] = useState({ name: "somesh Chandimal" });
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState({ name: "somesh Chandimal" });
+  // const [currentUser, setCurrentUser] = useState(null);
 
   return (
     <UserContext.Provider
@@ -47,10 +49,15 @@ function App() {
                 <Route path="/employee/roles" component={UserRoles} />
                 <Route path="/employee" component={EmployeeList} />
                 {/* Inventory Management */}
-                <Route path="/inventory/:id" component={ProductForm} />
+                <Route path="/inventory/catalog" component={ProductCatalog} />
                 <Route path="/inventory/categories" component={Categories} />
                 <Route path="/inventory/discounts" component={Discount} />
-                <Route path="/inventory" component={Inventory} />
+                <Route
+                  path="/inventory/update/:id"
+                  component={StockUpdateForm}
+                />
+                <Route path="/inventory/update" component={UpdateInventory} />
+                <Route path="/inventory/:id" component={ProductForm} />
                 {/* Customer Management */}
                 <Route path="/customers/:id" component={CustomerForm} />
                 <Route path="/customers" component={Customers} />

@@ -9,6 +9,8 @@ class ProductForm extends Form {
       name: "",
       description: "",
       category: "",
+      weight: "",
+      units: "",
       buyingPrice: "",
       retailPrice: "",
       barcode: "",
@@ -21,7 +23,13 @@ class ProductForm extends Form {
    *  name: "Muffin Chocolate Individual Wrap",
    *  description: "Pork - Tenderloin, Frozen",
    *  category: "Comedy|Drama|Romance",
-   *  image: "http://dummyimage.com/180x100.png/cc0000/ffffff",
+   *  image: [
+      "https://placehold.co/600x400/png",
+      "https://placehold.co/200x200/png",
+      "https://placehold.co/200x200/png",
+    ],
+   * weight: "1.5",
+   * units: "10",
    *  buyingPrice: "$48.67",
    *  retailPrice: "$8.85",
    *  barcode: "55154-5980",
@@ -32,6 +40,8 @@ class ProductForm extends Form {
     name: Joi.string().required().label("Name"),
     description: Joi.string().label("Description"),
     category: Joi.string().label("Category"),
+    weight: Joi.number().label("Weight"),
+    units: Joi.number().label("Units"),
     buyingPrice: Joi.string().label("Buying Price"),
     retailPrice: Joi.string().label("Retail Price"),
     barcode: Joi.string().label("Barcode"),
@@ -53,6 +63,8 @@ class ProductForm extends Form {
       name: product.name,
       description: product.description,
       category: product.category,
+      weight: product.weight,
+      units: product.units,
       buyingPrice: product.buyingPrice,
       retailPrice: product.retailPrice,
       barcode: product.barcode,
@@ -65,15 +77,6 @@ class ProductForm extends Form {
 
     this.props.history.push("/inventory");
   };
-  /*  name: "Muffin Chocolate Individual Wrap",
-   *  description: "Pork - Tenderloin, Frozen",
-   *  category: "Comedy|Drama|Romance",
-   *  image: "http://dummyimage.com/180x100.png/cc0000/ffffff",
-   *  buyingPrice: "$48.67",
-   *  retailPrice: "$8.85",
-   *  barcode: "55154-5980",
-   *  supplier_id: 98,
-   */
 
   render() {
     return (
@@ -85,6 +88,8 @@ class ProductForm extends Form {
           {this.renderInput("category", "Category")}
           {this.renderInput("buyingPrice", "Buying Price")}
           {this.renderInput("retailPrice", "Retail Price")}
+          {this.renderInput("weight", "Weight")}
+          {this.renderInput("units", "Units")}
           {this.renderInput("barcode", "Barcode")}
           {this.renderInput("supplier_id", "Supplier ID", "number")}
           <div className="my-3">{this.renderButton("Save")}</div>{" "}

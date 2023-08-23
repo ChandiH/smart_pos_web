@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Table from "../common/table";
 
-class ProductTable extends Component {
+class StockTable extends Component {
   columns = [
     {
       path: "name",
@@ -10,16 +10,23 @@ class ProductTable extends Component {
     { path: "category", label: "Category" },
     { path: "buyingPrice", label: "Buying Price" },
     { path: "retailPrice", label: "Retail Price" },
-    { path: "weight", label: "Weight" },
     { path: "barcode", label: "Barcode" },
-    { path: "supplier_id", label: "Supplier ID" },
+    {
+      key: "select",
+      content: (product) => (
+        <button
+          onClick={() => this.props.onSelect(product)}
+          className="btn btn-danger btn-sm"
+        >
+          Select
+        </button>
+      ),
+    },
   ];
   //     name: "Muffin Chocolate Individual Wrap",
   //     description: "Pork - Tenderloin, Frozen",
   //     category: "Comedy|Drama|Romance",
   //     image: "http://dummyimage.com/180x100.png/cc0000/ffffff",
-  //     weight: "1.5",
-  //     units: "10",
   //     buyingPrice: "$48.67",
   //     retailPrice: "$8.85",
   //     barcode: "55154-5980",
@@ -39,4 +46,4 @@ class ProductTable extends Component {
   }
 }
 
-export default ProductTable;
+export default StockTable;

@@ -4,10 +4,10 @@ import { paginate } from "../../utils/paginate";
 import Pagination from "../../components/common/pagination";
 import SearchBox from "../../components/common/searchBox";
 import { getProducts } from "../../services/fakeProductService";
-import ProductTable from "../../components/inventory/productTable";
+import StockTable from "../../components/inventory/stockTable";
 import _ from "lodash";
 
-class Inventory extends Component {
+class UpdateInventory extends Component {
   state = {
     products: [],
     currentPage: 1,
@@ -27,6 +27,10 @@ class Inventory extends Component {
     this.setState({ products });
 
     // deleteProduct(product.id);
+  };
+
+  handleSelect = (product) => {
+    this.props.history.push(`/inventory/update/${product.product_id}`);
   };
 
   handlePageChange = (page) => {
@@ -78,11 +82,6 @@ class Inventory extends Component {
       <div className="container my-3">
         <p>Showing {totalCount} Products in the database.</p>
         <div className="row my-3">
-          <div className="col-3">
-            <NavLink className="btn btn-primary" to="/inventory/new">
-              Add new Product
-            </NavLink>
-          </div>
           <div className="col-9">
             <SearchBox
               value={searchQuery}
@@ -90,12 +89,17 @@ class Inventory extends Component {
               placeholder={"Search... (name or barcode)"}
             />
           </div>
+          <div className="col-3">
+            <NavLink className="btn btn-primary" to="/inventory/new">
+              Add new Product
+            </NavLink>
+          </div>
         </div>
-        <ProductTable
+        <StockTable
           products={products}
           sortColumn={sortColumn}
           onLike={this.handleLike}
-          onDelete={this.handleDelete}
+          onSelect={this.handleSelect}
           onSort={this.handleSort}
         />
         <Pagination
@@ -109,4 +113,4 @@ class Inventory extends Component {
   }
 }
 
-export default Inventory;
+export default UpdateInventory;
