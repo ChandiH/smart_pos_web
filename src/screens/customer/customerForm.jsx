@@ -15,7 +15,7 @@ class CustomerForm extends Form {
   schema = {
     _id: Joi.string(),
     name: Joi.string().required().label("Name"),
-    contact: Joi.string().required().label("Contact"),
+    contact: Joi.number().required().label("Contact"),
   };
 
   componentDidMount() {

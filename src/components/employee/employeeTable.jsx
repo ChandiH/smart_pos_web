@@ -9,7 +9,7 @@ class EmployeeTable extends Component {
     },
     { path: "phone", label: "Contact" },
     { path: "email", label: "Email" },
-    { path: "role", label: "Role" },
+    { path: "userRole_name", label: "Role" },
     { path: "branch", label: "Branch" },
   ];
   //   columns = [

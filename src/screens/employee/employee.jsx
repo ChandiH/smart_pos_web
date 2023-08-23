@@ -20,6 +20,7 @@ class Employee extends Component {
   };
 
   componentDidMount() {
+    console.log("Employee - Mounted", getEmployees());
     this.setState({ employees: getEmployees() });
   }
 
@@ -54,7 +55,6 @@ class Employee extends Component {
     } = this.state;
 
     let filtered = allEmployees;
-    console.log("all", allEmployees);
     if (searchQuery)
       filtered = allEmployees.filter(
         (m) =>

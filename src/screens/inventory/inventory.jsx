@@ -51,7 +51,7 @@ class Inventory extends Component {
     } = this.state;
 
     let filtered = allProducts;
-    console.log("all", allProducts);
+
     if (searchQuery)
       filtered = allProducts.filter(
         (m) =>
@@ -87,7 +87,7 @@ class Inventory extends Component {
             <SearchBox
               value={searchQuery}
               onChange={this.handleSearch}
-              placeholder={"Search... (name or id)"}
+              placeholder={"Search... (name or barcode)"}
             />
           </div>
         </div>
