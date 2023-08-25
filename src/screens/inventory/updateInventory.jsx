@@ -3,9 +3,9 @@ import { NavLink } from "react-router-dom";
 import { paginate } from "../../utils/paginate";
 import Pagination from "../../components/common/pagination";
 import SearchBox from "../../components/common/searchBox";
-import { getProducts } from "../../services/fakeProductService";
 import StockTable from "../../components/inventory/stockTable";
 import _ from "lodash";
+import { getInventory } from "../../services/fakeInventoryService";
 
 class UpdateInventory extends Component {
   state = {
@@ -17,7 +17,16 @@ class UpdateInventory extends Component {
   };
 
   componentDidMount() {
-    this.setState({ products: getProducts() });
+    const inventory = getInventory();
+    const updatedInventory = inventory.map((item) => {
+      return {
+        ...item,
+        lastUpdated: item.stock.length
+          ? item.stock[0].updatedAt
+          : "out of stock",
+      };
+    });
+    this.setState({ products: [...updatedInventory] });
   }
 
   handleDelete = (product) => {

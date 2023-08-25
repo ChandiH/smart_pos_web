@@ -1,9 +1,13 @@
 import React, { Component } from "react";
-import { getInventoryByProduct } from "../../services/fakeInventoryService";
+import {
+  getInventoryByProduct,
+  updateInventory,
+} from "../../services/fakeInventoryService";
 
 class StockUpdateForm extends Component {
   state = {
     product: {
+      product_id: "",
       name: "",
       description: "",
       category: "",
@@ -15,13 +19,30 @@ class StockUpdateForm extends Component {
       barcode: "",
       supplier_id: "",
       stock: [],
+      lastUpdated: "",
     },
     quantity: 0,
   };
 
   componentDidMount() {
     const product = getInventoryByProduct(this.props.match.params.id);
-    this.setState({ product });
+    this.setState({
+      product: {
+        ...product,
+        lastUpdated: product.stock.length
+          ? product.stock[0].updatedAt
+          : "out of stock",
+        stock: product.stock.length
+          ? product.stock
+          : [
+              {
+                product_id: product.product_id,
+                quantity: 0,
+                updatedAt: "out of stock",
+              },
+            ],
+      },
+    });
   }
 
   handleIncrement = () => {
@@ -36,7 +57,16 @@ class StockUpdateForm extends Component {
     this.setState({ quantity: Number(e.target.value) });
   };
 
-  updateBtnClick = () => {};
+  updateBtnClick = () => {
+    if (this.state.quantity === 0)
+      return this.props.history.push("/inventory/update");
+    const updatedInfo = updateInventory(
+      this.state.product.stock[0],
+      this.state.quantity
+    );
+    console.log(updatedInfo);
+    this.props.history.push("/inventory/update");
+  };
 
   getQuantity = () => {
     let quantity = 0;

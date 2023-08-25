@@ -311,7 +311,14 @@ export function getInventory() {
     const quantityInfo = inventory.filter(
       (i) => i.product_id === product.product_id
     );
-    product.stock = [...quantityInfo];
+    product.stock = quantityInfo
+      ? [...quantityInfo]
+      : {
+          product_id: product.product_id,
+          branch_id: "",
+          quantity: 0,
+          updatedAt: "out of stock",
+        };
     inventoryInfo.push(product);
   });
   return inventoryInfo;
@@ -345,4 +352,24 @@ export function getInventoryByBranchAndProduct(branchId, productId) {
   return inventory.filter(
     (i) => i.branch_id === branchId && i.product_id === productId
   );
+}
+
+export function updateInventory(previousStock, newStock) {
+  console.log(previousStock, newStock);
+  const inventoryCopy = inventory;
+  const index = inventoryCopy.indexOf(previousStock);
+  if (index) {
+    const updatedStock = {
+      product_id: previousStock.product_id,
+      branch_id: "",
+      quantity: newStock,
+      updatedAt: new Date().toDateString(),
+    };
+    inventoryCopy.push(updatedStock);
+    return updatedStock;
+  } else {
+    inventoryCopy[index].quantity += newStock;
+    inventoryCopy[index].updatedAt = new Date().toDateString();
+    return inventoryCopy[index];
+  }
 }
