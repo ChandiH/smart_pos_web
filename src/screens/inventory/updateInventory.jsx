@@ -8,8 +8,6 @@ import AccessFrame from "../../components/accessFrame";
 import _ from "lodash";
 import { getInventory } from "../../services/fakeInventoryService";
 
-import { getProducts } from "../../services/fakeProductService";
-
 class UpdateInventory extends Component {
   state = {
     products: [],
@@ -94,7 +92,7 @@ class UpdateInventory extends Component {
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}
-        onDenied={() => this.props.history.push("/access-denied")}
+        onDenied={() => this.props.history.replace("/access-denied")}
       >
         <div className="container my-3">
           <p>Showing {totalCount} Products in the database.</p>

@@ -48,7 +48,7 @@ class CustomerForm extends Form {
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}
-        onDenied={() => this.props.history.push("/access-denied")}
+        onDenied={() => this.props.history.replace("/access-denied")}
       >
         <div className="container my-3">
           <h1>Add New Customer</h1>

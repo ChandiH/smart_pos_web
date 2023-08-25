@@ -86,18 +86,19 @@ export function getCustomers() {
 }
 
 export function getCustomer(id) {
-  return customers.find((c) => c.id === id);
+  return customers.find((c) => c.id.toString() === id);
 }
 
 export function saveCustomer(customer) {
-  let customerInDb = customers.find((c) => c.id === customer.id) || {};
+  let customerInDb =
+    customers.find((c) => c.id.toString() === customer.id) || {};
   customerInDb.name = customer.name;
   customerInDb.contact = customer.contact;
   customerInDb.visitCount = 0;
   customerInDb.totalSpent = 0;
   customerInDb.pointCount = 0;
 
-  if (!customerInDb.id) {
+  if (!customers.find((c) => c.id.toString() === customer.id)) {
     customerInDb.id = customers.length + 1;
     customers.push(customerInDb);
   }

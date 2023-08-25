@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import AccessFrame from "../../components/accessFrame";
 
-import { getInventoryByProduct } from "../../services/fakeInventoryService";
+import {
+  getInventoryByProduct,
+  updateInventory,
+} from "../../services/fakeInventoryService";
 
 class StockUpdateForm extends Component {
   state = {
@@ -86,7 +89,7 @@ class StockUpdateForm extends Component {
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}
-        onDenied={() => this.props.history.push("/access-denied")}
+        onDenied={() => this.props.history.replace("/access-denied")}
       >
         <div className="container my-3">
           <h2>Stock Update Form for {product.name}</h2>
