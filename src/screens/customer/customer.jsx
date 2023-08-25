@@ -2,13 +2,15 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import CustomerTable from "../../components/customer/customerTable";
 import Pagination from "../../components/common/pagination";
+import { paginate } from "../../utils/paginate";
+import SearchBox from "../../components/common/searchBox";
+import AccessFrame from "../../components/accessFrame";
+import _ from "lodash";
+
 import {
   getCustomers,
   deleteCustomer,
 } from "../../services/fakeCustomerService";
-import { paginate } from "../../utils/paginate";
-import _ from "lodash";
-import SearchBox from "../../components/common/searchBox";
 
 class Customers extends Component {
   state = {
@@ -17,6 +19,7 @@ class Customers extends Component {
     pageSize: 10,
     searchQuery: "",
     sortColumn: { path: "name", order: "asc" },
+    accessLevel: "customers",
   };
 
   componentDidMount() {
@@ -78,36 +81,41 @@ class Customers extends Component {
     const { totalCount, data: customers } = this.getPagedData();
 
     return (
-      <div className="container my-3">
-        <p>Showing {totalCount} Customers in the database.</p>
-        <div className="row my-3">
-          <div className="col-3">
-            <NavLink className="btn btn-primary" to="/customers/new">
-              Add new Customer
-            </NavLink>
+      <AccessFrame
+        accessLevel={this.state.accessLevel}
+        onDenied={() => this.props.history.push("/access-denied")}
+      >
+        <div className="container my-3">
+          <p>Showing {totalCount} Customers in the database.</p>
+          <div className="row my-3">
+            <div className="col-3">
+              <NavLink className="btn btn-primary" to="/customers/new">
+                Add new Customer
+              </NavLink>
+            </div>
+            <div className="col-9">
+              <SearchBox
+                value={searchQuery}
+                onChange={this.handleSearch}
+                placeholder={"Search... (name or id)"}
+              />
+            </div>
           </div>
-          <div className="col-9">
-            <SearchBox
-              value={searchQuery}
-              onChange={this.handleSearch}
-              placeholder={"Search... (name or id)"}
-            />
-          </div>
+          <CustomerTable
+            customers={customers}
+            sortColumn={sortColumn}
+            onLike={this.handleLike}
+            onDelete={this.handleDelete}
+            onSort={this.handleSort}
+          />
+          <Pagination
+            itemsCount={totalCount}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChange={this.handlePageChange}
+          />
         </div>
-        <CustomerTable
-          customers={customers}
-          sortColumn={sortColumn}
-          onLike={this.handleLike}
-          onDelete={this.handleDelete}
-          onSort={this.handleSort}
-        />
-        <Pagination
-          itemsCount={totalCount}
-          pageSize={pageSize}
-          currentPage={currentPage}
-          onPageChange={this.handlePageChange}
-        />
-      </div>
+      </AccessFrame>
     );
   }
 }

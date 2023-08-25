@@ -1,6 +1,8 @@
 import React from "react";
 import Joi from "joi-browser";
 import Form from "../../components/common/form";
+import AccessFrame from "../../components/accessFrame";
+
 import { getProduct, saveProduct } from "../../services/fakeProductService";
 
 class ProductForm extends Form {
@@ -17,24 +19,8 @@ class ProductForm extends Form {
       supplier_id: "",
     },
     errors: {},
+    accessLevel: "productForm",
   };
-
-  /* sample data
-   *  name: "Muffin Chocolate Individual Wrap",
-   *  description: "Pork - Tenderloin, Frozen",
-   *  category: "Comedy|Drama|Romance",
-   *  image: [
-      "https://placehold.co/600x400/png",
-      "https://placehold.co/200x200/png",
-      "https://placehold.co/200x200/png",
-    ],
-   * weight: "1.5",
-   * units: "10",
-   *  buyingPrice: "$48.67",
-   *  retailPrice: "$8.85",
-   *  barcode: "55154-5980",
-   *  supplier_id: 98,
-   */
 
   schema = {
     name: Joi.string().required().label("Name"),
@@ -80,21 +66,26 @@ class ProductForm extends Form {
 
   render() {
     return (
-      <div className="container my-3">
-        <h1>Add New Product</h1>
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("name", "Name")}
-          {this.renderInput("description", "Description")}
-          {this.renderInput("category", "Category")}
-          {this.renderInput("buyingPrice", "Buying Price")}
-          {this.renderInput("retailPrice", "Retail Price")}
-          {this.renderInput("weight", "Weight")}
-          {this.renderInput("units", "Units")}
-          {this.renderInput("barcode", "Barcode")}
-          {this.renderInput("supplier_id", "Supplier ID", "number")}
-          <div className="my-3">{this.renderButton("Save")}</div>{" "}
-        </form>
-      </div>
+      <AccessFrame
+        accessLevel={this.state.accessLevel}
+        onDenied={() => this.props.history.push("/access-denied")}
+      >
+        <div className="container my-3">
+          <h1>Add New Product</h1>
+          <form onSubmit={this.handleSubmit}>
+            {this.renderInput("name", "Name")}
+            {this.renderInput("description", "Description")}
+            {this.renderInput("category", "Category")}
+            {this.renderInput("buyingPrice", "Buying Price")}
+            {this.renderInput("retailPrice", "Retail Price")}
+            {this.renderInput("weight", "Weight")}
+            {this.renderInput("units", "Units")}
+            {this.renderInput("barcode", "Barcode")}
+            {this.renderInput("supplier_id", "Supplier ID", "number")}
+            <div className="my-3">{this.renderButton("Save")}</div>{" "}
+          </form>
+        </div>
+      </AccessFrame>
     );
   }
 }

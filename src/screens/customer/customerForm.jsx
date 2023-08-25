@@ -1,6 +1,8 @@
 import React from "react";
 import Joi from "joi-browser";
 import Form from "../../components/common/form";
+import AccessFrame from "../../components/accessFrame";
+
 import { getCustomer, saveCustomer } from "../../services/fakeCustomerService";
 
 class CustomerForm extends Form {
@@ -10,6 +12,7 @@ class CustomerForm extends Form {
       contact: "",
     },
     errors: {},
+    accessLevel: "customerForm",
   };
 
   schema = {
@@ -43,14 +46,19 @@ class CustomerForm extends Form {
 
   render() {
     return (
-      <div className="container my-3">
-        <h1>Add New Customer</h1>
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("name", "Name")}
-          {this.renderInput("contact", "Contact")}
-          <div className="my-3">{this.renderButton("Save")}</div>{" "}
-        </form>
-      </div>
+      <AccessFrame
+        accessLevel={this.state.accessLevel}
+        onDenied={() => this.props.history.push("/access-denied")}
+      >
+        <div className="container my-3">
+          <h1>Add New Customer</h1>
+          <form onSubmit={this.handleSubmit}>
+            {this.renderInput("name", "Name")}
+            {this.renderInput("contact", "Contact")}
+            <div className="my-3">{this.renderButton("Save")}</div>{" "}
+          </form>
+        </div>
+      </AccessFrame>
     );
   }
 }

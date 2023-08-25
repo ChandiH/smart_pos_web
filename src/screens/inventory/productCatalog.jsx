@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { paginate } from "../../utils/paginate";
 import Pagination from "../../components/common/pagination";
-import SearchBox from "../../components/common/searchBox";
-import { getProducts } from "../../services/fakeProductService";
 import ProductTable from "../../components/inventory/productTable";
+import SearchBox from "../../components/common/searchBox";
+import AccessFrame from "./../../components/accessFrame";
 import _ from "lodash";
+
+import { getProducts } from "../../services/fakeProductService";
 
 class ProductCatalog extends Component {
   state = {
@@ -14,6 +16,7 @@ class ProductCatalog extends Component {
     pageSize: 20,
     searchQuery: "",
     sortColumn: { path: "name", order: "asc" },
+    accessLevel: "productCatalog",
   };
 
   componentDidMount() {
@@ -75,36 +78,41 @@ class ProductCatalog extends Component {
     const { totalCount, data: products } = this.getPagedData();
 
     return (
-      <div className="container my-3">
-        <p>Showing {totalCount} Products in the database.</p>
-        <div className="row my-3">
-          <div className="col-3">
-            <NavLink className="btn btn-primary" to="/inventory/new">
-              Add new Product
-            </NavLink>
+      <AccessFrame
+        accessLevel={this.state.accessLevel}
+        onDenied={() => this.props.history.push("/access-denied")}
+      >
+        <div className="container my-3">
+          <p>Showing {totalCount} Products in the database.</p>
+          <div className="row my-3">
+            <div className="col-3">
+              <NavLink className="btn btn-primary" to="/inventory/new">
+                Add new Product
+              </NavLink>
+            </div>
+            <div className="col-9">
+              <SearchBox
+                value={searchQuery}
+                onChange={this.handleSearch}
+                placeholder={"Search... (name or barcode)"}
+              />
+            </div>
           </div>
-          <div className="col-9">
-            <SearchBox
-              value={searchQuery}
-              onChange={this.handleSearch}
-              placeholder={"Search... (name or barcode)"}
-            />
-          </div>
+          <ProductTable
+            products={products}
+            sortColumn={sortColumn}
+            onLike={this.handleLike}
+            onDelete={this.handleDelete}
+            onSort={this.handleSort}
+          />
+          <Pagination
+            itemsCount={totalCount}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChange={this.handlePageChange}
+          />
         </div>
-        <ProductTable
-          products={products}
-          sortColumn={sortColumn}
-          onLike={this.handleLike}
-          onDelete={this.handleDelete}
-          onSort={this.handleSort}
-        />
-        <Pagination
-          itemsCount={totalCount}
-          pageSize={pageSize}
-          currentPage={currentPage}
-          onPageChange={this.handlePageChange}
-        />
-      </div>
+      </AccessFrame>
     );
   }
 }

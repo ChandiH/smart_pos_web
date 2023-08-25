@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
+import NavBar from "./components/NavBar/navBar";
+import UserContext from "./context/UserContext";
 import {
   Login,
   Dashboard,
@@ -15,13 +17,22 @@ import {
   UserRoles,
   UpdateInventory,
   StockUpdateForm,
+  AccessDenied,
 } from "./screens";
-import NavBar from "./components/NavBar/navBar";
-import UserContext from "./context/UserContext";
 import "./App.css";
 
 function App() {
-  const [currentUser, setCurrentUser] = useState({ name: "somesh Chandimal" });
+  // ** REMOVE THIS AFTER TESTING **
+  // use when need to bypass login
+  const [currentUser, setCurrentUser] = useState({
+    id: 1,
+    name: "Somesh Chandimal",
+    userName: "Somesh",
+    email: "slahy0@trellian.com",
+    phone: "6953579061",
+    branch_id: 1,
+    userRole_id: 101,
+  });
   // const [currentUser, setCurrentUser] = useState(null);
 
   return (
@@ -65,6 +76,7 @@ function App() {
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/login" component={Login} />
                 <Route path="/not-found" component={NotFound} />
+                <Route path="/access-denied" component={AccessDenied} />
                 <Redirect from="/" exact to="/dashboard" />
                 <Redirect to="/not-found" />
               </Switch>

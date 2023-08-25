@@ -1,12 +1,11 @@
 import React from "react";
 import Joi from "joi-browser";
 import Form from "../../components/common/form";
+import AccessFrame from "../../components/accessFrame";
+
 import { getBranches } from "../../services/fakeBranchService";
-import {
-  getEmployee,
-  getUserRoles,
-  saveEmployee,
-} from "../../services/fakeEmployeeService";
+import { getEmployee, saveEmployee } from "../../services/fakeEmployeeService";
+import { getUserRoles } from "../../services/fakeAuthorizationService";
 
 class EmployeeForm extends Form {
   state = {
@@ -20,6 +19,7 @@ class EmployeeForm extends Form {
     branches: [],
     userRoles: [],
     errors: {},
+    accessLevel: "addEmployee",
   };
 
   schema = {
@@ -86,17 +86,22 @@ class EmployeeForm extends Form {
 
   render() {
     return (
-      <div className="container my-3">
-        <h1>Add New Employee</h1>
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("name", "Name")}
-          {this.renderInput("email", "Email")}
-          {this.renderInput("phone", "Contact")}
-          {this.renderSelect("branch", "Branch", this.state.branches)}
-          {this.renderSelect("userRole", "userRole", this.state.userRoles)}
-          <div className="my-3">{this.renderButton("Save")}</div>
-        </form>
-      </div>
+      <AccessFrame
+        accessLevel={this.state.accessLevel}
+        onDenied={() => this.props.history.push("/access-denied")}
+      >
+        <div className="container my-3">
+          <h1>Add New Employee</h1>
+          <form onSubmit={this.handleSubmit}>
+            {this.renderInput("name", "Name")}
+            {this.renderInput("email", "Email")}
+            {this.renderInput("phone", "Contact")}
+            {this.renderSelect("branch", "Branch", this.state.branches)}
+            {this.renderSelect("userRole", "userRole", this.state.userRoles)}
+            <div className="my-3">{this.renderButton("Save")}</div>
+          </form>
+        </div>
+      </AccessFrame>
     );
   }
 }

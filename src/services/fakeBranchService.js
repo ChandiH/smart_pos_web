@@ -1,9 +1,13 @@
 export const branches = [
-  { _id: "5b21ca3eeb7f6fbccd471818", name: "Moratuwa" },
-  { _id: "5b21ca3eeb7f6fbccd471814", name: "Colombo" },
-  { _id: "5b21ca3eeb7f6fbccd471820", name: "Negombo" },
+  { branch_id: 1, name: "Moratuwa" },
+  { branch_id: 2, name: "Colombo" },
+  { branch_id: 3, name: "Negombo" },
 ];
 
 export function getBranches() {
   return branches.filter((g) => g);
+}
+
+export function getBranch(id) {
+  return branches.find((g) => g.branch_id === id);
 }

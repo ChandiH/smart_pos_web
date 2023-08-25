@@ -5,6 +5,17 @@ import UserContext from "../../context/UserContext";
 const NavBar = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
+  const date = new Date();
+  var days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <Link className="navbar-brand mx-3" to="/">
@@ -30,12 +41,18 @@ const NavBar = () => {
         </div>
       </div>
 
-      <div className="col-1">
-        <span className="row" style={{ color: "black", fontSize: 10 }}>
-          Wednesday
+      <div className="col-1 mx-3">
+        <span
+          className="row"
+          style={{ color: "black", fontSize: 12, justifyContent: "end" }}
+        >
+          {days[date.getDay()]}
         </span>
-        <span className="row" style={{ color: "black", fontSize: 15 }}>
-          23 March 2023
+        <span
+          className="row"
+          style={{ color: "black", fontSize: 15, justifyContent: "end" }}
+        >
+          {date.toUTCString().slice(6, 16)}
         </span>
       </div>
 
@@ -48,7 +65,12 @@ const NavBar = () => {
         </span>
         <span
           className="row"
-          style={{ color: "black", fontSize: 15, justifyContent: "end" }}
+          style={{
+            color: "black",
+            fontSize: 15,
+            justifyContent: "end",
+            textAlign: "right",
+          }}
         >
           {currentUser.name}
         </span>
