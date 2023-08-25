@@ -1,14 +1,17 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import Pagination from "../../components/common/pagination";
+import { paginate } from "../../utils/paginate";
+import SearchBox from "../../components/common/searchBox";
+import EmployeeTable from "./../../components/employee/employeeTable";
+import AccessFrame from "../../components/accessFrame";
+import _ from "lodash";
+
 import {
   getEmployees,
   deleteEmployee,
 } from "../../services/fakeEmployeeService";
-import { paginate } from "../../utils/paginate";
-import _ from "lodash";
-import SearchBox from "../../components/common/searchBox";
-import EmployeeTable from "./../../components/employee/employeeTable";
+import { getBranch } from "../../services/fakeBranchService";
 
 class Employee extends Component {
   state = {
@@ -17,11 +20,16 @@ class Employee extends Component {
     pageSize: 10,
     searchQuery: "",
     sortColumn: { path: "name", order: "asc" },
+    accessLevel: "employee",
   };
 
   componentDidMount() {
-    console.log("Employee - Mounted", getEmployees());
-    this.setState({ employees: getEmployees() });
+    const employees = getEmployees();
+    const updatedEmployees = employees.map((employee) => {
+      const branch = getBranch(employee.branch_id);
+      return { ...employee, branch: branch.name };
+    });
+    this.setState({ employees: updatedEmployees });
   }
 
   handleDelete = (employee) => {
@@ -78,36 +86,41 @@ class Employee extends Component {
     const { totalCount, data: employees } = this.getPagedData();
 
     return (
-      <div className="container my-3">
-        <p>Showing {totalCount} Employees in the database.</p>
-        <div className="row my-3">
-          <div className="col-3">
-            <NavLink className="btn btn-primary" to="/employee/new">
-              Add new Employee
-            </NavLink>
+      <AccessFrame
+        accessLevel={this.state.accessLevel}
+        onDenied={() => this.props.history.replace("/access-denied")}
+      >
+        <div className="container my-3">
+          <p>Showing {totalCount} Employees in the database.</p>
+          <div className="row my-3">
+            <div className="col-3">
+              <NavLink className="btn btn-primary" to="/employee/new">
+                Add new Employee
+              </NavLink>
+            </div>
+            <div className="col-9">
+              <SearchBox
+                value={searchQuery}
+                onChange={this.handleSearch}
+                placeholder={"Search... (name or id)"}
+              />
+            </div>
           </div>
-          <div className="col-9">
-            <SearchBox
-              value={searchQuery}
-              onChange={this.handleSearch}
-              placeholder={"Search... (name or id)"}
-            />
-          </div>
+          <EmployeeTable
+            employees={employees}
+            sortColumn={sortColumn}
+            onLike={this.handleLike}
+            onDelete={this.handleDelete}
+            onSort={this.handleSort}
+          />
+          <Pagination
+            itemsCount={totalCount}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChange={this.handlePageChange}
+          />
         </div>
-        <EmployeeTable
-          employees={employees}
-          sortColumn={sortColumn}
-          onLike={this.handleLike}
-          onDelete={this.handleDelete}
-          onSort={this.handleSort}
-        />
-        <Pagination
-          itemsCount={totalCount}
-          pageSize={pageSize}
-          currentPage={currentPage}
-          onPageChange={this.handlePageChange}
-        />
-      </div>
+      </AccessFrame>
     );
   }
 }

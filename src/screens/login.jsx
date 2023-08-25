@@ -1,7 +1,8 @@
 import React from "react";
 import Joi from "joi-browser";
-import UserContext from "../context/UserContext";
 import Form from "../components/common/form";
+import UserContext from "../context/UserContext";
+
 import { authenticate } from "../services/fakeAuthenticationService";
 
 class Login extends Form {
@@ -22,7 +23,8 @@ class Login extends Form {
   doSubmit = () => {
     const user = authenticate(this.state.data);
     if (user) {
-      this.state.setUser({ name: user.userName });
+      this.state.setUser({ ...user });
+      console.log("user", user);
       this.props.history.replace("/dashboard");
     } else {
       const errors = { ...this.state.errors };

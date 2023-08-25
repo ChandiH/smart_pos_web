@@ -1,125 +1,101 @@
-const userRoles = [
-  {
-    userRole_id: 101,
-    name: "Owner",
-    description:
-      "The owner role has full control and authority over the business or organization. Owners make critical decisions and have access to all resources.",
-  },
-  {
-    userRole_id: 102,
-    name: "Manager",
-    description:
-      "Managers are responsible for overseeing daily operations and supervising staff. They have access to most resources and can make important decisions within their department.",
-  },
-  {
-    userRole_id: 103,
-    name: "Cashier",
-    description:
-      "Cashiers handle customer transactions, manage the cash register, and provide customer service. They have limited access to administrative functions.",
-  },
-  {
-    userRole_id: 104,
-    name: "Sales Associate",
-    description:
-      "Sales associates assist customers, promote products, and process sales. They have limited access to administrative functions and focus on sales-related tasks.",
-  },
-  {
-    userRole_id: 105,
-    name: "Guest",
-    description:
-      "Guests are customers or visitors who do not have any administrative privileges. They can browse products or services but cannot access the system's internal functions.",
-  },
-];
+import { getUserRoles } from "./fakeAuthorizationService";
 
 const employees = [
   {
     id: 1,
-    name: "Sascha Lahy",
+    name: "Somesh Chandimal",
+    userName: "Somesh",
     email: "slahy0@trellian.com",
     phone: "6953579061",
-    branch: "Moratuwa",
-    userRole_id: 102,
+    branch_id: 1,
+    userRole_id: 101,
   },
   {
     id: 2,
-    name: "Jeromy Striker",
+    name: "Hirushi Premarathna",
+    userName: "Hirushi",
     email: "jstriker1@ameblo.jp",
     phone: "7515823058",
-    branch: "Anuradhapura",
+    branch_id: 2,
     userRole_id: 102,
   },
   {
     id: 3,
-    name: "Serge Poundesford",
+    name: "Dinithi",
+    userName: "Dinithi",
     email: "spoundesford2@nifty.com",
     phone: "1301116352",
-    branch: "Awissawella",
-    userRole_id: 102,
+    branch_id: 3,
+    userRole_id: 103,
   },
   {
     id: 4,
     name: "Abigael Samsin",
+    userName: "Abigael",
     email: "asamsin3@newsvine.com",
     phone: "7866378501",
-    branch: "Moratuwa",
-    userRole_id: 103,
+    branch_id: 1,
+    userRole_id: 104,
   },
   {
     id: 5,
     name: "Frank Girardengo",
+    userName: "Frank",
     email: "fgirardengo4@walmart.com",
     phone: "9909919749",
-    branch: "Anuradhapura",
+    branch_id: 2,
     userRole_id: 103,
   },
   {
     id: 6,
     name: "Blithe McAllan",
+    userName: "Blithe",
     email: "bmcallan5@reverbnation.com",
     phone: "6827781736",
-    branch: "Awissawella",
+    branch_id: 2,
     userRole_id: 103,
   },
   {
     id: 7,
     name: "Malanie Newvell",
+    userName: "Malanie",
     email: "mnewvell6@mozilla.com",
     phone: "1534737151",
-    branch: "Moratuwa",
+    branch_id: 3,
     userRole_id: 103,
   },
   {
     id: 8,
     name: "Vanya Bette",
+    userName: "Vanya",
     email: "vbette7@weebly.com",
     phone: "4483033388",
-    branch: "Moratuwa",
+    branch_id: 3,
     userRole_id: 104,
   },
   {
     id: 9,
     name: "Karleen Orring",
+    userName: "Karleen",
     email: "korring8@github.io",
     phone: "7762133941",
-    branch: "Anuradhapura",
+    branch_id: 2,
     userRole_id: 104,
   },
   {
     id: 10,
     name: "Donella Leicester",
+    userName: "Donella",
     email: "dleicester9@joomla.org",
     phone: "9229496708",
-    branch: "Awissawella",
+    branch_id: 1,
     userRole_id: 104,
   },
 ];
 
-export function getUserRoles() {
-  return userRoles.filter((u) => u);
-}
-
 export function getEmployees() {
   const allEmployees = [...employees];
+  const userRoles = getUserRoles();
   allEmployees.forEach((employee) => {
     const userRole = userRoles.find(
       (c) => c.userRole_id === employee.userRole_id
