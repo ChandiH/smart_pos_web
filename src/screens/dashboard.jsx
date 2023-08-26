@@ -1,9 +1,27 @@
 import React from "react";
+import MonthlySaleChart from "../components/charts/monthlySaleChart";
+import MonthlyBranchChart from "../components/charts/monthlyBranchChart";
+import MonthlyProductChart from "./../components/charts/monthlyProductChart";
 
 const Dashboard = () => {
   return (
-    <div className="container">
-      <h1>Dashboard</h1>
+    <div className="col mt-3">
+      <div className="row">
+        <h3 className="mx-3">Sales by Day</h3>
+        <div className="mx-3">
+          <MonthlySaleChart height={350} width="95%" />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-6">
+          <h3 className="mx-3">Top Selling Branches</h3>
+          <MonthlyBranchChart height={250} width="100%" />
+        </div>
+        <div className="col-6">
+          <h3 className="mx-3">Top Selling Products</h3>
+          <MonthlyProductChart height={250} width="100%" />
+        </div>
+      </div>
     </div>
   );
 };
