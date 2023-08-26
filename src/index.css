@@ -16,3 +16,11 @@ code {
 .clickable {
   cursor: pointer;
 }
+
+.align-left{
+  text-align: left;
+}
+
+.align-right{
+  text-align: right;
+}

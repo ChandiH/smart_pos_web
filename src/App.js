@@ -18,8 +18,10 @@ import {
   UpdateInventory,
   StockUpdateForm,
   AccessDenied,
+  CashierSalePage,
 } from "./screens";
 import "./App.css";
+import CartContext from "./context/CartContext";
 
 function App() {
   // ** REMOVE THIS AFTER TESTING **
@@ -35,56 +37,59 @@ function App() {
   });
   // const [currentUser, setCurrentUser] = useState(null);
 
+  const [cart, setCart] = useState([]);
   return (
-    <UserContext.Provider
-      value={{ currentUser: currentUser, setCurrentUser: setCurrentUser }}
-    >
-      {!currentUser && (
-        <Switch>
-          <Route path="/login" component={Login} />
-          <Redirect to="/login" />
-        </Switch>
-      )}
-      {currentUser && (
-        <React.Fragment>
-          <NavBar />
-          <div className="row" style={{ backgroundColor: "#282C35" }}>
-            {/* <div className="col-3"><SideBar /></div> */}
-            <div
-              className="col"
-              style={{ backgroundColor: "white", borderWidth: 5 }}
-            >
-              <Switch>
-                {/* Employees Management */}
-                <Route path="/employee/:id" component={EmployeeForm} />
-                <Route path="/employee/roles" component={UserRoles} />
-                <Route path="/employee" component={EmployeeList} />
-                {/* Inventory Management */}
-                <Route path="/inventory/catalog" component={ProductCatalog} />
-                <Route path="/inventory/categories" component={Categories} />
-                <Route path="/inventory/discounts" component={Discount} />
-                <Route
-                  path="/inventory/update/:id"
-                  component={StockUpdateForm}
-                />
-                <Route path="/inventory/update" component={UpdateInventory} />
-                <Route path="/inventory/:id" component={ProductForm} />
-                {/* Customer Management */}
-                <Route path="/customers/:id" component={CustomerForm} />
-                <Route path="/customers" component={Customers} />
-                {/* Common */}
-                <Route path="/dashboard" component={Dashboard} />
-                <Route path="/login" component={Login} />
-                <Route path="/not-found" component={NotFound} />
-                <Route path="/access-denied" component={AccessDenied} />
-                <Redirect from="/" exact to="/dashboard" />
-                <Redirect to="/not-found" />
-              </Switch>
-            </div>
-          </div>
-        </React.Fragment>
-      )}
-    </UserContext.Provider>
+    <CartContext.Provider value={{ cart, setCart }}>
+      <UserContext.Provider
+        value={{ currentUser: currentUser, setCurrentUser: setCurrentUser }}
+      >
+        {!currentUser && (
+          <Switch>
+            <Route path="/login" component={Login} />
+            <Redirect to="/login" />
+          </Switch>
+        )}
+        {currentUser && (
+          <React.Fragment>
+            <NavBar />
+            {/* <div className="row" style={{ backgroundColor: "#282C35" }}>
+              <div className="col-3">
+                <SideBar />
+              </div>
+              <div
+                className="col"
+                style={{ backgroundColor: "white", borderWidth: 5 }}
+              > */}
+            <Switch>
+              {/* Employees Management */}
+              <Route path="/employee/:id" component={EmployeeForm} />
+              <Route path="/employee/roles" component={UserRoles} />
+              <Route path="/employee" component={EmployeeList} />
+              {/* Inventory Management */}
+              <Route path="/inventory/catalog" component={ProductCatalog} />
+              <Route path="/inventory/categories" component={Categories} />
+              <Route path="/inventory/discounts" component={Discount} />
+              <Route path="/inventory/update/:id" component={StockUpdateForm} />
+              <Route path="/inventory/update" component={UpdateInventory} />
+              <Route path="/inventory/:id" component={ProductForm} />
+              {/* Customer Management */}
+              <Route path="/customers/:id" component={CustomerForm} />
+              <Route path="/customers" component={Customers} />
+              {/* Common */}
+              <Route path="/sale" component={CashierSalePage} />
+              <Route path="/dashboard" component={Dashboard} />
+              <Route path="/login" component={Login} />
+              <Route path="/not-found" component={NotFound} />
+              <Route path="/access-denied" component={AccessDenied} />
+              <Redirect from="/" exact to="/dashboard" />
+              <Redirect to="/not-found" />
+            </Switch>
+            {/* </div> */}
+            {/* </div> */}
+          </React.Fragment>
+        )}
+      </UserContext.Provider>
+    </CartContext.Provider>
   );
 }
 

@@ -26,6 +26,9 @@ const NavBar = () => {
 
       <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div className="navbar-nav">
+          <NavLink className="nav-item nav-link" to="/sale">
+            Sale
+          </NavLink>
           <NavLink className="nav-item nav-link" to="/customers">
             Customers
           </NavLink>
