@@ -41,7 +41,7 @@ class CustomerForm extends Form {
   doSubmit = () => {
     saveCustomer(this.state.data);
 
-    this.props.history.push("/customers");
+    this.props.history.goBack();
   };
 
   render() {
@@ -55,7 +55,7 @@ class CustomerForm extends Form {
           <form onSubmit={this.handleSubmit}>
             {this.renderInput("name", "Name")}
             {this.renderInput("contact", "Contact")}
-            <div className="my-3">{this.renderButton("Save")}</div>{" "}
+            <div className="my-3">{this.renderButton("Save")}</div>
           </form>
         </div>
       </AccessFrame>

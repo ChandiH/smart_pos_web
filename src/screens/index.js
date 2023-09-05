@@ -3,7 +3,9 @@ export { default as Login } from "./login";
 export { default as Dashboard } from "./dashboard";
 export { default as NotFound } from "./notFound";
 export { default as AccessDenied } from "./accessDenied";
-export { default as CashierSalePage } from "./cashierSalePage";
+
+//Sale
+export { default as CashierSalePage } from "./sale/cashierSalePage";
 
 //Cutomer Management Screens
 export { default as Customers } from "./customer/customer";
