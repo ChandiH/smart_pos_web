@@ -18,9 +18,9 @@ const NavBar = () => {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <Link className="navbar-brand mx-3" to="/">
+      <NavLink className="navbar-brand mx-3" to="/">
         Smart POS
-      </Link>
+      </NavLink>
 
       <div className="col" />
 
@@ -87,6 +87,7 @@ const NavBar = () => {
       <button
         className="btn btn-primary mx-3"
         onClick={() => setCurrentUser(null)}
+        role="logOutButton"
       >
         LogOut
       </button>

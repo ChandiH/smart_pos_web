@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
-import UserContext from "../context/UserContext";
-import CartContext from "../context/CartContext";
-import SearchBox from "../components/common/searchBox";
-import SaleStockTable from "../components/inventory/saleStockTable";
-import SaleCartTable from "../components/inventory/saleCartTable";
+import UserContext from "../../context/UserContext";
+import CartContext from "../../context/CartContext";
+import SearchBox from "../../components/common/searchBox";
+import SaleStockTable from "../../components/sale/saleStockTable";
+import SaleCartTable from "../../components/sale/saleCartTable";
 import _ from "lodash";
 
-import { getInventoryByBranch } from "../services/fakeInventoryService";
-import { getCustomers } from "../services/fakeCustomerService";
-import { saveOrder } from "../services/fakeOrderService";
+import { getInventoryByBranch } from "../../services/fakeInventoryService";
+import { getCustomers } from "../../services/fakeCustomerService";
+import { saveOrder } from "../../services/fakeOrderService";
+import SummaryWindow from "../../components/sale/summaryWindow";
 
 const CashierSalePage = ({ history }) => {
   const accessLevel = "cashierSalePage";
@@ -31,6 +32,9 @@ const CashierSalePage = ({ history }) => {
   const { cart, setCart } = useContext(CartContext);
   const [productSearchQuery, setPoductSearchQuery] = useState("");
   const [customerSearchQuery, setCustomerSearchQuery] = useState("");
+
+  const [paymentMethod, setPaymentMethod] = useState("cash");
+  const [paymentDetails, setPaymentDetails] = useState(null);
 
   useEffect(() => {
     const products = getInventoryByBranch(currentUser.branch_id);
@@ -58,11 +62,11 @@ const CashierSalePage = ({ history }) => {
       return;
     }
     let filterCustomer = null;
-    if (customerSearchQuery) {
+    if (query) {
       filterCustomer = customers.filter(
         (m) =>
-          m.name.toLowerCase().startsWith(customerSearchQuery.toLowerCase()) ||
-          m.contact.toString() === customerSearchQuery
+          m.name.toLowerCase().startsWith(query.toLowerCase()) ||
+          m.contact.toString() === query
       );
     }
     if (filterCustomer && filterCustomer.length > 0) {
@@ -143,11 +147,30 @@ const CashierSalePage = ({ history }) => {
     return { data: sorted };
   };
 
+  const validateOrder = () => {
+    return cart.length > 0 && paymentDetails;
+  };
+
   const placeOrder = () => {
     console.log("order placed");
     saveOrder(currentUser, customer, cart);
     setCart([]);
     handleCustomerSearch("");
+    setPaymentMethod("cash");
+    setPaymentDetails("");
+  };
+
+  const paymentHandler = (paymentType) => {
+    if (paymentDetails === paymentType) return;
+    setPaymentMethod(paymentType);
+    setPaymentDetails("");
+  };
+
+  const getButtonProperties = (name) => {
+    if (name === paymentMethod) {
+      return "col btn border rounded-2 mx-2 btn-primary";
+    }
+    return "col btn btn-secondry border rounded-2 mx-2";
   };
 
   return (
@@ -244,7 +267,9 @@ const CashierSalePage = ({ history }) => {
               </dt>
               <dd className="col-5 align-right">
                 <h5>
-                  <b>Rs.{getTotalPrice() - getDiscount()}</b>
+                  <b>
+                    Rs.{parseFloat(getTotalPrice() - getDiscount()).toFixed(2)}
+                  </b>
                 </h5>
               </dd>
             </div>
@@ -256,31 +281,69 @@ const CashierSalePage = ({ history }) => {
           <h5>Payment Method</h5>
           <div className="col mt-2">
             <div className="row mb-2">
-              <div className=" col btn btn-primary border rounded-2 mx-2">
+              <button
+                className={getButtonProperties("cash")}
+                onClick={() => paymentHandler("cash")}
+              >
                 Cash
-              </div>
-              <div className="col btn btn-secondry border rounded-2">
+              </button>
+              <button
+                className={getButtonProperties("credit/debit")}
+                onClick={() => paymentHandler("credit/debit")}
+              >
                 Credit/Debit
-              </div>
+              </button>
             </div>
             <div className="row mb-2">
-              <div className=" col btn btn-secondry border rounded-2 mx-2">
+              <button
+                disabled
+                className={getButtonProperties("mobile")}
+                onClick={() => paymentHandler("mobile")}
+              >
                 Mobile Payment
-              </div>
-              <div className="col btn btn-secondry border rounded-2">
+              </button>
+              <button
+                className={getButtonProperties("loyalty")}
+                disabled={customer.name === "Guest Customer"}
+                onClick={() => paymentHandler("loyalty")}
+              >
                 Loyalty
-              </div>
+              </button>
             </div>
+            {paymentMethod === "cash" ? (
+              <>
+                <dt>Cash Given: </dt>
+                <input
+                  type="number"
+                  name="cash given"
+                  className="form-control mt-2"
+                  placeholder="amount given"
+                  value={paymentDetails}
+                  onChange={(data) =>
+                    setPaymentDetails(data.currentTarget.value)
+                  }
+                />
+              </>
+            ) : (
+              <>
+                <dt>Reference Number: </dt>
+                <input
+                  type="text"
+                  name="query"
+                  className="form-control mt-2"
+                  placeholder="type here"
+                  value={paymentDetails}
+                  onChange={(data) =>
+                    setPaymentDetails(data.currentTarget.value)
+                  }
+                />
+              </>
+            )}
           </div>
-
-          <input
-            type="text"
-            name="query"
-            className="form-control mx-2 mt-2"
-            placeholder="Bill Refference Number"
-          />
         </div>
+
         <hr />
+
         <div className="row">
           <div className="col-7">
             <input
@@ -291,9 +354,24 @@ const CashierSalePage = ({ history }) => {
               style={{ aspectRatio: 3 }}
             />
           </div>
-          <div className="btn btn-primary col-5 pt-3" onClick={placeOrder}>
+          <button
+            disabled={!validateOrder()}
+            className="btn btn-primary col-5 pt-3"
+            data-toggle="modal"
+            data-target="#popUpWindow"
+          >
             <h3>Bill</h3>
-          </div>
+          </button>
+          <SummaryWindow
+            id={"popUpWindow"}
+            cashierName={currentUser.name}
+            quantity={getTotalQuantity()}
+            discount={getDiscount()}
+            totalPrice={getTotalPrice()}
+            paymentMethod={paymentMethod}
+            paymentDetails={paymentDetails}
+            placeOrder={placeOrder}
+          />
         </div>
       </div>
     </div>
