@@ -12,22 +12,22 @@ const SummaryWindow = ({
 }) => {
   return (
     <div
-      class="modal fade"
+      className="modal fade"
       id={id}
-      tabindex="-1"
-      role="dialog"
+      tabIndex="-1"
+      role="ModalBase"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
+      <div className="modal-dialog" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title" id="exampleModalLabel">
               Confirm
             </h5>
             <button
               type="button"
-              class="close"
+              className="close"
               data-dismiss="modal"
               aria-label="Close"
             >
@@ -93,20 +93,20 @@ const SummaryWindow = ({
             )}
             <hr />
           </div>
-          <div class="modal-body">
+          <div className="modal-body">
             If bill is not printed use below 'Print Reciept' button to print
             again..
             <br /> otherwise confirm the order by pressing 'Get Next Order'
             button
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary">
+          <div className="modal-footer">
+            <button type="button" className="btn btn-primary">
               Print Reciept
             </button>
 
             <button
               type="button"
-              class="btn btn-primary"
+              className="btn btn-primary"
               data-dismiss="modal"
               onClick={placeOrder}
             >

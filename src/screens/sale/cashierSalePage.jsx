@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import UserContext from "../../context/UserContext";
 import CartContext from "../../context/CartContext";
 import SearchBox from "../../components/common/searchBox";
-import SaleStockTable from "../../components/inventory/saleStockTable";
-import SaleCartTable from "../../components/inventory/saleCartTable";
+import SaleStockTable from "../../components/sale/saleStockTable";
+import SaleCartTable from "../../components/sale/saleCartTable";
 import _ from "lodash";
 
 import { getInventoryByBranch } from "../../services/fakeInventoryService";

@@ -47,6 +47,7 @@ const SaleCartTable = ({ onSort, sortColumn }) => {
           >
             <button
               type="button"
+              data-testid="decrement"
               className="btn btn-outline-primary"
               onClick={() => handleCartProductDecrement(product)}
             >
@@ -60,6 +61,7 @@ const SaleCartTable = ({ onSort, sortColumn }) => {
             />
             <button
               type="button"
+              data-testid="increment"
               className="btn btn-outline-primary"
               onClick={() => handleCartProductIncrement(product)}
             >
@@ -85,6 +87,7 @@ const SaleCartTable = ({ onSort, sortColumn }) => {
         <button
           onClick={() => onRemoveFromCart(product)}
           className="btn btn-danger btn-sm"
+          data-testid="remove"
         >
           Remove
         </button>
