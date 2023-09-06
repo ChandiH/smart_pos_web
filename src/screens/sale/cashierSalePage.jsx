@@ -365,6 +365,7 @@ const CashierSalePage = ({ history }) => {
           <SummaryWindow
             id={"popUpWindow"}
             cashierName={currentUser.name}
+            customerName={customer.name}
             quantity={getTotalQuantity()}
             discount={getDiscount()}
             totalPrice={getTotalPrice()}

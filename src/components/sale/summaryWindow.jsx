@@ -4,6 +4,7 @@ const SummaryWindow = ({
   id,
   paymentMethod,
   cashierName,
+  customerName,
   quantity,
   discount,
   totalPrice,
@@ -40,7 +41,12 @@ const SummaryWindow = ({
               <div className="row">
                 <dt className="col-5 ">Cashier Name:</dt>
                 <dd className="col-7 align-right">{cashierName}</dd>
-
+                {customerName !== "Guest Customer" && (
+                  <>
+                    <dt className="col-5 ">Customer Name:</dt>
+                    <dd className="col-7 align-right">{customerName}</dd>
+                  </>
+                )}
                 <dt className="col-5 ">Total Quantity:</dt>
                 <dd className="col-7 align-right">{quantity}</dd>
 
