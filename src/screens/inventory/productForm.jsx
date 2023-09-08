@@ -4,6 +4,8 @@ import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
 
 import { getProduct, saveProduct } from "../../services/fakeProductService";
+import { getCategories } from "./../../services/fakeCategoryService";
+import SelectWithBtn from "./../../components/common/selectWithBtn";
 
 class ProductForm extends Form {
   state = {
@@ -18,6 +20,7 @@ class ProductForm extends Form {
       barcode: "",
       supplier_id: "",
     },
+    categories: [],
     errors: {},
     accessLevel: "productForm",
   };
@@ -34,7 +37,14 @@ class ProductForm extends Form {
     supplier_id: Joi.number().label("Supplier ID"),
   };
 
+  async fetchData() {
+    const categories = await getCategories();
+    console.log(categories);
+    this.setState({ categories });
+  }
+
   componentDidMount() {
+    this.fetchData();
     const productId = this.props.match.params.id;
     if (productId === "new") return;
 
@@ -75,7 +85,16 @@ class ProductForm extends Form {
           <form onSubmit={this.handleSubmit}>
             {this.renderInput("name", "Name")}
             {this.renderInput("description", "Description")}
-            {this.renderInput("category", "Category")}
+            <SelectWithBtn
+              label="Category"
+              placeHolder="Select Category"
+              error={this.state.errors["category"]}
+              options={this.state.categories}
+              btnTitle="Add New Category"
+              onClick={() =>
+                this.props.history.push("/inventory/categories/new")
+              }
+            />
             {this.renderInput("buyingPrice", "Buying Price")}
             {this.renderInput("retailPrice", "Retail Price")}
             {this.renderInput("weight", "Weight")}

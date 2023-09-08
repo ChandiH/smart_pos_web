@@ -88,7 +88,7 @@ const SummaryWindow = ({
                       <h5>
                         <b>
                           Rs.
-                          {parseInt(paymentDetails - totalPrice - discount)}
+                          {parseInt(paymentDetails - totalPrice + discount)}
                           .00
                         </b>
                       </h5>

@@ -32,6 +32,10 @@ class Employee extends Component {
     this.setState({ employees: updatedEmployees });
   }
 
+  handleSelect = (employee) => {
+    return this.props.history.push("/employee/profile", employee);
+  };
+
   handleDelete = (employee) => {
     const employees = this.state.employees.filter(
       (m) => m._id !== employee._id
@@ -110,6 +114,7 @@ class Employee extends Component {
             employees={employees}
             sortColumn={sortColumn}
             onLike={this.handleLike}
+            onSelect={this.handleSelect}
             onDelete={this.handleDelete}
             onSort={this.handleSort}
           />

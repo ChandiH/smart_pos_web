@@ -27,6 +27,7 @@ const userRoles = [
       "productCatalog",
       "productForm",
       "stockUpdateForm",
+      "addEmployee",
     ],
     description:
       "The owner role has full control and authority over the business or organization. Owners make critical decisions and have access to all resources.",

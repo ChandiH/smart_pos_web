@@ -108,7 +108,7 @@ export function getEmployees() {
 }
 
 export function getEmployee(id) {
-  return employees.find((c) => c.id === id);
+  return employees.find((c) => c.id == id);
 }
 
 export function saveEmployee(employee) {

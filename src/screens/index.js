@@ -3,6 +3,7 @@ export { default as Login } from "./login";
 export { default as Dashboard } from "./dashboard";
 export { default as NotFound } from "./notFound";
 export { default as AccessDenied } from "./accessDenied";
+export { default as ConfigScreen } from "./configScreen";
 
 //Sale
 export { default as CashierSalePage } from "./sale/cashierSalePage";
@@ -22,4 +23,5 @@ export { default as StockUpdateForm } from "./inventory/stockUpdateForm";
 //Employee Management Screens
 export { default as EmployeeList } from "./employee/employee";
 export { default as EmployeeForm } from "./employee/employeeForm";
+export { default as EmployeeProfile } from "./employee/employeeProfile";
 export { default as UserRoles } from "./employee/userRoles";

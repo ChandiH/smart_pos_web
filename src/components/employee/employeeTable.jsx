@@ -11,6 +11,17 @@ class EmployeeTable extends Component {
     { path: "email", label: "Email" },
     { path: "userRole_name", label: "Role" },
     { path: "branch", label: "Branch" },
+    {
+      key: "select",
+      content: (employee) => (
+        <button
+          onClick={() => this.props.onSelect(employee)}
+          className="btn btn-danger btn-sm"
+        >
+          Select
+        </button>
+      ),
+    },
   ];
   //   columns = [
   //     {

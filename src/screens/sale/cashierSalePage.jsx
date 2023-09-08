@@ -111,12 +111,10 @@ const CashierSalePage = ({ history }) => {
     let totalPrice = 0;
     if (cart.length !== 0) {
       cart.forEach((product) => {
-        totalPrice += parseFloat(
-          (product.quantity * product.retailPrice.slice(4)).toFixed(2)
-        );
+        totalPrice += product.quantity * product.retailPrice.slice(4);
       });
     }
-    return totalPrice;
+    return parseFloat(totalPrice).toFixed(2);
   };
 
   const getDiscount = () => {

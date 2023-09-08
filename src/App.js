@@ -5,6 +5,7 @@ import UserContext from "./context/UserContext";
 import {
   Login,
   Dashboard,
+  ConfigScreen,
   NotFound,
   Customers,
   CustomerForm,
@@ -14,6 +15,7 @@ import {
   Categories,
   EmployeeList,
   EmployeeForm,
+  EmployeeProfile,
   UserRoles,
   UpdateInventory,
   StockUpdateForm,
@@ -62,13 +64,14 @@ function App() {
               > */}
             <Switch>
               {/* Employees Management */}
-              <Route path="/employee/:id" component={EmployeeForm} />
               <Route path="/employee/roles" component={UserRoles} />
+              <Route path="/employee/profile" component={EmployeeProfile} />
+              <Route path="/employee/:id" component={EmployeeForm} />
               <Route path="/employee" component={EmployeeList} />
               {/* Inventory Management */}
               <Route path="/inventory/catalog" component={ProductCatalog} />
-              <Route path="/inventory/categories" component={Categories} />
               <Route path="/inventory/discounts" component={Discount} />
+              <Route path="/inventory/categories/:id" component={Categories} />
               <Route path="/inventory/update/:id" component={StockUpdateForm} />
               <Route path="/inventory/update" component={UpdateInventory} />
               <Route path="/inventory/:id" component={ProductForm} />
@@ -79,6 +82,7 @@ function App() {
               <Route path="/sale" component={CashierSalePage} />
               <Route path="/dashboard" component={Dashboard} />
               <Route path="/login" component={Login} />
+              <Route path="/config" component={ConfigScreen} />
               <Route path="/not-found" component={NotFound} />
               <Route path="/access-denied" component={AccessDenied} />
               <Redirect from="/" exact to="/dashboard" />
