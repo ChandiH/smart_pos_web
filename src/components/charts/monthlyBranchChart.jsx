@@ -16,7 +16,7 @@ const MonthlyBranchChart = ({ height, width, type = "bar" }) => {
     {
       name: "June",
       month: 6,
-      data: Array.from({ length: 3 }, () => getRandomNumber(0, 100)),
+      data: Array.from({ length: 3 }, () => getRandomNumber(0, 10)),
     },
     {
       name: "July",

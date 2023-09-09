@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import SelectWithBtn from "../../components/common/selectWithBtn";
 import { getUserRoles } from "../../services/fakeAuthorizationService";
 import { getBranches } from "../../services/fakeBranchService";
+import AccessFrame from "./../../components/accessFrame";
 
 const EmployeeProfile = ({ history, location }) => {
   const [employee, setEmployee] = useState({});
@@ -32,7 +33,10 @@ const EmployeeProfile = ({ history, location }) => {
   );
 
   return (
-    <>
+    <AccessFrame
+      accessLevel={"employeeDetails"}
+      onDenied={() => history.replace("/access-denied")}
+    >
       <div className="container my-3">
         <h2>Employee Profile</h2>
       </div>
@@ -66,7 +70,7 @@ const EmployeeProfile = ({ history, location }) => {
               </div>
               <hr />
               <SelectWithBtn
-                label="Assigned Branch"
+                label="Assigned New Branch"
                 placeHolder="Select Branch"
                 options={branches}
               />
@@ -79,7 +83,7 @@ const EmployeeProfile = ({ history, location }) => {
           </div>
         </div>
       </section>
-    </>
+    </AccessFrame>
   );
 };
 

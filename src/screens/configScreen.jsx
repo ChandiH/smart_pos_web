@@ -3,6 +3,7 @@ import Categories from "./inventory/categories";
 import { BiShow } from "react-icons/bi";
 import SearchBox from "../components/common/searchBox";
 import { getCategories } from "../services/fakeCategoryService";
+import AccessFrame from "../components/accessFrame";
 const option = Object.freeze({
   CATEGORY: "category",
 });
@@ -53,48 +54,53 @@ const ConfigScreen = ({ history }) => {
   };
 
   return (
-    <div className="container my-3">
-      <div className="row">
-        <div className="col-5">
-          <div className="card p-3 mb-3">
-            <h5 className="card-title mb-3">Inventory</h5>
-            {optionButton(
-              "Add new Category",
-              () => console.log("clicked"),
-              handleClickCategoryView
-            )}
-            {optionButton("Add new Supplier", () => console.log("clicked"))}
+    <AccessFrame
+      accessLevel={"configuration"}
+      onDenied={() => history.replace("/access-denied")}
+    >
+      <div className="container my-3">
+        <div className="row">
+          <div className="col-5">
+            <div className="card p-3 mb-3">
+              <h5 className="card-title mb-3">Inventory</h5>
+              {optionButton(
+                "Add new Category",
+                () => console.log("clicked"),
+                handleClickCategoryView
+              )}
+              {optionButton("Add new Supplier", () => console.log("clicked"))}
+            </div>
+            <div className="card p-3">
+              <h5 className="card-title mb-3">Access Rights</h5>
+              {optionButton(
+                "Edit User Roles",
+                () => history.push("/employee/roles"),
+                handleClickCategoryView
+              )}
+            </div>
           </div>
-          <div className="card p-3">
-            <h5 className="card-title mb-3">Access Rights</h5>
-            {optionButton(
-              "Edit User Roles",
-              () => history.push("/employee/roles"),
-              handleClickCategoryView
-            )}
-          </div>
-        </div>
 
-        <div className="col-6">
-          <div className="card p-3">
-            <SearchBox
-              value={searchQuery}
-              placeholder={placeHolder}
-              onChange={handleSearch}
-            />
-            <div className="card p-3 mt-3">
-              <ul class="list-group list-group-flush">
-                {filteredData.map((data, index) => (
-                  <li key={index} class="list-group-item">
-                    {data.name}
-                  </li>
-                ))}
-              </ul>
+          <div className="col-6">
+            <div className="card p-3">
+              <SearchBox
+                value={searchQuery}
+                placeholder={placeHolder}
+                onChange={handleSearch}
+              />
+              <div className="card p-3 mt-3">
+                <ul class="list-group list-group-flush">
+                  {filteredData.map((data, index) => (
+                    <li key={index} class="list-group-item">
+                      {data.name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </AccessFrame>
   );
 };
 

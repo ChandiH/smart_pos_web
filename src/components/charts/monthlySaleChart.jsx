@@ -17,12 +17,12 @@ const MonthlySaleChart = ({ height, width, type = "area" }) => {
     {
       name: "June",
       month: 6,
-      data: Array.from({ length: 30 }, () => getRandomNumber(0, 100)),
+      data: Array.from({ length: 30 }, () => getRandomNumber(0, 10)),
     },
     {
       name: "July",
       month: 7,
-      data: Array.from({ length: 30 }, () => getRandomNumber(0, 100)),
+      data: Array.from({ length: 30 }, () => getRandomNumber(0, 50)),
     },
     {
       name: "August",
