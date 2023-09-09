@@ -1,5 +1,5 @@
 import { screen, render } from "@testing-library/react";
-import Table from "./table";
+import Table from "../../components/common/table";
 
 describe("Table", () => {
   const props = {

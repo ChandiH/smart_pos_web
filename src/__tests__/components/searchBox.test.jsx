@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import user from "@testing-library/user-event";
-import SearchBox from "./searchBox";
+import SearchBox from "../../components/common/searchBox";
 
 describe("SearchBox", () => {
   test("should render a search box", () => {

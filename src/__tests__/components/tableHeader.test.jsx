@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import user from "@testing-library/user-event";
-import TableHeader from "./tableHeader";
+import TableHeader from "../../components/common/tableHeader";
 
 describe("TableHeader", () => {
   const props = {

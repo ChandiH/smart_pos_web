@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import EmployeeTable from "./employeeTable";
+import user from "@testing-library/user-event";
+import EmployeeTable from "../../components/employee/employeeTable";
 
 describe("EmployeeTable", () => {
   const props = {
@@ -31,5 +32,14 @@ describe("EmployeeTable", () => {
     render(<EmployeeTable {...props} />);
     const table = screen.getByRole("table");
     expect(table).toBeInTheDocument();
+  });
+
+  test("should select should call onSelect", async () => {
+    user.setup();
+    const onSelect = jest.fn();
+    render(<EmployeeTable {...props} onSelect={onSelect} />);
+    const button = screen.getAllByRole("button")[0];
+    await user.click(button);
+    expect(onSelect).toHaveBeenCalled();
   });
 });

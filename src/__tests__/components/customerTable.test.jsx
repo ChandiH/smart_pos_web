@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import CustomerTable from "./customerTable";
+import CustomerTable from "../../components/customer/customerTable";
 
 describe("CustomerTable", () => {
   const props = {

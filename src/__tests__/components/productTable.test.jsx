@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import ProductTable from "./productTable";
+import ProductTable from "../../components/inventory/productTable";
 
 describe("ProductTable", () => {
   const props = {

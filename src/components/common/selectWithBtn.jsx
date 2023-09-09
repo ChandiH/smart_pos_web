@@ -16,11 +16,13 @@ const SelectWithBtn = ({
       <div className="row mb-2">
         <div className="col-8">
           <select
-            class="form-select"
+            className="form-select"
             aria-label={label}
             disabled={selectDisabled}
           >
-            <option selected>{placeHolder ? placeHolder : "Select"}</option>
+            <option defaultValue={null}>
+              {placeHolder ? placeHolder : "Select"}
+            </option>
             {options.map((option, index) => (
               <option key={index} value={option._id}>
                 {option.name}

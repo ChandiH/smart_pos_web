@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Input from "./input";
+import Input from "../../components/common/input";
 
 describe("Input", () => {
   test("should render an Input properly", () => {

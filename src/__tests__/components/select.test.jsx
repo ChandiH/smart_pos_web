@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Select from "./select";
+import Select from "../../components/common/select";
 
 describe("Select", () => {
   const props = {

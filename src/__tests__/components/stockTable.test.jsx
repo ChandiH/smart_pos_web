@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import user from "@testing-library/user-event";
-import StockTable from "./stockTable";
+import StockTable from "../../components/inventory/stockTable";
 
 describe("StockTable", () => {
   const props = {

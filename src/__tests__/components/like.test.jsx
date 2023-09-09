@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Like from "./like";
+import Like from "../../components/common/like";
 
 describe("Like", () => {
   test("should render a Like properly", () => {

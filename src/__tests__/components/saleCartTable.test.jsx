@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import user from "@testing-library/user-event";
-import SaleCartTable from "./saleCartTable";
+import SaleCartTable from "../../components/sale/saleCartTable";
 import CartContext from "../../context/CartContext";
 
 const cartContextValue = {

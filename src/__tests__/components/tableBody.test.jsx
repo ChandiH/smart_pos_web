@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import TableBody from "./tableBody";
+import TableBody from "../../components/common/tableBody";
 
 describe("TableBody", () => {
   const props = {

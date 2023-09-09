@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import AccessFrame from "./accessFrame";
-import UserContext from "../context/UserContext";
+import AccessFrame from "../../components/accessFrame";
+import UserContext from "../../context/UserContext";
 
 /* // Sample UserRole
  *const userRole = {

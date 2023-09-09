@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import user from "@testing-library/user-event";
-import Pagination from "./pagination";
+import Pagination from "../../components/common/pagination";
 
 describe("Pagination", () => {
   const props = {

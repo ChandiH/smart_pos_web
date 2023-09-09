@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import user from "@testing-library/user-event";
-import ListGroup from "./listGroup";
+import ListGroup from "../../components/common/listGroup";
 
 describe("ListGroup", () => {
   const props = {

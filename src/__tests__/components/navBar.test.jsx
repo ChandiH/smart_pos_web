@@ -1,6 +1,6 @@
 import { screen, render } from "@testing-library/react";
 import user from "@testing-library/user-event";
-import NavBar from "./navBar";
+import NavBar from "../../components/NavBar/navBar";
 import { BrowserRouter } from "react-router-dom";
 import UserContext from "../../context/UserContext";
 
