@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import UserContext from "../../context/UserContext";
 
 const NavBar = () => {
@@ -58,7 +58,7 @@ const NavBar = () => {
           className="row"
           style={{ color: "black", fontSize: 15, justifyContent: "end" }}
         >
-          {date.toUTCString().slice(6, 16)}
+          {date.toUTCString().slice(5, 16)}
         </span>
       </div>
 
@@ -90,7 +90,7 @@ const NavBar = () => {
       <button
         className="btn btn-primary mx-3"
         onClick={() => setCurrentUser(null)}
-        role="logOutButton"
+        data-testId="logOutButton"
       >
         LogOut
       </button>

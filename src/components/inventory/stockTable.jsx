@@ -11,6 +11,7 @@ class StockTable extends Component {
     { path: "buyingPrice", label: "Buying Price" },
     { path: "retailPrice", label: "Retail Price" },
     { path: "barcode", label: "Barcode" },
+    { path: "quantity", label: "Stock" },
     { path: "lastUpdated", label: "Last Updated" },
     {
       key: "select",

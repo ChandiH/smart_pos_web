@@ -1,16 +1,11 @@
 import React, { useState } from "react";
-import Categories from "./inventory/categories";
-import { BiShow } from "react-icons/bi";
 import SearchBox from "../components/common/searchBox";
 import { getCategories } from "../services/fakeCategoryService";
 import AccessFrame from "../components/accessFrame";
-const option = Object.freeze({
-  CATEGORY: "category",
-});
 
 const ConfigScreen = ({ history }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [placeHolder, setPlaceHolder] = useState("Search ...");
+  const [placeHolder] = useState("Search ...");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 

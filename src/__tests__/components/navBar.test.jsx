@@ -39,7 +39,7 @@ describe("NavBar", () => {
   test("should render a logout button", () => {
     renderNavBar();
 
-    const logoutButton = screen.getByRole("logOutButton");
+    const logoutButton = screen.getByTestId("logOutButton");
     expect(logoutButton).toBeInTheDocument();
   });
 
@@ -47,7 +47,7 @@ describe("NavBar", () => {
     user.setup();
     renderNavBar();
 
-    const logoutButton = screen.getByRole("logOutButton");
+    const logoutButton = screen.getByTestId("logOutButton");
     await user.click(logoutButton);
     expect(userContextProp.value.setCurrentUser).toHaveBeenCalled();
   });

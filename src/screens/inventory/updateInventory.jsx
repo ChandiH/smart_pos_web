@@ -23,6 +23,7 @@ class UpdateInventory extends Component {
     const updatedInventory = inventory.map((item) => {
       return {
         ...item,
+        quantity: item.stock.length ? item.stock[0].quantity : "0",
         lastUpdated: item.stock.length
           ? item.stock[0].updatedAt
           : "out of stock",

@@ -23,7 +23,7 @@ const EmployeeProfile = ({ history, location }) => {
     setEmployee(location.state);
     console.log(location.state);
     fetchData();
-  }, []);
+  }, [history, location.state]);
 
   const renderDetails = (label, name) => (
     <div className="row mb-2">

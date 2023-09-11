@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MonthlySaleChart from "../components/charts/monthlySaleChart";
 import MonthlyBranchChart from "../components/charts/monthlyBranchChart";
 import MonthlyProductChart from "./../components/charts/monthlyProductChart";
+import { useContext } from "react";
+import UserContext from "./../context/UserContext";
 
-const Dashboard = () => {
+const Dashboard = ({ history }) => {
+  const { currentUser } = useContext(UserContext);
+
+  useEffect(() => {
+    switch (currentUser.userRole_id) {
+      case 103:
+        return history.replace("/sale");
+      default:
+        return;
+    }
+  }, [currentUser, history]);
   return (
     <div className="col mt-3">
       <div className="row">

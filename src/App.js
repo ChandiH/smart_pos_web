@@ -28,16 +28,17 @@ import CartContext from "./context/CartContext";
 function App() {
   // ** REMOVE THIS AFTER TESTING **
   // use when need to bypass login
-  const [currentUser, setCurrentUser] = useState({
-    id: 1,
-    name: "Somesh Chandimal",
-    userName: "Somesh",
-    email: "slahy0@trellian.com",
-    phone: "6953579061",
-    branch_id: 1,
-    userRole_id: 101,
-  });
-  // const [currentUser, setCurrentUser] = useState(null);
+  // const [currentUser, setCurrentUser] = useState({
+  //   id: 1,
+  //   name: "Somesh Chandimal",
+  //   userName: "Somesh",
+  //   email: "slahy0@trellian.com",
+  //   phone: "6953579061",
+  //   branch_id: 1,
+  //   userRole_id: 101,
+  // });
+
+  const [currentUser, setCurrentUser] = useState(null);
 
   const [cart, setCart] = useState([]);
   return (
