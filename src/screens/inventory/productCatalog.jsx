@@ -7,7 +7,7 @@ import SearchBox from "../../components/common/searchBox";
 import AccessFrame from "./../../components/accessFrame";
 import _ from "lodash";
 
-import { getProducts } from "../../services/fakeProductService";
+import { getProductWithCategory } from "../../services/productService";
 
 class ProductCatalog extends Component {
   state = {
@@ -19,8 +19,13 @@ class ProductCatalog extends Component {
     accessLevel: "productCatalog",
   };
 
+  fetchProducts = async () => {
+    const { data: products } = await getProductWithCategory();
+    this.setState({ products });
+  };
+
   componentDidMount() {
-    this.setState({ products: getProducts() });
+    this.fetchProducts();
   }
 
   handleDelete = (product) => {

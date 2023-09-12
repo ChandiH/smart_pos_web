@@ -7,9 +7,9 @@ class ProductTable extends Component {
       path: "name",
       label: "Name",
     },
-    { path: "category", label: "Category" },
-    { path: "buyingPrice", label: "Buying Price" },
-    { path: "retailPrice", label: "Retail Price" },
+    { path: "category_name", label: "Category" },
+    { path: "buying_ppu", label: "Buying Price" },
+    { path: "retail_ppu", label: "Retail Price" },
     { path: "weight", label: "Weight" },
     { path: "barcode", label: "Barcode" },
     { path: "supplier_id", label: "Supplier ID" },
@@ -31,7 +31,11 @@ class ProductTable extends Component {
     return (
       <Table
         columns={this.columns}
-        data={products}
+        data={products.map((product) => ({
+          ...product,
+          buying_ppu: "Rs. " + product.buying_ppu,
+          retail_ppu: "Rs. " + product.retail_ppu,
+        }))}
         sortColumn={sortColumn}
         onSort={onSort}
       />

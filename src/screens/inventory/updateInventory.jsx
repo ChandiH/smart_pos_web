@@ -6,7 +6,8 @@ import SearchBox from "../../components/common/searchBox";
 import StockTable from "../../components/inventory/stockTable";
 import AccessFrame from "../../components/accessFrame";
 import _ from "lodash";
-import { getInventory } from "../../services/fakeInventoryService";
+import { getInventory } from "../../services/inventoryService";
+import { getProducts } from "../../services/productService";
 
 class UpdateInventory extends Component {
   state = {
@@ -18,18 +19,25 @@ class UpdateInventory extends Component {
     accessLevel: "inventory",
   };
 
-  componentDidMount() {
-    const inventory = getInventory();
-    const updatedInventory = inventory.map((item) => {
+  fetchData = async () => {
+    const { data: inventory } = await getInventory();
+    console.log(inventory);
+    const { data: products } = await getProducts();
+    const updatedInventory = products.map((product) => {
+      const stock = inventory.find(
+        (item) => item.product_id === product.product_id
+      );
+
       return {
-        ...item,
-        quantity: item.stock.length ? item.stock[0].quantity : "0",
-        lastUpdated: item.stock.length
-          ? item.stock[0].updatedAt
-          : "out of stock",
+        ...product,
+        quantity: stock ? stock.quantity : "0",
       };
     });
     this.setState({ products: [...updatedInventory] });
+  };
+
+  componentDidMount() {
+    this.fetchData();
   }
 
   handleDelete = (product) => {
@@ -42,7 +50,7 @@ class UpdateInventory extends Component {
   };
 
   handleSelect = (product) => {
-    this.props.history.push(`/inventory/update/${product.product_id}`);
+    this.props.history.push(`/inventory/update/${product.product_id}`, product);
   };
 
   handlePageChange = (page) => {

@@ -7,7 +7,7 @@ import SaleCartTable from "../../components/sale/saleCartTable";
 import _ from "lodash";
 
 import { getInventoryByBranch } from "../../services/fakeInventoryService";
-import { getCustomers } from "../../services/fakeCustomerService";
+import { getCustomers } from "../../services/customerService";
 import { saveOrder } from "../../services/fakeOrderService";
 import SummaryWindow from "../../components/sale/summaryWindow";
 
@@ -36,10 +36,15 @@ const CashierSalePage = ({ history }) => {
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [paymentDetails, setPaymentDetails] = useState(null);
 
+  const fetchData = async () => {
+    const { data: customers } = await getCustomers();
+    setCustomers(customers);
+  };
+
   useEffect(() => {
     const products = getInventoryByBranch(currentUser.branch_id);
     setProducts(products);
-    setCustomers(getCustomers());
+    fetchData();
   }, [currentUser.branch_id]);
 
   const handleSort = (sortColumn) => {
@@ -66,7 +71,7 @@ const CashierSalePage = ({ history }) => {
       filterCustomer = customers.filter(
         (m) =>
           m.name.toLowerCase().startsWith(query.toLowerCase()) ||
-          m.contact.toString() === query
+          m.phone.toString() === query
       );
     }
     if (filterCustomer && filterCustomer.length > 0) {
@@ -229,9 +234,9 @@ const CashierSalePage = ({ history }) => {
           {customer.name !== "Guest Customer" && (
             <>
               <dt className="col-5 ">Contact:</dt>
-              <dd className="col-7 align-right">{customer?.contact}</dd>
+              <dd className="col-7 align-right">{customer?.phone}</dd>
               <dt className="col-7">Total Loyalty Points:</dt>
-              <dd className="col-5 align-right">{customer?.pointCount}</dd>
+              <dd className="col-5 align-right">{customer?.rewards_points}</dd>
             </>
           )}
         </div>
