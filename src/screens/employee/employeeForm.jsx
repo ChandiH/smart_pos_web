@@ -4,13 +4,14 @@ import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
 
 import { getBranches } from "../../services/fakeBranchService";
-import { getEmployee, saveEmployee } from "../../services/fakeEmployeeService";
+import { getEmployee, addEmployee } from "../../services/employeeService";
 import { getUserRoles } from "../../services/fakeAuthorizationService";
 
 class EmployeeForm extends Form {
   state = {
     data: {
       name: "",
+      userName: "",
       email: "",
       phone: "",
       userRole: "",
@@ -25,6 +26,7 @@ class EmployeeForm extends Form {
   schema = {
     _id: Joi.string(),
     name: Joi.string().required().label("Name"),
+    userName: Joi.string().required().label("User Name"),
     email: Joi.string().required().label("Email").email(),
     phone: Joi.number().required().label("Phone Number"),
     branch: Joi.string().required().label("Branch"),
@@ -65,22 +67,24 @@ class EmployeeForm extends Form {
       (obj) => obj.name === this.state.data.userRole
     );
     const branch_obj = this.state.branches.find(
-      (obj) => obj._id === this.state.data.branch
+      (obj) => obj.name === this.state.data.branch
     );
     console.log("userRole_obj", userRole_obj);
     console.log("branch_obj", branch_obj);
     console.log("Employee", Employee);
     return {
       name: Employee.name,
+      username: Employee.userName,
       email: Employee.email,
       phone: Employee.phone,
-      userRole_id: userRole_obj.userRole_id,
-      branch: branch_obj.name,
+      role_id: userRole_obj.userRole_id,
+      branch_id: branch_obj.branch_id,
     };
   }
 
   doSubmit = () => {
-    saveEmployee(this.mapToDataModel(this.state.data));
+    console.log(this.state);
+    addEmployee(this.mapToDataModel(this.state.data));
     this.props.history.goBack();
   };
 
@@ -94,6 +98,7 @@ class EmployeeForm extends Form {
           <h1>Add New Employee</h1>
           <form onSubmit={this.handleSubmit}>
             {this.renderInput("name", "Name")}
+            {this.renderInput("userName", "User Name")}
             {this.renderInput("email", "Email")}
             {this.renderInput("phone", "Contact")}
             {this.renderSelect("branch", "Branch", this.state.branches)}

@@ -7,11 +7,7 @@ import EmployeeTable from "./../../components/employee/employeeTable";
 import AccessFrame from "../../components/accessFrame";
 import _ from "lodash";
 
-import {
-  getEmployees,
-  deleteEmployee,
-} from "../../services/fakeEmployeeService";
-import { getBranch } from "../../services/fakeBranchService";
+import { getEmployees, getEmployee } from "../../services/employeeService";
 
 class Employee extends Component {
   state = {
@@ -23,13 +19,14 @@ class Employee extends Component {
     accessLevel: "employee",
   };
 
+  async fetchData() {
+    const { data: employees } = await getEmployees();
+    console.log(employees);
+    this.setState({ employees });
+  }
+
   componentDidMount() {
-    const employees = getEmployees();
-    const updatedEmployees = employees.map((employee) => {
-      const branch = getBranch(employee.branch_id);
-      return { ...employee, branch: branch.name };
-    });
-    this.setState({ employees: updatedEmployees });
+    this.fetchData();
   }
 
   handleSelect = (employee) => {
@@ -37,12 +34,11 @@ class Employee extends Component {
   };
 
   handleDelete = (employee) => {
-    const employees = this.state.employees.filter(
-      (m) => m._id !== employee._id
-    );
-    this.setState({ employees });
-
-    deleteEmployee(employee.id);
+    // const employees = this.state.employees.filter(
+    //   (m) => m._id !== employee._id
+    // );
+    // this.setState({ employees });
+    // deleteEmployee(employee.id);
   };
 
   handlePageChange = (page) => {
@@ -71,7 +67,7 @@ class Employee extends Component {
       filtered = allEmployees.filter(
         (m) =>
           m.name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
-          m.id.toString() === searchQuery
+          m.employee_id.toString() === searchQuery
       );
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
@@ -82,10 +78,10 @@ class Employee extends Component {
   };
 
   render() {
-    const { length: count } = this.state.employees;
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
 
-    if (count === 0) return <p>There are no Employees in the database.</p>;
+    if (!this.state.employees)
+      return <p>There are no Employees in the database.</p>;
 
     const { totalCount, data: employees } = this.getPagedData();
 

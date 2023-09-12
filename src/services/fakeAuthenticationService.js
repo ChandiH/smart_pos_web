@@ -1,20 +1,20 @@
 import { getUserRole } from "./fakeAuthorizationService";
-import { getEmployee } from "./fakeEmployeeService";
+import { getEmployee } from "./fakeServices/fakeEmployeeService";
 
 const users = [
   {
     employee_id: 1,
-    userName: "Somesh",
+    userName: "Admin",
     password: "1111",
   },
   {
     employee_id: 2,
-    userName: "Hirushi",
+    userName: "Manager",
     password: "2222",
   },
   {
     employee_id: 3,
-    userName: "Dinithi",
+    userName: "Cashier",
     password: "3333",
   },
 ];

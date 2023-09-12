@@ -1,4 +1,4 @@
-import { getUserRoles } from "./fakeAuthorizationService";
+import { getUserRoles } from "../fakeAuthorizationService";
 
 const employees = [
   {

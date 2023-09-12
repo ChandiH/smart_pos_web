@@ -61,10 +61,10 @@ const EmployeeProfile = ({ history, location }) => {
             <main className="col-lg-6 my-3">
               <h4 className="title text-dark">
                 {employee.name} <br />
-                <small className="text-muted">{employee.userRole_name}</small>
+                <small className="text-muted">{employee.role_name}</small>
               </h4>
               <div className="col my-3">
-                {renderDetails("Assigned Branch", employee.branch)}
+                {renderDetails("Assigned Branch", employee.branch_name)}
                 {renderDetails("Email", employee.email)}
                 {renderDetails("Contact", employee.phone)}
               </div>

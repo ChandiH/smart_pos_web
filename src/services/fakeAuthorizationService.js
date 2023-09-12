@@ -17,7 +17,7 @@ const accessLevels = [
 
 const userRoles = [
   {
-    userRole_id: 101,
+    userRole_id: 1,
     name: "Owner",
     access: [
       "employee",
@@ -36,7 +36,7 @@ const userRoles = [
       "The owner role has full control and authority over the business or organization. Owners make critical decisions and have access to all resources.",
   },
   {
-    userRole_id: 102,
+    userRole_id: 2,
     name: "Manager",
     access: [
       "employee",
@@ -51,21 +51,21 @@ const userRoles = [
       "Managers are responsible for overseeing daily operations and supervising staff. They have access to most resources and can make important decisions within their department.",
   },
   {
-    userRole_id: 103,
+    userRole_id: 3,
     name: "Cashier",
     access: ["customer", "customerForm", "productCatalog"],
     description:
       "Cashiers handle customer transactions, manage the cash register, and provide customer service. They have limited access to administrative functions.",
   },
   {
-    userRole_id: 104,
+    userRole_id: 4,
     name: "Sales Associate",
     access: ["report", "productCatalog"],
     description:
       "Sales associates assist customers, promote products, and process sales. They have limited access to administrative functions and focus on sales-related tasks.",
   },
   {
-    userRole_id: 105,
+    userRole_id: 5,
     name: "Guest",
     access: ["productCatalog"],
     description:

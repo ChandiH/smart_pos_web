@@ -9,8 +9,8 @@ class EmployeeTable extends Component {
     },
     { path: "phone", label: "Contact" },
     { path: "email", label: "Email" },
-    { path: "userRole_name", label: "Role" },
-    { path: "branch", label: "Branch" },
+    { path: "role_name", label: "Role" },
+    { path: "branch_name", label: "Branch" },
     {
       key: "select",
       content: (employee) => (
