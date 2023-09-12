@@ -3,13 +3,14 @@ import Joi from "joi-browser";
 import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
 
-import { getCustomer, saveCustomer } from "../../services/fakeCustomerService";
-
+import { getCustomer, addCustomer } from "../../services/customerService";
 class CustomerForm extends Form {
   state = {
     data: {
       name: "",
-      contact: "",
+      phone: "",
+      email: "",
+      address: "",
     },
     errors: {},
     accessLevel: "customerForm",
@@ -18,7 +19,9 @@ class CustomerForm extends Form {
   schema = {
     _id: Joi.string(),
     name: Joi.string().required().label("Name"),
-    contact: Joi.number().required().label("Contact"),
+    phone: Joi.number().label("Contact Number"),
+    email: Joi.string().email().label("Email"),
+    address: Joi.string().label("Address"),
   };
 
   componentDidMount() {
@@ -34,13 +37,14 @@ class CustomerForm extends Form {
   mapToViewModel(customer) {
     return {
       name: customer.name,
-      contact: customer.contact,
+      phone: customer.phone,
+      email: customer.email,
+      address: customer.address,
     };
   }
 
   doSubmit = () => {
-    saveCustomer(this.state.data);
-
+    addCustomer(this.state.data);
     this.props.history.goBack();
   };
 
@@ -54,7 +58,9 @@ class CustomerForm extends Form {
           <h1>Add New Customer</h1>
           <form onSubmit={this.handleSubmit}>
             {this.renderInput("name", "Name")}
-            {this.renderInput("contact", "Contact")}
+            {this.renderInput("phone", "Contact Number")}
+            {this.renderInput("email", "Email")}
+            {this.renderInput("address", "Address")}
             <div className="my-3">{this.renderButton("Save")}</div>
           </form>
         </div>

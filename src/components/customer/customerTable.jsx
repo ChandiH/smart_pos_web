@@ -9,10 +9,9 @@ class CustomerTable extends Component {
       path: "name",
       label: "Name",
     },
-    { path: "contact", label: "Contact" },
-    { path: "visitCount", label: "Visit Count" },
-    { path: "totalSpent", label: "Total Spent" },
-    { path: "pointCount", label: "Point Count" },
+    { path: "phone", label: "Contact" },
+    { path: "email", label: "Email" },
+    { path: "rewards_points", label: "Point Count" },
   ];
   //   columns = [
   //     {

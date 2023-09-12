@@ -7,33 +7,26 @@ import SearchBox from "../../components/common/searchBox";
 import AccessFrame from "../../components/accessFrame";
 import _ from "lodash";
 
-import {
-  getCustomers,
-  deleteCustomer,
-} from "../../services/fakeCustomerService";
+import { getCustomers } from "../../services/customerService";
 
 class Customers extends Component {
   state = {
     customers: [],
     currentPage: 1,
-    pageSize: 10,
+    pageSize: 30,
     searchQuery: "",
     sortColumn: { path: "name", order: "asc" },
     accessLevel: "customers",
   };
 
-  componentDidMount() {
-    this.setState({ customers: getCustomers() });
+  async fetchData() {
+    const { data: customers } = await getCustomers();
+    this.setState({ customers });
   }
 
-  handleDelete = (customer) => {
-    const customers = this.state.customers.filter(
-      (m) => m._id !== customer._id
-    );
-    this.setState({ customers });
-
-    deleteCustomer(customer.id);
-  };
+  componentDidMount() {
+    this.fetchData();
+  }
 
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
@@ -57,12 +50,11 @@ class Customers extends Component {
     } = this.state;
 
     let filtered = allCustomers;
-    console.log("all", allCustomers);
     if (searchQuery)
       filtered = allCustomers.filter(
         (m) =>
           m.name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
-          m.id.toString() === searchQuery
+          m.phone.toString().startsWith(searchQuery)
       );
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
@@ -105,7 +97,6 @@ class Customers extends Component {
             customers={customers}
             sortColumn={sortColumn}
             onLike={this.handleLike}
-            onDelete={this.handleDelete}
             onSort={this.handleSort}
           />
           <Pagination
