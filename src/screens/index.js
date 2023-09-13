@@ -4,6 +4,7 @@ export { default as Dashboard } from "./dashboard";
 export { default as NotFound } from "./notFound";
 export { default as AccessDenied } from "./accessDenied";
 export { default as ConfigScreen } from "./configScreen";
+export { default as UserProfile } from "./userProfile";
 
 //Sale
 export { default as CashierSalePage } from "./sale/cashierSalePage";

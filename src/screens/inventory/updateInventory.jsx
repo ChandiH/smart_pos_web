@@ -21,7 +21,6 @@ class UpdateInventory extends Component {
 
   fetchData = async () => {
     const { data: inventory } = await getInventory();
-    console.log(inventory);
     const { data: products } = await getProducts();
     const updatedInventory = products.map((product) => {
       const stock = inventory.find(

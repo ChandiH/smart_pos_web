@@ -81,12 +81,15 @@ const NavBar = () => {
           {currentUser.name}
         </span>
       </div>
-      <img
-        src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
-        style={{ width: 40, aspectRatio: 1, marginLeft: 10, marginRight: 10 }}
-        className="rounded-circle shadow-4"
-        alt="Avatar"
-      />
+
+      <NavLink className="nav-item nav-link" to="/user-profile">
+        <img
+          src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+          style={{ width: 40, aspectRatio: 1, marginLeft: 10, marginRight: 10 }}
+          className="rounded-circle shadow-4"
+          alt="Avatar"
+        />
+      </NavLink>
       <button
         className="btn btn-primary mx-3"
         onClick={() => setCurrentUser(null)}

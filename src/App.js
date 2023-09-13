@@ -21,6 +21,7 @@ import {
   StockUpdateForm,
   AccessDenied,
   CashierSalePage,
+  UserProfile,
 } from "./screens";
 import "./App.css";
 import CartContext from "./context/CartContext";
@@ -83,6 +84,7 @@ function App() {
               <Route path="/sale" component={CashierSalePage} />
               <Route path="/dashboard" component={Dashboard} />
               <Route path="/login" component={Login} />
+              <Route path="/user-profile" component={UserProfile} />
               <Route path="/config" component={ConfigScreen} />
               <Route path="/not-found" component={NotFound} />
               <Route path="/access-denied" component={AccessDenied} />
