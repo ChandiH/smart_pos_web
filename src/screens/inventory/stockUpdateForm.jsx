@@ -2,11 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import AccessFrame from "../../components/accessFrame";
 
 import { getInventoryByProduct } from "../../services/inventoryService";
-import {
-  getInventoryByProduct as product,
-  updateInventory,
-} from "../../services/fakeInventoryService";
-import { products } from "../../services/fakeProductService";
 import UserContext from "../../context/UserContext";
 
 const StockUpdateForm = ({ history, match }) => {

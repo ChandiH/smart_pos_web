@@ -4,10 +4,10 @@ import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
 
 import {
-  addNewCategory,
   getCategories,
   getCategory,
-} from "./../../services/fakeCategoryService";
+  addCategory,
+} from "./../../services/categoryService";
 
 class Categories extends Form {
   state = {
@@ -22,11 +22,11 @@ class Categories extends Form {
     name: Joi.string().required().label("Name"),
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const category_id = this.props?.match.params.id;
     if (category_id === "new") return;
 
-    const category = getCategory(category_id);
+    const { data: category } = await getCategory(category_id);
     if (!category) return this.props.history.replace("/not-found");
 
     this.setState({ data: this.mapToViewModel(category) });
@@ -39,8 +39,7 @@ class Categories extends Form {
   }
 
   doSubmit = async () => {
-    await addNewCategory(this.state.data.name);
-    console.log(getCategories());
+    await addCategory(this.state.data.name);
     this.props.history.goBack();
   };
 

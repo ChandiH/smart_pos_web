@@ -17,14 +17,12 @@ class SaleStockTable extends Component {
   //   };
 
   columns = [
-    { path: "barcode", label: "Barcode" },
     {
       path: "name",
       label: "Name",
     },
-    { path: "category", label: "Category" },
-    { path: "weight", label: "Weight" },
-    { path: "retailPrice", label: "Retail Price" },
+    { path: "quantity", label: "Stock" },
+    { path: "retail_ppu", label: "Retail Price" },
     // {
     //   key: "quantity",
     //   content: (product) => (
@@ -63,6 +61,7 @@ class SaleStockTable extends Component {
       key: "select",
       content: (product) => (
         <button
+          disabled={product.quantity == 0}
           onClick={() => this.props.onSelect(product)}
           className="btn btn-danger btn-sm"
         >

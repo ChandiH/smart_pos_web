@@ -32,9 +32,7 @@ const SaleCartTable = ({ onSort, sortColumn }) => {
       path: "name",
       label: "Name",
     },
-    { path: "category", label: "Category" },
-    { path: "weight", label: "Weight" },
-    { path: "retailPrice", label: "Retail Price" },
+    { path: "retail_ppu", label: "Retail Price" },
     {
       key: "quantity",
       label: "Quantity",
@@ -76,9 +74,7 @@ const SaleCartTable = ({ onSort, sortColumn }) => {
       key: "total",
       label: "Total",
       content: (product) =>
-        parseFloat(
-          (product.quantity * product.retailPrice.slice(4)).toFixed(2)
-        ),
+        `Rs. ${parseFloat((product.quantity * product.retail_ppu).toFixed(2))}`,
     },
     {
       key: "delete",

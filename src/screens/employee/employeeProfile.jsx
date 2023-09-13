@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SelectWithBtn from "../../components/common/selectWithBtn";
 import { getUserRoles } from "../../services/fakeAuthorizationService";
-import { getBranches } from "../../services/fakeBranchService";
+import { getAllBranches } from "../../services/branchService";
 import AccessFrame from "./../../components/accessFrame";
 
 const EmployeeProfile = ({ history, location }) => {
@@ -11,11 +11,11 @@ const EmployeeProfile = ({ history, location }) => {
 
   const fetchData = async () => {
     const roles = await getUserRoles();
-    const branch = await getBranches();
+    const { data: branch } = await getAllBranches();
     setUserRoles(
       roles.map((role) => ({ _id: role.userRole_id, name: role.name }))
     );
-    setBranches(branch.map((b) => ({ _id: b.branch_id, name: b.name })));
+    setBranches(branch.map((b) => ({ _id: b.id, name: b.city })));
   };
 
   useEffect(() => {

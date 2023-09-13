@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SearchBox from "../components/common/searchBox";
-import { getCategories } from "../services/fakeCategoryService";
 import AccessFrame from "../components/accessFrame";
+import { getCategories } from "../services/categoryService";
 
 const ConfigScreen = ({ history }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -15,7 +15,7 @@ const ConfigScreen = ({ history }) => {
   };
 
   const handleClickCategoryView = async () => {
-    const categories = await getCategories();
+    const { data: categories } = await getCategories();
     const formatted = categories.map((c) => ({
       _id: c.category_id,
       name: c.name,
@@ -60,7 +60,7 @@ const ConfigScreen = ({ history }) => {
               <h5 className="card-title mb-3">Inventory</h5>
               {optionButton(
                 "Add new Category",
-                () => console.log("clicked"),
+                () => history.push("/inventory/categories/new"),
                 handleClickCategoryView
               )}
               {optionButton("Add new Supplier", () => console.log("clicked"))}

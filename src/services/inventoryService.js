@@ -10,3 +10,7 @@ export function getInventory() {
 export function getInventoryByProduct(id) {
   return http.get(`${ApiEndPoint}/product/${id}`);
 }
+
+export function getInventoryByBranch(id) {
+  return http.get(`${ApiEndPoint}/branch/${id}`);
+}

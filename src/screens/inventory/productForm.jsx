@@ -4,7 +4,7 @@ import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
 
 import { getProduct, saveProduct } from "../../services/fakeProductService";
-import { getCategories } from "./../../services/fakeCategoryService";
+import { getCategories } from "../../services/categoryService";
 import SelectWithBtn from "./../../components/common/selectWithBtn";
 
 class ProductForm extends Form {
@@ -16,7 +16,7 @@ class ProductForm extends Form {
       weight: "",
       units: "",
       buyingPrice: "",
-      retailPrice: "",
+      retail_ppu: "",
       barcode: "",
       supplier_id: "",
     },
@@ -32,14 +32,13 @@ class ProductForm extends Form {
     weight: Joi.number().label("Weight"),
     units: Joi.number().label("Units"),
     buyingPrice: Joi.string().label("Buying Price"),
-    retailPrice: Joi.string().label("Retail Price"),
+    retail_ppu: Joi.string().label("Retail Price"),
     barcode: Joi.string().label("Barcode"),
     supplier_id: Joi.number().label("Supplier ID"),
   };
 
   async fetchData() {
-    const categories = await getCategories();
-    console.log(categories);
+    const { data: categories } = await getCategories();
     this.setState({ categories });
   }
 
@@ -62,7 +61,7 @@ class ProductForm extends Form {
       weight: product.weight,
       units: product.units,
       buyingPrice: product.buyingPrice,
-      retailPrice: product.retailPrice,
+      retail_ppu: product.retail_ppu,
       barcode: product.barcode,
       supplier_id: product.supplier_id,
     };
@@ -70,7 +69,6 @@ class ProductForm extends Form {
 
   doSubmit = () => {
     saveProduct(this.state.data);
-
     this.props.history.push("/inventory");
   };
 
@@ -96,8 +94,7 @@ class ProductForm extends Form {
               }
             />
             {this.renderInput("buyingPrice", "Buying Price")}
-            {this.renderInput("retailPrice", "Retail Price")}
-            {this.renderInput("weight", "Weight")}
+            {this.renderInput("retail_ppu", "Retail Price")}
             {this.renderInput("units", "Units")}
             {this.renderInput("barcode", "Barcode")}
             {this.renderInput("supplier_id", "Supplier ID", "number")}

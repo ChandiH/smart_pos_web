@@ -45,7 +45,7 @@ class CustomerForm extends Form {
 
   doSubmit = () => {
     addCustomer(this.state.data);
-    this.props.history.goBack();
+    this.props.history.replace("/customers");
   };
 
   render() {

@@ -6,7 +6,8 @@ import SaleStockTable from "../../components/sale/saleStockTable";
 import SaleCartTable from "../../components/sale/saleCartTable";
 import _ from "lodash";
 
-import { getInventoryByBranch } from "../../services/fakeInventoryService";
+import { getInventoryByBranch } from "../../services/inventoryService";
+import { getProducts } from "../../services/productService";
 import { getCustomers } from "../../services/customerService";
 import { saveOrder } from "../../services/fakeOrderService";
 import SummaryWindow from "../../components/sale/summaryWindow";
@@ -39,11 +40,26 @@ const CashierSalePage = ({ history }) => {
   const fetchData = async () => {
     const { data: customers } = await getCustomers();
     setCustomers(customers);
+
+    const { data: inventory } = await getInventoryByBranch(
+      currentUser.branch_id
+    );
+
+    const { data: products } = await getProducts();
+    const updatedInventory = products.map((product) => {
+      const stock = inventory.find(
+        (item) => item.product_id === product.product_id
+      );
+
+      return {
+        ...product,
+        quantity: stock ? stock.quantity : "0",
+      };
+    });
+    setProducts(updatedInventory);
   };
 
   useEffect(() => {
-    const products = getInventoryByBranch(currentUser.branch_id);
-    setProducts(products);
     fetchData();
   }, [currentUser.branch_id]);
 
@@ -116,7 +132,7 @@ const CashierSalePage = ({ history }) => {
     let totalPrice = 0;
     if (cart.length !== 0) {
       cart.forEach((product) => {
-        totalPrice += product.quantity * product.retailPrice.slice(4);
+        totalPrice += product.quantity * product.retail_ppu;
       });
     }
     return parseFloat(totalPrice).toFixed(2);
@@ -125,9 +141,9 @@ const CashierSalePage = ({ history }) => {
   const getDiscount = () => {
     let discount = 0;
     cart.forEach((product) => {
-      discount += parseFloat(product.quantity * product.discount.toFixed(2));
+      discount += parseFloat(product.quantity * product.discount);
     });
-    return discount;
+    return parseFloat(discount).toFixed(2);
   };
 
   const getPagedData = () => {
@@ -257,7 +273,7 @@ const CashierSalePage = ({ history }) => {
               <dd className="col-5 align-right">{getTotalPrice()}</dd>
 
               <dt className="col-7">Discount:</dt>
-              <dd className="col-5 align-right">-{getDiscount()}</dd>
+              <dd className="col-5 align-right">{getDiscount()}</dd>
             </div>
           </div>
           <hr />
@@ -373,7 +389,7 @@ const CashierSalePage = ({ history }) => {
             discount={getDiscount()}
             totalPrice={getTotalPrice()}
             paymentMethod={paymentMethod}
-            paymentDetails={paymentDetails}
+            paymentDetails={parseInt(paymentDetails)}
             placeOrder={placeOrder}
           />
         </div>

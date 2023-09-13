@@ -3,7 +3,7 @@ import Joi from "joi-browser";
 import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
 
-import { getBranches } from "../../services/fakeBranchService";
+import { getAllBranches } from "../../services/branchService";
 import { getEmployee, addEmployee } from "../../services/employeeService";
 import { getUserRoles } from "../../services/fakeAuthorizationService";
 
@@ -33,9 +33,16 @@ class EmployeeForm extends Form {
     userRole: Joi.string().required().label("User Role"),
   };
 
+  fetchData = async () => {
+    const { data: branches } = await getAllBranches();
+    const branchList = branches.map((b) => ({ _id: b.id, name: b.city }));
+    this.setState({ branches: branchList });
+  };
+
   componentDidMount() {
     try {
-      this.setState({ branches: getBranches(), userRoles: getUserRoles() });
+      this.fetchData();
+      this.setState({ userRoles: getUserRoles() });
       console.log("state,", this.state);
     } catch (ex) {
       console.log("error,", ex);

@@ -1,4 +1,4 @@
-import { products } from "./fakeProductService";
+import { products } from "../fakeProductService";
 
 const inventory = [
   {

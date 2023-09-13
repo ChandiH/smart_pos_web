@@ -10,7 +10,6 @@ class ProductTable extends Component {
     { path: "category_name", label: "Category" },
     { path: "buying_ppu", label: "Buying Price" },
     { path: "retail_ppu", label: "Retail Price" },
-    { path: "weight", label: "Weight" },
     { path: "barcode", label: "Barcode" },
     { path: "supplier_id", label: "Supplier ID" },
   ];

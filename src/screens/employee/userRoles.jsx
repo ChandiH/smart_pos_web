@@ -1,11 +1,9 @@
-import React, { useState } from "react";
-import Categories from "../inventory/categories";
-import { BiShow } from "react-icons/bi";
+import React from "react";
 import SearchBox from "../../components/common/searchBox";
-import { getCategories } from "../../services/fakeCategoryService";
 import UserRoleTable from "./../../components/employee/userRoleTable";
 import { Component } from "react";
 import { getUserRoles } from "../../services/fakeAuthorizationService";
+
 const option = Object.freeze({
   CATEGORY: "category",
 });

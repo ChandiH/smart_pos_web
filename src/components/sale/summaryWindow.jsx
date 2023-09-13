@@ -11,6 +11,10 @@ const SummaryWindow = ({
   paymentDetails,
   placeOrder,
 }) => {
+  const calculateChanges = () => {
+    return parseInt(paymentDetails - (totalPrice - discount));
+  };
+
   return (
     <div
       className="modal fade"
@@ -54,7 +58,7 @@ const SummaryWindow = ({
                 <dd className="col-5 align-right">{totalPrice}</dd>
 
                 <dt className="col-7">Discount:</dt>
-                <dd className="col-5 align-right">-{discount}</dd>
+                <dd className="col-5 align-right">{discount}</dd>
                 <dt className="col-7">Grand Total:</dt>
                 <dd className="col-5 align-right">
                   <b>
@@ -88,7 +92,7 @@ const SummaryWindow = ({
                       <h5>
                         <b>
                           Rs.
-                          {parseInt(paymentDetails - totalPrice + discount)}
+                          {calculateChanges()}
                           .00
                         </b>
                       </h5>
@@ -106,12 +110,17 @@ const SummaryWindow = ({
             button
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-primary">
+            <button
+              type="button"
+              disabled={calculateChanges() < 0}
+              className="btn btn-primary"
+            >
               Print Reciept
             </button>
 
             <button
               type="button"
+              disabled={calculateChanges() < 0}
               className="btn btn-primary"
               data-dismiss="modal"
               onClick={placeOrder}
