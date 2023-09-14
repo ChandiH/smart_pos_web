@@ -26,10 +26,10 @@ class UpdateInventory extends Component {
       const stock = inventory.find(
         (item) => item.product_id === product.product_id
       );
-
       return {
         ...product,
         quantity: stock ? stock.quantity : "0",
+        lastupdate_at: stock ? stock.lastupdate_at.slice(0, 10) : "never",
       };
     });
     this.setState({ products: [...updatedInventory] });

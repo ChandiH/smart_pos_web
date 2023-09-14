@@ -37,6 +37,7 @@ function App() {
     phone: "6953579061",
     branch_id: 1,
     userRole_id: 1,
+    branch_name: "Kandy",
   });
 
   // const [currentUser, setCurrentUser] = useState(null);

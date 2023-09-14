@@ -3,7 +3,12 @@ import Joi from "joi-browser";
 import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
 
-import { getCustomer, addCustomer } from "../../services/customerService";
+import {
+  getCustomer,
+  addCustomer,
+  findEmail,
+  findPhone,
+} from "../../services/customerService";
 class CustomerForm extends Form {
   state = {
     data: {
@@ -43,9 +48,23 @@ class CustomerForm extends Form {
     };
   }
 
-  doSubmit = () => {
-    addCustomer(this.state.data);
-    this.props.history.replace("/customers");
+  doSubmit = async () => {
+    let errors = {};
+    // check whether eamil and phone already exists
+    const { data: email } = await findEmail(this.state.data.email);
+    if (email[0].count == 1) errors.email = "Email already exists";
+
+    const { data: phone } = await findPhone(this.state.data.phone);
+    if (phone[0].count == 1) errors.phone = "Phone already exists";
+    //if so raise error
+    this.setState({ errors });
+
+    //if not add customer
+    if (email[0].count == 0 && phone[0].count == 0) {
+      addCustomer(this.state.data);
+      return this.props.history.replace("/customers");
+    }
+    return;
   };
 
   render() {

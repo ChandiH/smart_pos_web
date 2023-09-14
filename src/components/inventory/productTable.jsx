@@ -4,6 +4,21 @@ import Table from "../common/table";
 class ProductTable extends Component {
   columns = [
     {
+      key: "image",
+      content: (product) => (
+        <img
+          src={
+            product.image
+              ? product.image[0]
+              : "https://placehold.co/200x200/png"
+          }
+          style={{ width: 40, aspectRatio: 1, marginLeft: 10, marginRight: 10 }}
+          className="shadow-4"
+          alt="image"
+        />
+      ),
+    },
+    {
       path: "name",
       label: "Name",
     },

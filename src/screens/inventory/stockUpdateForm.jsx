@@ -3,8 +3,9 @@ import AccessFrame from "../../components/accessFrame";
 
 import { getInventoryByProduct } from "../../services/inventoryService";
 import UserContext from "../../context/UserContext";
+import { getBranch } from "../../services/branchService";
 
-const StockUpdateForm = ({ history, match }) => {
+const StockUpdateForm = ({ history, match, location }) => {
   const accessLevel = "stockUpdateForm";
   const { currentUser } = useContext(UserContext);
   const [quantity, setQuantity] = useState(0);
@@ -31,16 +32,40 @@ const StockUpdateForm = ({ history, match }) => {
 
   const fetchData = async () => {
     const { data: product } = await getInventoryByProduct(match.params.id);
-    console.log(product);
     setResponse(product);
-    setProduct({
-      ...product[0],
-      image: [
-        "https://placehold.co/600x400/png",
-        "https://placehold.co/200x200/png",
-        "https://placehold.co/200x200/png",
-      ],
-    });
+    if (product.length === 0) {
+      const inventoryProduct = {
+        ...location.state,
+        image: [
+          "https://placehold.co/600x400/png",
+          "https://placehold.co/200x200/png",
+          "https://placehold.co/200x200/png",
+        ],
+        branch_name: currentUser.branch_name,
+      };
+      setProduct(inventoryProduct);
+    } else {
+      setProduct(
+        product.length === 0
+          ? {
+              ...location.state,
+              image: [
+                "https://placehold.co/600x400/png",
+                "https://placehold.co/200x200/png",
+                "https://placehold.co/200x200/png",
+              ],
+              branch_name: currentUser.branch_name,
+            }
+          : {
+              ...product[0],
+              image: [
+                "https://placehold.co/600x400/png",
+                "https://placehold.co/200x200/png",
+                "https://placehold.co/200x200/png",
+              ],
+            }
+      );
+    }
   };
 
   useEffect(() => {

@@ -13,3 +13,11 @@ export function getCustomer(id) {
 export function addCustomer({ name, email, phone, address }) {
   return http.post(`${ApiEndPoint}`, { name, email, phone, address });
 }
+
+export function findEmail(email) {
+  return http.get(`${ApiEndPoint}/email/${email}`);
+}
+
+export function findPhone(phone) {
+  return http.get(`${ApiEndPoint}/phone/${phone}`);
+}

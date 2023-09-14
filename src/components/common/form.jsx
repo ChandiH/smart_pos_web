@@ -62,14 +62,17 @@ class Form extends Component {
     const { data, errors } = this.state;
 
     return (
-      <Select
-        name={name}
-        value={data[name]}
-        label={label}
-        options={options}
-        onChange={this.handleChange}
-        error={errors[name]}
-      />
+      <div className="my-3">
+        <Select
+          size={3}
+          name={name}
+          value={data[name]}
+          label={label}
+          options={options}
+          onChange={this.handleChange}
+          error={errors[name]}
+        />
+      </div>
     );
   }
 
