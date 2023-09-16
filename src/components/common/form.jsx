@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Joi from "joi-browser";
 import Input from "./input";
 import Select from "./select";
+import SelectWithBtn from "./selectWithBtn";
 
 class Form extends Component {
   state = {
@@ -64,7 +65,6 @@ class Form extends Component {
     return (
       <div className="my-3">
         <Select
-          size={3}
           name={name}
           value={data[name]}
           label={label}
@@ -73,6 +73,33 @@ class Form extends Component {
           error={errors[name]}
         />
       </div>
+    );
+  }
+
+  renderSelectWithBtn(
+    name,
+    label,
+    placeHolder,
+    options,
+    onClick,
+    btnTitle = "Confirm",
+    btnDisabled = false
+  ) {
+    const { data, errors } = this.state;
+
+    return (
+      <SelectWithBtn
+        name={name}
+        value={data[name]}
+        label={label}
+        placeHolder={placeHolder}
+        options={options}
+        onChange={this.handleChange}
+        error={errors[name]}
+        btnTitle={btnTitle}
+        btnDisabled={btnDisabled}
+        onClick={onClick}
+      />
     );
   }
 

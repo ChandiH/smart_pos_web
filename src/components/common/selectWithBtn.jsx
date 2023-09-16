@@ -1,6 +1,7 @@
 import React from "react";
 
 const SelectWithBtn = ({
+  name,
   label,
   placeHolder,
   options,
@@ -9,31 +10,37 @@ const SelectWithBtn = ({
   btnTitle = "Confirm",
   btnDisabled,
   error,
+  ...rest
 }) => {
   return (
     <>
-      {label && <label className="mb-2 d-block">{label}:</label>}
-      <div className="row mb-2">
-        <div className="col-8">
-          <select
-            className="form-select"
-            aria-label={label}
-            disabled={selectDisabled}
-          >
-            <option defaultValue={null}>
-              {placeHolder ? placeHolder : "Select"}
-            </option>
-            {options.map((option, index) => (
-              <option key={index} value={option._id}>
-                {option.name}
+      <div className="row mb-3">
+        <div className="col-7">
+          <div className="form-group form-floating">
+            <select
+              name={name}
+              id={name}
+              className="form-select form-control"
+              {...rest}
+              disabled={selectDisabled}
+            >
+              <option selected value={""}>
+                {placeHolder ? placeHolder : "Select"}
               </option>
-            ))}
-          </select>
+              {options.map((option, index) => (
+                <option key={index} value={option._id}>
+                  {option.name}
+                </option>
+              ))}
+            </select>
+            {label && <label htmlFor={name}>{label}:</label>}
+          </div>
         </div>
         <button
           disabled={btnDisabled}
-          className="col-4 btn btn-primary shadow-0"
+          className="col btn btn-primary shadow-0"
           onClick={onClick}
+          style={{ height: "40px", alignSelf: "center", marginRight: "10px" }}
         >
           {btnTitle}
         </button>

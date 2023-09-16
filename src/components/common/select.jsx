@@ -2,16 +2,23 @@ import React from "react";
 
 const Select = ({ name, label, options, error, ...rest }) => {
   return (
-    <div className="form-group">
-      <label htmlFor={name}>{label}</label>
-      <select name={name} id={name} {...rest} className="form-control">
-        <option value="" key={"default"} />
+    <div className="form-group form-floating">
+      <select
+        name={name}
+        id={name}
+        {...rest}
+        className="form-control form-select"
+      >
+        <option selected value={""}>
+          open this select menu
+        </option>
         {options.map((option, index) => (
           <option key={index} value={option._id}>
             {option.name}
           </option>
         ))}
       </select>
+      <label for={name}>{label}</label>
       {error && (
         <div role="alert" className="alert alert-danger">
           {error}

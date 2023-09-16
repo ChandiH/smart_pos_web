@@ -3,9 +3,9 @@ import Joi from "joi-browser";
 import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
 
-import { getProduct, saveProduct } from "../../services/fakeProductService";
+import { getProduct, saveProduct } from "../../services/productService";
 import { getCategories } from "../../services/categoryService";
-import SelectWithBtn from "./../../components/common/selectWithBtn";
+import UploadImage from "../../components/common/uploadImage";
 
 class ProductForm extends Form {
   state = {
@@ -13,13 +13,13 @@ class ProductForm extends Form {
       name: "",
       description: "",
       category: "",
-      weight: "",
-      units: "",
-      buyingPrice: "",
+      buying_ppu: "",
       retail_ppu: "",
+      discount: "",
       barcode: "",
       supplier_id: "",
     },
+    images: [],
     categories: [],
     errors: {},
     accessLevel: "productForm",
@@ -29,10 +29,9 @@ class ProductForm extends Form {
     name: Joi.string().required().label("Name"),
     description: Joi.string().label("Description"),
     category: Joi.string().label("Category"),
-    weight: Joi.number().label("Weight"),
-    units: Joi.number().label("Units"),
-    buyingPrice: Joi.string().label("Buying Price"),
+    buying_ppu: Joi.string().label("Buying Price"),
     retail_ppu: Joi.string().label("Retail Price"),
+    discount: Joi.string().label("Discount"),
     barcode: Joi.string().label("Barcode"),
     supplier_id: Joi.number().label("Supplier ID"),
   };
@@ -58,21 +57,21 @@ class ProductForm extends Form {
       name: product.name,
       description: product.description,
       category: product.category,
-      weight: product.weight,
-      units: product.units,
-      buyingPrice: product.buyingPrice,
+      buying_ppu: product.buyingPrice,
       retail_ppu: product.retail_ppu,
+      discount: product.discount,
       barcode: product.barcode,
       supplier_id: product.supplier_id,
     };
   }
 
   doSubmit = () => {
-    saveProduct(this.state.data);
-    this.props.history.push("/inventory");
+    saveProduct(this.state.data, this.state.images);
+    // this.props.history.push("/inventory");
   };
 
   render() {
+    const { data, errors } = this.state;
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}
@@ -83,19 +82,21 @@ class ProductForm extends Form {
           <form onSubmit={this.handleSubmit}>
             {this.renderInput("name", "Name")}
             {this.renderInput("description", "Description")}
-            <SelectWithBtn
-              label="Category"
-              placeHolder="Select Category"
-              error={this.state.errors["category"]}
-              options={this.state.categories}
-              btnTitle="Add New Category"
-              onClick={() =>
-                this.props.history.push("/inventory/categories/new")
-              }
+            {this.renderSelectWithBtn(
+              "category",
+              "Category",
+              "Select Category",
+              this.state.categories,
+              () => this.props.history.push("/inventory/categories/new"),
+              "Add New Category"
+            )}
+            {this.renderInput("buying_ppu", "Buying Price", "number")}
+            {this.renderInput("retail_ppu", "Retail Price", "number")}
+            {this.renderInput("discount", "Discount", "number")}
+            <UploadImage
+              fileTypes={["JPG", "PNG", "GIF"]}
+              setFiles={(files) => this.setState({ images: files })}
             />
-            {this.renderInput("buyingPrice", "Buying Price")}
-            {this.renderInput("retail_ppu", "Retail Price")}
-            {this.renderInput("units", "Units")}
             {this.renderInput("barcode", "Barcode")}
             {this.renderInput("supplier_id", "Supplier ID", "number")}
             <div className="my-3">{this.renderButton("Save")}</div>{" "}

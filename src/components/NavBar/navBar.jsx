@@ -93,7 +93,7 @@ const NavBar = () => {
       <button
         className="btn btn-primary mx-3"
         onClick={() => setCurrentUser(null)}
-        data-testId="logOutButton"
+        data-testid="logOutButton"
       >
         LogOut
       </button>

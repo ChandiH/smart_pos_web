@@ -26,3 +26,8 @@ export { default as EmployeeList } from "./employee/employee";
 export { default as EmployeeForm } from "./employee/employeeForm";
 export { default as EmployeeProfile } from "./employee/employeeProfile";
 export { default as UserRoles } from "./employee/userRoles";
+
+//Suppliers Management Screens
+export { default as Suppliers } from "./supplier/suppliers";
+export { default as SupplierForm } from "./supplier/supplierForm";
+export { default as SupplierProfile } from "./supplier/supplierProfile";

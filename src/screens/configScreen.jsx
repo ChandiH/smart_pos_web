@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SearchBox from "../components/common/searchBox";
 import AccessFrame from "../components/accessFrame";
 import { getCategories } from "../services/categoryService";
+import { getSuppliers } from "../services/supplierService";
 
 const ConfigScreen = ({ history }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,6 +26,17 @@ const ConfigScreen = ({ history }) => {
     setFilteredData(formatted);
   };
 
+  const handleClickSupplierView = async () => {
+    const { data: suppliers } = await getSuppliers();
+    const formatted = suppliers.map((s) => ({
+      _id: s.supplier_id,
+      name: s.name,
+    }));
+    setSearchQuery("");
+    setData(formatted);
+    setFilteredData(formatted);
+  };
+
   const filterData = (query) => {
     const allData = [...data];
     let filtered = allData;
@@ -35,15 +47,21 @@ const ConfigScreen = ({ history }) => {
 
     setFilteredData(filtered);
   };
+
   const optionButton = (name, onBtnClick, onViewClick) => {
     return (
       <div className="row mb-3 mx-3">
         <button className="col btn btn-primary shadow-0" onClick={onBtnClick}>
           {name}
         </button>
-        <button className="col-2 btn btn-secondary mx-3 " onClick={onViewClick}>
-          {" >"}
-        </button>
+        {onViewClick && (
+          <button
+            className="col-2 btn btn-secondary mx-3 "
+            onClick={onViewClick}
+          >
+            {" >"}
+          </button>
+        )}
       </div>
     );
   };
@@ -56,6 +74,7 @@ const ConfigScreen = ({ history }) => {
       <div className="container my-3">
         <div className="row">
           <div className="col-5">
+            {/* Inventory Configuration */}
             <div className="card p-3 mb-3">
               <h5 className="card-title mb-3">Inventory</h5>
               {optionButton(
@@ -63,14 +82,22 @@ const ConfigScreen = ({ history }) => {
                 () => history.push("/inventory/categories/new"),
                 handleClickCategoryView
               )}
-              {optionButton("Add new Supplier", () => console.log("clicked"))}
             </div>
+            {/* Suppliers*/}
+            <div className="card p-3 mb-3">
+              <h5 className="card-title mb-3">Suppliers</h5>
+              {optionButton("View Suppliers", () => history.push("/suppliers"))}
+              {optionButton(
+                "Add new Supplier",
+                () => history.push("/suppliers/new"),
+                handleClickSupplierView
+              )}
+            </div>
+            {/* Access Setting */}
             <div className="card p-3">
               <h5 className="card-title mb-3">Access Rights</h5>
-              {optionButton(
-                "Edit User Roles",
-                () => history.push("/employee/roles"),
-                handleClickCategoryView
+              {optionButton("Edit User Roles", () =>
+                history.push("/employee/roles")
               )}
             </div>
           </div>
