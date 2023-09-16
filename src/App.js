@@ -22,6 +22,9 @@ import {
   AccessDenied,
   CashierSalePage,
   UserProfile,
+  Suppliers,
+  SupplierProfile,
+  SupplierForm,
 } from "./screens";
 import "./App.css";
 import CartContext from "./context/CartContext";
@@ -78,6 +81,10 @@ function App() {
               <Route path="/inventory/update/:id" component={StockUpdateForm} />
               <Route path="/inventory/update" component={UpdateInventory} />
               <Route path="/inventory/:id" component={ProductForm} />
+              {/* Supplier Management */}
+              <Route path="/suppliers/profile" component={SupplierProfile} />
+              <Route path="/suppliers/:id" component={SupplierForm} />
+              <Route path="/suppliers" component={Suppliers} />
               {/* Customer Management */}
               <Route path="/customers/:id" component={CustomerForm} />
               <Route path="/customers" component={Customers} />
