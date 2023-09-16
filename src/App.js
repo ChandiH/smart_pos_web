@@ -25,6 +25,8 @@ import {
   Suppliers,
   SupplierProfile,
   SupplierForm,
+  BranchDetails,
+  BranchForm,
 } from "./screens";
 import "./App.css";
 import CartContext from "./context/CartContext";
@@ -88,6 +90,9 @@ function App() {
               {/* Customer Management */}
               <Route path="/customers/:id" component={CustomerForm} />
               <Route path="/customers" component={Customers} />
+              {/* Branch Management */}
+              <Route path="/branch/:id" component={BranchDetails} />
+              <Route path="/branch" component={BranchForm} />
               {/* Common */}
               <Route path="/sale" component={CashierSalePage} />
               <Route path="/dashboard" component={Dashboard} />

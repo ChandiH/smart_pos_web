@@ -2,6 +2,15 @@ import React, { Component } from "react";
 import Table from "../common/table";
 
 class StockTable extends Component {
+  handleText(product) {
+    return parseInt(product.reorder_level) > parseInt(product.quantity) ||
+      parseInt(product.quantity) === 0 ? (
+      <p style={{ color: "red" }}>{product.quantity}</p>
+    ) : (
+      <p>{product.quantity}</p>
+    );
+  }
+
   columns = [
     {
       path: "name",
@@ -10,7 +19,11 @@ class StockTable extends Component {
     { path: "category_name", label: "Category" },
     { path: "buying_ppu", label: "Buying Price" },
     { path: "retail_ppu", label: "Retail Price" },
-    { path: "quantity", label: "Stock" },
+    {
+      key: "lowStock",
+      label: "Stock",
+      content: (product) => this.handleText(product),
+    },
     { path: "lastupdate_at", label: "Last Updated" },
     {
       key: "select",

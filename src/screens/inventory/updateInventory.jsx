@@ -30,6 +30,7 @@ class UpdateInventory extends Component {
         ...product,
         quantity: stock ? stock.quantity : "0",
         lastupdate_at: stock ? stock.lastupdate_at.slice(0, 10) : "never",
+        reorder_level: stock ? stock.reorder_level : undefined,
       };
     });
     this.setState({ products: [...updatedInventory] });
@@ -105,18 +106,19 @@ class UpdateInventory extends Component {
         <div className="container my-3">
           <p>Showing {totalCount} Products in the database.</p>
           <div className="row my-3">
-            <div className="col-9">
+            <div className="col-8">
               <SearchBox
                 value={searchQuery}
                 onChange={this.handleSearch}
                 placeholder={"Search... (name or barcode)"}
               />
             </div>
-            <div className="col-3">
-              <NavLink className="btn btn-primary" to="/inventory/new">
-                Add new Product
-              </NavLink>
-            </div>
+
+            <NavLink className="col btn btn-primary mx-2" to="/inventory/new">
+              Add new Product
+            </NavLink>
+
+            <button className="col btn btn-secondary">Low Stock Alert</button>
           </div>
           <StockTable
             products={products}

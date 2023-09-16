@@ -1,89 +1,105 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SearchBox from "../../components/common/searchBox";
 import UserRoleTable from "./../../components/employee/userRoleTable";
-import { Component } from "react";
-import { getUserRoles } from "../../services/fakeAuthorizationService";
+import _ from "lodash";
 
-const option = Object.freeze({
-  CATEGORY: "category",
-});
+import {
+  getAccessLevels,
+  getUserRoles,
+} from "../../services/fakeAuthorizationService";
 
-class UserRoles extends Component {
-  state = {
-    userRoles: [],
-    filteredData: [],
-    searchQuery: "",
-    placeholder: "Search ... ",
-    sortColumn: { path: "name", order: "asc" },
-    selectedRole: {},
-  };
-  // const [searchQuery, setSearchQuery] = useState("");
-  // const [placeHolder, setPlaceHolder] = useState("Search ...");
-  // const [data, setData] = useState([]);
-  // const [filteredData, setFilteredData] = useState([]);
+const UserRoles = () => {
+  const [accessLevels, setAccessLevels] = useState([]);
+  const [userRoles, setUserRoles] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortColumn, setSortColumn] = useState({ path: "name", order: "asc" });
+  const [selectedRole, setSelectedRole] = useState({});
+  const [isSettingChanged, setIsSettingChanged] = useState(false);
 
-  componentDidMount() {
+  useEffect(() => {
+    const accessLevels = getAccessLevels();
     const roles = getUserRoles();
-    console.log(roles);
-    this.setState({ userRoles: roles, filteredData: roles });
-  }
+    setAccessLevels(accessLevels);
+    setUserRoles(roles);
+    setFilteredData(roles);
+  }, []);
 
-  handleSearch = (query) => {
-    this.setState({ searchQuery: query });
-    this.filterData(query);
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    filterData(query);
   };
 
-  filterData = (query) => {
-    const allData = [...this.state.userRoles];
+  const handleSort = (sortColumn) => {
+    setSortColumn(sortColumn);
+    const sortedList = _.orderBy(
+      userRoles,
+      [sortColumn.path],
+      [sortColumn.order]
+    );
+    setFilteredData(sortedList);
+  };
+
+  const filterData = (query) => {
+    const allData = [...userRoles];
     let filtered = allData;
     if (query !== "")
       filtered = allData.filter((d) =>
         d.name.toLowerCase().startsWith(query.toLowerCase())
       );
-    this.setState({ filteredData: filtered });
+    setFilteredData(filtered);
   };
 
-  render() {
-    const { searchQuery, placeholder, selectedRole } = this.state;
-
-    return (
-      <div className="container my-3">
-        <div className="row">
-          <div className="col-5">
-            <div className="card p-3">
-              <SearchBox
-                value={searchQuery}
-                placeholder={placeholder}
-                onChange={this.handleSearch}
-              />
-
-              <UserRoleTable
-                userRoles={this.state.filteredData}
-                sortColumn={this.state.sortColumn}
-                onSelect={(role) => this.setState({ selectedRole: role })}
-              />
-            </div>
+  return (
+    <div className="container my-3">
+      <div className="row">
+        <div className="col-5">
+          <div className="card p-3">
+            <SearchBox
+              value={searchQuery}
+              placeholder="Search..."
+              onChange={handleSearch}
+            />
+            <UserRoleTable
+              userRoles={filteredData}
+              sortColumn={sortColumn}
+              onSort={handleSort}
+              onSelect={(role) => setSelectedRole(role)}
+            />
           </div>
+        </div>
 
-          <div className="col-6">
-            <div className="card p-3 mb-3">
-              <h5 className="card-title mb-3">
-                {selectedRole.name ? selectedRole.name : "Selecte UserRole"}
-              </h5>
-              <ul class="list-group list-group-flush">
-                {selectedRole.access?.map((data, index) => (
-                  <li key={index} class="list-group-item">
-                    {data}
-                  </li>
-                ))}
-              </ul>
-              <button className="btn btn-primary mt-3">Save Changes</button>
-            </div>
+        <div className="col-6">
+          <div className="card p-3 mb-3">
+            <h5 className="card-title mb-3">
+              {selectedRole.name ? selectedRole.name : "Select UserRole"}
+            </h5>
+            <ul class="list-group list-group-flush">
+              {accessLevels.map((access) => (
+                <li class="form-check list-group-item">
+                  <input
+                    class="form-check-input mx-1"
+                    type="checkbox"
+                    value=""
+                    onChange={() => setIsSettingChanged(true)}
+                  />
+                  <label class="form-check-label mx-3" for="flexCheckChecked">
+                    {access}
+                  </label>
+                </li>
+              ))}
+            </ul>
+            <button
+              className="btn btn-primary mt-3"
+              disabled={!isSettingChanged}
+            >
+              Save Changes
+            </button>
           </div>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default UserRoles;

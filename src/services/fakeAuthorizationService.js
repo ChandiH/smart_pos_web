@@ -1,5 +1,5 @@
-/* should use a enum for this
 const accessLevels = [
+  "configuration",
   // employee management access levels
   "employee",
   "employeeDetails",
@@ -13,7 +13,11 @@ const accessLevels = [
   "customerForm",
   "customers",
   "report",
-];*/
+  // supplier management access levels
+  "supplierForm",
+  "supplier",
+  "supplierDetails",
+];
 
 const userRoles = [
   {
@@ -75,6 +79,10 @@ const userRoles = [
       "Guests are customers or visitors who do not have any administrative privileges. They can browse products or services but cannot access the system's internal functions.",
   },
 ];
+
+export function getAccessLevels() {
+  return accessLevels;
+}
 
 export function getUserRoles() {
   return userRoles.filter((u) => u);

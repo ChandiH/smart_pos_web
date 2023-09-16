@@ -4,6 +4,8 @@ import MonthlyBranchChart from "../components/charts/monthlyBranchChart";
 import MonthlyProductChart from "./../components/charts/monthlyProductChart";
 import { useContext } from "react";
 import UserContext from "./../context/UserContext";
+import SaleHistoryView from "../components/sale/saleHistortView";
+import DashBoardTile from "../components/charts/dashboardTile";
 
 const Dashboard = ({ history }) => {
   const { currentUser } = useContext(UserContext);
@@ -17,21 +19,30 @@ const Dashboard = ({ history }) => {
     }
   }, [currentUser, history]);
   return (
-    <div className="col mt-3">
+    <div className="container">
       <div className="row">
-        <h3 className="mx-3">Sales by Day</h3>
-        <div className="mx-3">
-          <MonthlySaleChart height={350} width="95%" />
-        </div>
+        <DashBoardTile label="Gross Sale" />
+        <DashBoardTile label="Gross Profit" />
+        <DashBoardTile label="Total Product Sale" />
       </div>
-      <div className="row">
-        <div className="col-6">
-          <h3 className="mx-3">Top Selling Branches</h3>
-          <MonthlyBranchChart height={250} width="100%" />
+      <div className="col">
+        <div className="row mb-3 p-2 rounded border">
+          <h3 className="mx-3">Sales by Day</h3>
+          <MonthlySaleChart height={350} width="100%" />
         </div>
-        <div className="col-6">
-          <h3 className="mx-3">Top Selling Products</h3>
-          <MonthlyProductChart height={250} width="100%" />
+        <div className="row">
+          <div className="col p-2 rounded border">
+            <h3 className="mx-3">Top Selling Branches</h3>
+            <MonthlyBranchChart height={250} width="100%" />
+          </div>
+          <div className="col p-2 rounded border">
+            <h3 className="mx-3">Top Selling Products</h3>
+            <MonthlyProductChart height={250} width="100%" />
+          </div>
+        </div>
+        <div className="row my-3 p-2 rounded border">
+          <h3 className="mx-3">Sales Today on {currentUser.branch_name}</h3>
+          <SaleHistoryView />
         </div>
       </div>
     </div>

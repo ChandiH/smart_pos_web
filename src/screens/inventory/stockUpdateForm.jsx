@@ -3,12 +3,12 @@ import AccessFrame from "../../components/accessFrame";
 
 import { getInventoryByProduct } from "../../services/inventoryService";
 import UserContext from "../../context/UserContext";
-import { getBranch } from "../../services/branchService";
 
 const StockUpdateForm = ({ history, match, location }) => {
   const accessLevel = "stockUpdateForm";
   const { currentUser } = useContext(UserContext);
   const [quantity, setQuantity] = useState(0);
+  const [reorderLevel, setReorderLevel] = useState();
   const [response, setResponse] = useState([]);
   const [product, setProduct] = useState({});
 
@@ -71,6 +71,10 @@ const StockUpdateForm = ({ history, match, location }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setReorderLevel(product.reorder_level);
+  }, [product]);
   // componentDidMount() {
   //   // this.setState({ product: { ...this.props.location.state } });
   //   // const product = products(this.props.match.params.id);
@@ -95,15 +99,15 @@ const StockUpdateForm = ({ history, match, location }) => {
   // }
 
   const handleIncrement = () => {
-    setQuantity({ quantity: quantity + 1 });
+    setQuantity(quantity + 1);
   };
 
   const handleDecrement = () => {
-    setQuantity({ quantity: quantity - 1 });
+    setQuantity(quantity - 1);
   };
 
   const handleQuantityChange = (e) => {
-    setQuantity({ quantity: Number(e.target.value) });
+    setQuantity(parseInt(e.target.value));
   };
 
   const updateBtnClick = () => {
@@ -130,6 +134,13 @@ const StockUpdateForm = ({ history, match, location }) => {
   //   }
   // };
 
+  const renderDetails = (label, value) => (
+    <>
+      <dt className="col-5">{label}:</dt>
+      <dd className="col-7">{value}</dd>
+    </>
+  );
+
   return (
     <AccessFrame
       accessLevel={accessLevel}
@@ -138,73 +149,69 @@ const StockUpdateForm = ({ history, match, location }) => {
       <div className="container my-3">
         <h2>Stock Update Form for {product.name}</h2>
       </div>
-      <section className="py-1">
-        <div className="container">
-          <div className="row gx-5">
-            {product.image?.length > 0 && (
-              <aside className="col-lg-6 my-5">
-                <div className="rounded-4 mb-3 d-flex justify-content-center">
+      <section className="container py-1">
+        <div className="row gx-5">
+          {product.image?.length > 0 && (
+            <aside className="col-lg-6 my-5">
+              <div className="rounded-4 mb-3 d-flex justify-content-center">
+                <img
+                  alt="display"
+                  style={{ width: "60%", aspectRatio: 1, margin: "auto" }}
+                  className="rounded-4 fit"
+                  src={product.image[0]}
+                />
+              </div>
+              <div className="d-flex justify-content-center mb-3">
+                {product.image.slice(1).map((imgUri, index) => (
                   <img
-                    alt="display"
-                    style={{ width: "60%", aspectRatio: 1, margin: "auto" }}
-                    className="rounded-4 fit"
-                    src={product.image[0]}
+                    key={index}
+                    alt="sub"
+                    width="70"
+                    height="70"
+                    className="rounded-2 border mx-2 item-thumb"
+                    src={imgUri}
                   />
+                ))}
+              </div>
+            </aside>
+          )}
+
+          <main className="col-lg-6">
+            <div className="ps-lg-3">
+              <h4 className="title text-dark">
+                {product.name} <br />
+                <small className="text-muted">{product.category_name}</small>
+              </h4>
+              <div className="col my-3">
+                <div className="col">
+                  <span className="text-muted">{product.quantity} items</span>
+                  <span className="text-success ms-2">In stock</span>
                 </div>
-                <div className="d-flex justify-content-center mb-3">
-                  {product.image.slice(1).map((imgUri, index) => (
-                    <img
-                      key={index}
-                      alt="sub"
-                      width="70"
-                      height="70"
-                      className="rounded-2 border mx-2 item-thumb"
-                      src={imgUri}
-                    />
-                  ))}
+                <div className="col">
+                  <span className="text-muted">last updated at:</span>
+                  <span className="text-success ms-2">
+                    {product.lastupdate_at?.slice(0, 10)}
+                  </span>
                 </div>
-              </aside>
-            )}
+                <span className="text">{product.branch_name} Branch</span>
+              </div>
 
-            <main className="col-lg-6">
-              <div className="ps-lg-3">
-                <h4 className="title text-dark">
-                  {product.name} <br />
-                  <small className="text-muted">{product.category_name}</small>
-                </h4>
-                <div className="col my-3">
-                  <div className="col">
-                    <span className="text-muted">{product.quantity} items</span>
-                    <span className="text-success ms-2">In stock</span>
-                  </div>
-                  <div className="col">
-                    <span className="text-muted">last updated at:</span>
-                    <span className="text-success ms-2">
-                      {product.lastupdate_at?.slice(0, 10)}
-                    </span>
-                  </div>
-                  <span className="text">{product.branch_name} Branch</span>
-                </div>
+              <p>
+                Description: <br />
+                {product.description}
+              </p>
 
-                <p>
-                  Description: <br />
-                  {product.description}
-                </p>
+              <div className="row">
+                {renderDetails("Buying Price", `Rs. ${product.buying_ppu}`)}
+                {renderDetails("Retail Price", `Rs. ${product.retail_ppu}`)}
+                {renderDetails("Discount", `Rs. ${product.discount}`)}
+                {renderDetails("Supplier", product.supplier_id)}
+                {renderDetails("Reorder level", product.reorder_level)}
+              </div>
+              <hr />
 
-                <div className="row">
-                  <dt className="col-5">buying Price:</dt>
-                  <dd className="col-7">Rs. {product.buying_ppu}</dd>
-
-                  <dt className="col-5">retails price:</dt>
-                  <dd className="col-7">Rs. {product.retail_ppu}</dd>
-
-                  <dt className="col-5">Supplier:</dt>
-                  <dd className="col-7">{product.supplier_id}</dd>
-                </div>
-
-                <hr />
-
-                <div>
+              <div className="row">
+                <div className="col">
                   <label className="mb-2 d-block">New Stock</label>
                   <div className="input-group mb-3" style={{ width: 150 }}>
                     <div
@@ -220,7 +227,7 @@ const StockUpdateForm = ({ history, match, location }) => {
                         -
                       </button>
                       <input
-                        type="text"
+                        type="number"
                         className="form-control text-center border "
                         value={quantity}
                         onChange={handleQuantityChange}
@@ -234,16 +241,34 @@ const StockUpdateForm = ({ history, match, location }) => {
                       </button>
                     </div>
                   </div>
+                  <button
+                    className="btn btn-primary shadow-0"
+                    onClick={updateBtnClick}
+                  >
+                    Update Inventory
+                  </button>
                 </div>
-                <button
-                  className="btn btn-primary shadow-0"
-                  onClick={updateBtnClick}
-                >
-                  Update Inventory
-                </button>
+
+                <div className="col">
+                  <label className="mb-2 d-block">Reorder Alert Level:</label>
+                  <div className="input mb-3" style={{ width: 150 }}>
+                    <input
+                      type="number"
+                      className="form-control text-center border "
+                      value={reorderLevel}
+                      onChange={(e) => setReorderLevel(e.target.value)}
+                    />
+                  </div>
+                  <button
+                    className="btn btn-primary shadow-0"
+                    onClick={updateBtnClick}
+                  >
+                    Change Level
+                  </button>
+                </div>
               </div>
-            </main>
-          </div>
+            </div>
+          </main>
         </div>
       </section>
     </AccessFrame>

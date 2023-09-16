@@ -1,5 +1,3 @@
-import { products } from "./fakeProductService";
-
 const orders = [
   {
     order_id: 1,

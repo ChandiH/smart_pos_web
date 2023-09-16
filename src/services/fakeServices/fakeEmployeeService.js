@@ -8,7 +8,7 @@ const employees = [
     email: "slahy0@trellian.com",
     phone: "6953579061",
     branch_id: 1,
-    userRole_id: 101,
+    userRole_id: 1,
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const employees = [
     email: "jstriker1@ameblo.jp",
     phone: "7515823058",
     branch_id: 2,
-    userRole_id: 102,
+    userRole_id: 2,
   },
   {
     id: 3,
@@ -26,7 +26,7 @@ const employees = [
     email: "spoundesford2@nifty.com",
     phone: "1301116352",
     branch_id: 3,
-    userRole_id: 103,
+    userRole_id: 3,
   },
   {
     id: 4,
@@ -35,7 +35,7 @@ const employees = [
     email: "asamsin3@newsvine.com",
     phone: "7866378501",
     branch_id: 1,
-    userRole_id: 104,
+    userRole_id: 4,
   },
   {
     id: 5,
@@ -44,7 +44,7 @@ const employees = [
     email: "fgirardengo4@walmart.com",
     phone: "9909919749",
     branch_id: 2,
-    userRole_id: 103,
+    userRole_id: 3,
   },
   {
     id: 6,
@@ -53,7 +53,7 @@ const employees = [
     email: "bmcallan5@reverbnation.com",
     phone: "6827781736",
     branch_id: 2,
-    userRole_id: 103,
+    userRole_id: 3,
   },
   {
     id: 7,
@@ -62,7 +62,7 @@ const employees = [
     email: "mnewvell6@mozilla.com",
     phone: "1534737151",
     branch_id: 3,
-    userRole_id: 103,
+    userRole_id: 3,
   },
   {
     id: 8,
@@ -71,7 +71,7 @@ const employees = [
     email: "vbette7@weebly.com",
     phone: "4483033388",
     branch_id: 3,
-    userRole_id: 104,
+    userRole_id: 4,
   },
   {
     id: 9,
@@ -80,7 +80,7 @@ const employees = [
     email: "korring8@github.io",
     phone: "7762133941",
     branch_id: 2,
-    userRole_id: 104,
+    userRole_id: 4,
   },
   {
     id: 10,
@@ -89,7 +89,7 @@ const employees = [
     email: "dleicester9@joomla.org",
     phone: "9229496708",
     branch_id: 1,
-    userRole_id: 104,
+    userRole_id: 4,
   },
 ];
 

@@ -3,6 +3,7 @@ import SearchBox from "../components/common/searchBox";
 import AccessFrame from "../components/accessFrame";
 import { getCategories } from "../services/categoryService";
 import { getSuppliers } from "../services/supplierService";
+import { getAllBranches } from "./../services/branchService";
 
 const ConfigScreen = ({ history }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -31,6 +32,25 @@ const ConfigScreen = ({ history }) => {
     const formatted = suppliers.map((s) => ({
       _id: s.supplier_id,
       name: s.name,
+    }));
+    setSearchQuery("");
+    setData(formatted);
+    setFilteredData(formatted);
+  };
+
+  const handleClickBranchView = async () => {
+    const { data: branches } = await getAllBranches();
+    const formatted = branches.map((s) => ({
+      _id: s.id,
+      name: s.city,
+      content: (branch) => (
+        <button
+          className="btn btn-danger mx-3"
+          onClick={() => history.push(`/branch/${branch._id}`)}
+        >
+          select
+        </button>
+      ),
     }));
     setSearchQuery("");
     setData(formatted);
@@ -94,10 +114,22 @@ const ConfigScreen = ({ history }) => {
               )}
             </div>
             {/* Access Setting */}
-            <div className="card p-3">
+            <div className="card p-3 mb-3">
               <h5 className="card-title mb-3">Access Rights</h5>
               {optionButton("Edit User Roles", () =>
                 history.push("/employee/roles")
+              )}
+            </div>
+            {/* Branch Configuration */}
+            <div className="card p-3 mb-3">
+              <h5 className="card-title mb-3">Branch</h5>
+              {optionButton("View Branche Details", () =>
+                console.log("branch configuration")
+              )}
+              {optionButton(
+                "Add new Branch",
+                () => history.push("/branch"),
+                handleClickBranchView
               )}
             </div>
           </div>
@@ -110,10 +142,15 @@ const ConfigScreen = ({ history }) => {
                 onChange={handleSearch}
               />
               <div className="card p-3 mt-3">
-                <ul class="list-group list-group-flush">
+                <ul className="list-group list-group-flush">
                   {filteredData.map((data, index) => (
-                    <li key={index} class="list-group-item">
+                    <li
+                      key={index}
+                      className="list-group-item"
+                      style={{ justifyContent: "space-between" }}
+                    >
                       {data.name}
+                      {data.content ? data.content(data) : ""}
                     </li>
                   ))}
                 </ul>
