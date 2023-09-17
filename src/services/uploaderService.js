@@ -13,3 +13,17 @@ export function uploadImage(file) {
   };
   return http.post(ApiEndPoint, formData, config);
 }
+
+export function uploadMultipleImage(files) {
+  const formData = new FormData();
+  for (let i = 0; i < files.length; i++) {
+    formData.append("files", files[i]);
+  }
+  console.log(formData);
+  const config = {
+    headers: {
+      "content-type": "multipart/form-data",
+    },
+  };
+  return http.post(`${ApiEndPoint}-multiple`, formData, config);
+}

@@ -63,8 +63,8 @@ class ProductCatalog extends Component {
     if (searchQuery)
       filtered = allProducts.filter(
         (m) =>
-          m.name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
-          m.barcode.startsWith(searchQuery)
+          m.product_name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
+          m.product_barcode.startsWith(searchQuery)
       );
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
