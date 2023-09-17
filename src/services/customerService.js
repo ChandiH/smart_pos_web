@@ -10,8 +10,8 @@ export function getCustomer(id) {
   return http.get(`${ApiEndPoint}/${id}`);
 }
 
-export function addCustomer({ name, email, phone, address }) {
-  return http.post(`${ApiEndPoint}`, { name, email, phone, address });
+export function addCustomer(data) {
+  return http.post(`${ApiEndPoint}`, data);
 }
 
 export function findEmail(email) {

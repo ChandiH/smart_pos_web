@@ -6,11 +6,11 @@ import Like from "../common/like";
 class CustomerTable extends Component {
   columns = [
     {
-      path: "name",
+      path: "customer_name",
       label: "Name",
     },
-    { path: "phone", label: "Contact" },
-    { path: "email", label: "Email" },
+    { path: "customer_phone", label: "Contact" },
+    { path: "customer_email", label: "Email" },
     { path: "rewards_points", label: "Point Count" },
   ];
   //   columns = [
