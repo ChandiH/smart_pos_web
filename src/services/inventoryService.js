@@ -14,3 +14,7 @@ export function getInventoryByProduct(id) {
 export function getInventoryByBranch(id) {
   return http.get(`${ApiEndPoint}/branch/${id}`);
 }
+
+export function updateInventory(data) {
+  return http.post(ApiEndPoint, data);
+}

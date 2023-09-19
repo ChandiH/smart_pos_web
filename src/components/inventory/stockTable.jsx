@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Table from "../common/table";
+import { getImageUrl } from "../../services/imageHandler";
 
 class StockTable extends Component {
   handleText(product) {
@@ -13,18 +14,33 @@ class StockTable extends Component {
 
   columns = [
     {
-      path: "name",
+      key: "image",
+      content: (product) => (
+        <img
+          src={
+            product.product_image[0].startsWith("http")
+              ? "https://placehold.co/200x200/png"
+              : getImageUrl(product.product_image[0])
+          }
+          style={{ width: 40, aspectRatio: 1, marginLeft: 10, marginRight: 10 }}
+          className="shadow-4 rounded"
+          alt="image"
+        />
+      ),
+    },
+    {
+      path: "product_name",
       label: "Name",
     },
     { path: "category_name", label: "Category" },
-    { path: "buying_ppu", label: "Buying Price" },
-    { path: "retail_ppu", label: "Retail Price" },
+    { path: "buying_price", label: "Buying Price" },
+    { path: "retail_price", label: "Retail Price" },
     {
       key: "lowStock",
       label: "Stock",
       content: (product) => this.handleText(product),
     },
-    { path: "lastupdate_at", label: "Last Updated" },
+    { path: "updated_on", label: "Updated on" },
     {
       key: "select",
       content: (product) => (

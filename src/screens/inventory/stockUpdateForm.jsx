@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import AccessFrame from "../../components/accessFrame";
 
-import { getInventoryByProduct } from "../../services/inventoryService";
+import {
+  getInventoryByProduct,
+  updateInventory,
+} from "../../services/inventoryService";
 import UserContext from "../../context/UserContext";
+import { getImageUrl } from "./../../services/imageHandler";
 
 const StockUpdateForm = ({ history, match, location }) => {
   const accessLevel = "stockUpdateForm";
@@ -12,60 +16,31 @@ const StockUpdateForm = ({ history, match, location }) => {
   const [response, setResponse] = useState([]);
   const [product, setProduct] = useState({});
 
-  // state = {
-  //   product: {
-  //     product_id: "",
-  //     name: "",
-  //     description: "",
-  //     category: "",
-  //     image: [],
-  //     weight: "",
-  //     unit: "",
-  //     buyingPrice: "",
-  //     retailPrice: "",
-  //     barcode: "",
-  //     supplier_id: "",
-  //     stock: [],
-  //     lastUpdated: "",
-  //   },
-  // };
-
   const fetchData = async () => {
-    const { data: product } = await getInventoryByProduct(match.params.id);
-    setResponse(product);
-    if (product.length === 0) {
-      const inventoryProduct = {
-        ...location.state,
-        image: [
-          "https://placehold.co/600x400/png",
-          "https://placehold.co/200x200/png",
-          "https://placehold.co/200x200/png",
-        ],
-        branch_name: currentUser.branch_name,
-      };
-      setProduct(inventoryProduct);
-    } else {
-      setProduct(
-        product.length === 0
-          ? {
-              ...location.state,
-              image: [
-                "https://placehold.co/600x400/png",
-                "https://placehold.co/200x200/png",
-                "https://placehold.co/200x200/png",
-              ],
-              branch_name: currentUser.branch_name,
-            }
-          : {
-              ...product[0],
-              image: [
-                "https://placehold.co/600x400/png",
-                "https://placehold.co/200x200/png",
-                "https://placehold.co/200x200/png",
-              ],
-            }
-      );
-    }
+    const { data: inventory } = await getInventoryByProduct(match.params.id);
+    const stock = inventory.find(
+      (stock) => stock.branch_id === currentUser.branch_id
+    );
+    const currentBranchStock = stock
+      ? stock
+      : {
+          branch_id: currentUser.branch_id,
+          branch_name: currentUser.branch_name,
+          quantity: 0,
+          reorder_level: 0,
+        };
+    setResponse(inventory);
+    setProduct(
+      inventory.length === 0
+        ? {
+            ...location.state,
+            ...currentBranchStock,
+          }
+        : {
+            ...inventory[0],
+            ...currentBranchStock,
+          }
+    );
   };
 
   useEffect(() => {
@@ -110,7 +85,20 @@ const StockUpdateForm = ({ history, match, location }) => {
     setQuantity(parseInt(e.target.value));
   };
 
-  const updateBtnClick = () => {
+  const updateBtnClick = async () => {
+    try {
+      const { data } = await updateInventory({
+        branch_id: currentUser.branch_id,
+        product_id: product.product_id,
+        quantity: product.quantity + quantity,
+        reorder_level: reorderLevel,
+      });
+      console.log("Inventory Updated Successfully", data);
+      return history.replace("/inventory/update");
+    } catch (e) {
+      console.log("Error Occured");
+      console.log(e.response.data);
+    }
     // if (quantity === 0)
     //   return this.props.history.push("/inventory/update");
     // const updatedInfo = updateInventory(
@@ -147,31 +135,34 @@ const StockUpdateForm = ({ history, match, location }) => {
       onDenied={() => history.replace("/access-denied")}
     >
       <div className="container my-3">
-        <h2>Stock Update Form for {product.name}</h2>
+        <h2>Stock Update Form for {product.product_name}</h2>
       </div>
       <section className="container py-1">
         <div className="row gx-5">
-          {product.image?.length > 0 && (
+          {product.product_image?.length > 0 && (
             <aside className="col-lg-6 my-5">
               <div className="rounded-4 mb-3 d-flex justify-content-center">
                 <img
                   alt="display"
                   style={{ width: "60%", aspectRatio: 1, margin: "auto" }}
                   className="rounded-4 fit"
-                  src={product.image[0]}
+                  src={getImageUrl(product.product_image[0])}
                 />
               </div>
               <div className="d-flex justify-content-center mb-3">
-                {product.image.slice(1).map((imgUri, index) => (
-                  <img
-                    key={index}
-                    alt="sub"
-                    width="70"
-                    height="70"
-                    className="rounded-2 border mx-2 item-thumb"
-                    src={imgUri}
-                  />
-                ))}
+                {product.product_image.length > 1 &&
+                  product.product_image
+                    .slice(1)
+                    .map((imgUri, index) => (
+                      <img
+                        key={index}
+                        alt="sub"
+                        width="70"
+                        height="70"
+                        className="rounded-2 border mx-2 item-thumb"
+                        src={getImageUrl(imgUri)}
+                      />
+                    ))}
               </div>
             </aside>
           )}
@@ -179,7 +170,7 @@ const StockUpdateForm = ({ history, match, location }) => {
           <main className="col-lg-6">
             <div className="ps-lg-3">
               <h4 className="title text-dark">
-                {product.name} <br />
+                {product.product_name} <br />
                 <small className="text-muted">{product.category_name}</small>
               </h4>
               <div className="col my-3">
@@ -190,7 +181,7 @@ const StockUpdateForm = ({ history, match, location }) => {
                 <div className="col">
                   <span className="text-muted">last updated at:</span>
                   <span className="text-success ms-2">
-                    {product.lastupdate_at?.slice(0, 10)}
+                    {product.updated_on?.slice(0, 10)}
                   </span>
                 </div>
                 <span className="text">{product.branch_name} Branch</span>
@@ -198,12 +189,12 @@ const StockUpdateForm = ({ history, match, location }) => {
 
               <p>
                 Description: <br />
-                {product.description}
+                {product.product_desc}
               </p>
 
               <div className="row">
-                {renderDetails("Buying Price", `Rs. ${product.buying_ppu}`)}
-                {renderDetails("Retail Price", `Rs. ${product.retail_ppu}`)}
+                {renderDetails("Buying Price", `Rs. ${product.buying_price}`)}
+                {renderDetails("Retail Price", `Rs. ${product.retail_price}`)}
                 {renderDetails("Discount", `Rs. ${product.discount}`)}
                 {renderDetails("Supplier", product.supplier_id)}
                 {renderDetails("Reorder level", product.reorder_level)}

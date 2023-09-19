@@ -8,21 +8,20 @@ import { addSupplier, getSupplier } from "../../services/supplierService";
 class EmployeeForm extends Form {
   state = {
     data: {
-      name: "",
-      email: "",
-      phone: "",
-      address: "",
+      supplier_name: "",
+      supplier_email: "",
+      supplier_phone: "",
+      supplier_address: "",
     },
     errors: {},
     accessLevel: "supplierForm",
   };
 
   schema = {
-    _id: Joi.string(),
-    name: Joi.string().required().label("Name"),
-    email: Joi.string().required().label("Email").email(),
-    phone: Joi.number().required().label("Phone Number"),
-    address: Joi.string().required().label("Address"),
+    supplier_name: Joi.string().required().label("Name"),
+    supplier_email: Joi.string().required().label("Email").email(),
+    supplier_phone: Joi.number().required().label("Phone Number"),
+    supplier_address: Joi.string().required().label("Address"),
   };
 
   componentDidMount() {
@@ -32,30 +31,18 @@ class EmployeeForm extends Form {
     const Supplier = getSupplier(supplierId);
     if (!Supplier) return this.props.history.replace("/not-found");
 
-    this.setState({ data: this.mapToViewModel(Supplier) });
+    this.setState({ data: { ...Supplier } });
   }
 
-  mapToViewModel(Supplier) {
-    return {
-      name: Supplier.name,
-      email: Supplier.email,
-      phone: Supplier.phone,
-      address: Supplier.address,
-    };
-  }
-
-  mapToDataModel(Supplier) {
-    return {
-      name: Supplier.name,
-      email: Supplier.email,
-      phone: Supplier.phone,
-      address: Supplier.address,
-    };
-  }
-
-  doSubmit = () => {
-    addSupplier(this.state.data);
-    // this.props.history.goBack();
+  doSubmit = async () => {
+    try {
+      await addSupplier(this.state.data);
+      this.props.history.goBack();
+    } catch (e) {
+      console.log("Error Occured");
+      console.log(e.response.data);
+      this.setState({ errors: { ...e.response.data.error } });
+    }
   };
 
   render() {
@@ -67,10 +54,10 @@ class EmployeeForm extends Form {
         <div className="container my-3">
           <h1>Add New Supplier</h1>
           <form onSubmit={this.handleSubmit}>
-            {this.renderInput("name", "Name")}
-            {this.renderInput("email", "Email")}
-            {this.renderInput("phone", "Contact", "number")}
-            {this.renderInput("address", "Address")}
+            {this.renderInput("supplier_name", "Name")}
+            {this.renderInput("supplier_email", "Email")}
+            {this.renderInput("supplier_phone", "Contact", "number")}
+            {this.renderInput("supplier_address", "Address")}
             <div className="my-3">{this.renderButton("Save")}</div>
           </form>
         </div>

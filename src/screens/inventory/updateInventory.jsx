@@ -6,8 +6,18 @@ import SearchBox from "../../components/common/searchBox";
 import StockTable from "../../components/inventory/stockTable";
 import AccessFrame from "../../components/accessFrame";
 import _ from "lodash";
-import { getInventory } from "../../services/inventoryService";
+import {
+  getInventory,
+  getInventoryByBranch,
+} from "../../services/inventoryService";
 import { getProducts } from "../../services/productService";
+
+/*
+try reconstruct the database
+there is error in the database
+i added inventory to the database it contain updated on == null
+make sure trigger is working
+*/
 
 class UpdateInventory extends Component {
   state = {
@@ -17,19 +27,22 @@ class UpdateInventory extends Component {
     searchQuery: "",
     sortColumn: { path: "name", order: "asc" },
     accessLevel: "inventory",
+    user: {},
   };
 
   fetchData = async () => {
-    const { data: inventory } = await getInventory();
+    const { data: inventory } = await getInventoryByBranch(1);
+    console.log(inventory);
     const { data: products } = await getProducts();
     const updatedInventory = products.map((product) => {
       const stock = inventory.find(
         (item) => item.product_id === product.product_id
       );
+      console.log(stock);
       return {
         ...product,
         quantity: stock ? stock.quantity : "0",
-        lastupdate_at: stock ? stock.lastupdate_at.slice(0, 10) : "never",
+        updated_on: stock ? stock.updated_on : "never",
         reorder_level: stock ? stock.reorder_level : undefined,
       };
     });
@@ -79,8 +92,8 @@ class UpdateInventory extends Component {
     if (searchQuery)
       filtered = allProducts.filter(
         (m) =>
-          m.name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
-          m.barcode.startsWith(searchQuery)
+          m.product_name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
+          m.product_barcode.startsWith(searchQuery)
       );
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
@@ -102,6 +115,7 @@ class UpdateInventory extends Component {
       <AccessFrame
         accessLevel={this.state.accessLevel}
         onDenied={() => this.props.history.replace("/access-denied")}
+        setUser={(user) => this.setState({ user: user.currentUser })}
       >
         <div className="container my-3">
           <p>Showing {totalCount} Products in the database.</p>

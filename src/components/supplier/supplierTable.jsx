@@ -4,12 +4,12 @@ import Table from "../common/table";
 class SupplierTable extends Component {
   columns = [
     {
-      path: "name",
+      path: "supplier_name",
       label: "Name",
     },
-    { path: "phone", label: "Contact" },
-    { path: "email", label: "Email" },
-    { path: "address", label: "Address" },
+    { path: "supplier_phone", label: "Contact" },
+    { path: "supplier_email", label: "Email" },
+    { path: "supplier_address", label: "Address" },
     {
       key: "select",
       content: (employee) => (

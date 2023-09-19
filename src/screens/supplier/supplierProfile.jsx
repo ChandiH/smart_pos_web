@@ -19,12 +19,12 @@ const tableColumn = [
     ),
   },
   {
-    path: "name",
+    path: "product_name",
     label: "Name",
   },
   { path: "category_name", label: "Category" },
-  { path: "buying_ppu", label: "Buying Price" },
-  { path: "barcode", label: "Barcode" },
+  { path: "buying_price", label: "Buying Price" },
+  { path: "product_barcode", label: "Barcode" },
 ];
 
 const SupplierProfile = ({ history, location }) => {
@@ -73,12 +73,12 @@ const SupplierProfile = ({ history, location }) => {
       <section className="py-1 container">
         <main className="col-lg-6 my-3">
           <h4 className="title text-dark">
-            {supplier.name} <br />
+            {supplier.supplier_name} <br />
           </h4>
           <div className="col my-3">
-            {renderDetails("Email", supplier.email)}
-            {renderDetails("Contact", supplier.phone)}
-            {renderDetails("Address", supplier.address)}
+            {renderDetails("Email", supplier.supplier_email)}
+            {renderDetails("Contact", supplier.supplier_phone)}
+            {renderDetails("Address", supplier.supplier_address)}
           </div>
         </main>
         <h5 className="col-lg-6 my-3">Product List</h5>
@@ -90,8 +90,8 @@ const SupplierProfile = ({ history, location }) => {
           columns={tableColumn}
           data={products.map((product) => ({
             ...product,
-            buying_ppu: "Rs. " + product.buying_ppu,
-            retail_ppu: "Rs. " + product.retail_ppu,
+            buying_price: "Rs. " + product.buying_price,
+            retail_price: "Rs. " + product.retail_price,
           }))}
           sortColumn={sortColumn}
           onSort={handleSort}
