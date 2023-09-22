@@ -21,7 +21,6 @@ class Supplier extends Component {
 
   async fetchData() {
     const { data: suppliers } = await getSuppliers();
-    console.log(suppliers);
     this.setState({ suppliers });
   }
 
@@ -58,7 +57,7 @@ class Supplier extends Component {
     if (searchQuery)
       filtered = allSuppliers.filter(
         (m) =>
-          m.name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
+          m.supplier_name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
           m.supplier_id.toString() === searchQuery
       );
 

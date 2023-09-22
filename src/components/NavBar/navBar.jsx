@@ -95,7 +95,10 @@ const NavBar = () => {
       </NavLink>
       <button
         className="btn btn-primary mx-3"
-        onClick={() => setCurrentUser(null)}
+        onClick={() => {
+          localStorage.removeItem("token");
+          setCurrentUser(null);
+        }}
         data-testid="logOutButton"
       >
         LogOut

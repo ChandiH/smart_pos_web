@@ -10,20 +10,6 @@ export function getEmployee(id) {
   return http.get(`${ApiEndPoint}/${id}`);
 }
 
-export function addEmployee({
-  name,
-  username,
-  email,
-  phone,
-  role_id,
-  branch_id,
-}) {
-  return http.post(`${ApiEndPoint}`, {
-    name,
-    username,
-    email,
-    phone,
-    role_id,
-    branch_id,
-  });
+export function updateEmployee(id, data) {
+  return http.put(`${ApiEndPoint}/${id}`, data);
 }

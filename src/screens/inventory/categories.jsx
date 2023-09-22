@@ -12,14 +12,14 @@ import {
 class Categories extends Form {
   state = {
     data: {
-      name: "",
+      category_name: "",
     },
     errors: {},
     accessLevel: "productForm",
   };
 
   schema = {
-    name: Joi.string().required().label("Name"),
+    category_name: Joi.string().required().label("Name"),
   };
 
   async componentDidMount() {
@@ -32,15 +32,14 @@ class Categories extends Form {
     this.setState({ data: this.mapToViewModel(category) });
   }
 
-  mapToViewModel(category) {
-    return {
-      name: category.name,
-    };
-  }
-
   doSubmit = async () => {
-    await addCategory(this.state.data.name);
-    this.props.history.goBack();
+    try {
+      await addCategory(this.state.data.category_name);
+      this.props.history.goBack();
+    } catch (e) {
+      console.log("Error Occured");
+      console.log(e.response.data);
+    }
   };
 
   render() {
@@ -52,7 +51,7 @@ class Categories extends Form {
         <div className="container my-3">
           <h1>Add New Category</h1>
           <form onSubmit={this.handleSubmit}>
-            {this.renderInput("name", "Name")}
+            {this.renderInput("category_name", "Name")}
             <div className="my-3">{this.renderButton("Save")}</div>{" "}
           </form>
         </div>

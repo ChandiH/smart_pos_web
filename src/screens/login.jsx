@@ -3,12 +3,12 @@ import Joi from "joi-browser";
 import Form from "../components/common/form";
 import UserContext from "../context/UserContext";
 
-import { authenticate } from "../services/fakeAuthenticationService";
+import { authenticate } from "../services/authenticationService";
 
 class Login extends Form {
   state = {
     data: {
-      userName: "",
+      username: "",
       password: "",
     },
     errors: {},
@@ -16,22 +16,30 @@ class Login extends Form {
   };
 
   schema = {
-    userName: Joi.string().required().label("Name"),
+    username: Joi.string().required().label("Name"),
     password: Joi.string().required().label("Password"),
   };
 
-  doSubmit = () => {
-    const user = authenticate(this.state.data);
-    if (user) {
-      this.state.setUser({ ...user });
-      console.log("user", user);
-      this.props.history.replace("/dashboard");
-    } else {
-      const errors = { ...this.state.errors };
-      const errorMessage = "user does not exist";
-      errors.userName = errorMessage;
-      this.setState({ errors });
+  doSubmit = async () => {
+    try {
+      const { data } = await authenticate(this.state.data);
+      console.log("token", data.token);
+      localStorage.setItem("token", data.token);
+    } catch (e) {
+      console.log("Error Occured");
+      console.log(e.response.data);
+      this.setState({ errors: { ...e.response.data.error } });
     }
+    // if (user) {
+    //   this.state.setUser({ ...user });
+    //   console.log("user", user);
+    //   this.props.history.replace("/dashboard");
+    // } else {
+    //   const errors = { ...this.state.errors };
+    //   const errorMessage = "user does not exist";
+    //   errors.userName = errorMessage;
+    //   this.setState({ errors });
+    // }
   };
 
   render() {
@@ -63,7 +71,7 @@ class Login extends Form {
               <div className="col">
                 <h1>Login</h1>
                 <form onSubmit={this.handleSubmit}>
-                  {this.renderInput("userName", "Name")}
+                  {this.renderInput("username", "Name")}
                   {this.renderInput("password", "Password", "password")}
                   <div className="my-3">{this.renderButton("Login")}</div>
                 </form>

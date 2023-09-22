@@ -1,29 +1,48 @@
 import React, { useEffect, useState } from "react";
 import SelectWithBtn from "../../components/common/selectWithBtn";
-import { getUserRoles } from "../../services/fakeAuthorizationService";
+import { getUserRoles } from "../../services/authorizationService";
 import { getAllBranches } from "../../services/branchService";
 import AccessFrame from "./../../components/accessFrame";
+import { updateEmployee } from "../../services/employeeService";
 
 const EmployeeProfile = ({ history, location }) => {
   const [employee, setEmployee] = useState({});
   const [userRoles, setUserRoles] = useState([]);
   const [branches, setBranches] = useState([]);
+  const [branch, setBranch] = useState(null);
+  const [role, setRole] = useState(null);
 
   const fetchData = async () => {
-    const roles = await getUserRoles();
+    const { data: roles } = await getUserRoles();
     const { data: branch } = await getAllBranches();
     setUserRoles(
-      roles.map((role) => ({ _id: role.userRole_id, name: role.name }))
+      roles.map((role) => ({ _id: role.role_id, name: role.role_name }))
     );
-    setBranches(branch.map((b) => ({ _id: b.id, name: b.city })));
+    setBranches(branch.map((b) => ({ _id: b.branch_id, name: b.branch_city })));
   };
 
   useEffect(() => {
     if (!location.state) return history.replace("/not-found");
     setEmployee(location.state);
-    console.log(location.state);
     fetchData();
   }, [history, location.state]);
+
+  const saveChanges = async () => {
+    try {
+      const { data } = await updateEmployee(employee.employee_id, {
+        employee_name: employee.employee_name,
+        employee_email: employee.employee_email,
+        employee_phone: employee.employee_phone,
+        role_id: role ? role : employee.role_id,
+        branch_id: branch ? branch : employee.branch_id,
+      });
+      return history.goBack();
+    } catch (e) {
+      console.log("Error Occured");
+      console.log(e.response.data);
+      // this.setState({ errors: { ...e.response.data.error } });
+    }
+  };
 
   const renderDetails = (label, name) => (
     <div className="row mb-2">
@@ -50,8 +69,8 @@ const EmployeeProfile = ({ history, location }) => {
                   style={{ width: "60%", aspectRatio: 1, margin: "auto" }}
                   className="rounded-4 fit"
                   src={
-                    employee.image
-                      ? employee.image
+                    employee.employee_image
+                      ? employee.employee_image
                       : "https://placehold.co/400x400/png"
                   }
                 />
@@ -60,24 +79,38 @@ const EmployeeProfile = ({ history, location }) => {
 
             <main className="col-lg-6 my-3">
               <h4 className="title text-dark">
-                {employee.name} <br />
+                {employee.employee_name} <br />
                 <small className="text-muted">{employee.role_name}</small>
               </h4>
               <div className="col my-3">
                 {renderDetails("Assigned Branch", employee.branch_name)}
-                {renderDetails("Email", employee.email)}
-                {renderDetails("Contact", employee.phone)}
+                {renderDetails("Email", employee.employee_email)}
+                {renderDetails("Contact", employee.employee_phone)}
               </div>
               <hr />
               <SelectWithBtn
+                name={"branch"}
                 label="Assigned New Branch"
+                value={branch}
                 placeHolder="Select Branch"
                 options={branches}
+                btnDisabled={!branch}
+                onChange={(e) => {
+                  setBranch(e.currentTarget.value);
+                }}
+                onClick={saveChanges}
               />
               <SelectWithBtn
+                name={"role"}
+                value={role}
                 label="Change User Role"
                 placeHolder="Select User Role"
                 options={userRoles}
+                btnDisabled={!role}
+                onChange={(e) => {
+                  setRole(e.currentTarget.value);
+                }}
+                onClick={saveChanges}
               />
             </main>
           </div>

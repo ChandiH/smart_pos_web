@@ -20,7 +20,7 @@ const ConfigScreen = ({ history }) => {
     const { data: categories } = await getCategories();
     const formatted = categories.map((c) => ({
       _id: c.category_id,
-      name: c.name,
+      name: c.category_name,
     }));
     setSearchQuery("");
     setData(formatted);

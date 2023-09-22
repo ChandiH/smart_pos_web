@@ -21,7 +21,6 @@ class Employee extends Component {
 
   async fetchData() {
     const { data: employees } = await getEmployees();
-    console.log(employees);
     this.setState({ employees });
   }
 
@@ -66,7 +65,7 @@ class Employee extends Component {
     if (searchQuery)
       filtered = allEmployees.filter(
         (m) =>
-          m.name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
+          m.employee_name.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
           m.employee_id.toString() === searchQuery
       );
 

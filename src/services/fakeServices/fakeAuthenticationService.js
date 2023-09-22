@@ -1,5 +1,5 @@
-import { getUserRole } from "./fakeAuthorizationService";
-import { getEmployee } from "./fakeServices/fakeEmployeeService";
+import { getUserRole } from "../fakeAuthorizationService";
+import { getEmployee } from "./fakeEmployeeService";
 
 const users = [
   {

@@ -37,12 +37,17 @@ class ProductForm extends Form {
   };
 
   async fetchData() {
-    const { data: categories } = await getCategories();
-    const formatted = categories.map((category) => ({
-      _id: category.category_id,
-      name: category.category_name,
-    }));
-    this.setState({ categories: formatted });
+    try {
+      const { data: categories } = await getCategories();
+      const formatted = categories.map((category) => ({
+        _id: category.category_id,
+        name: category.category_name,
+      }));
+      this.setState({ categories: formatted });
+    } catch (e) {
+      console.log("Error in fetching Categories");
+      alert(e.response.data);
+    }
   }
 
   componentDidMount() {

@@ -4,11 +4,10 @@ import Table from "../common/table";
 class EmployeeTable extends Component {
   columns = [
     {
-      path: "name",
+      path: "employee_name",
       label: "Name",
     },
-    { path: "phone", label: "Contact" },
-    { path: "email", label: "Email" },
+    { path: "employee_email", label: "Email" },
     { path: "role_name", label: "Role" },
     { path: "branch_name", label: "Branch" },
     {

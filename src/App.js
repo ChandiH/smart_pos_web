@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import NavBar from "./components/NavBar/navBar";
 import UserContext from "./context/UserContext";
@@ -30,6 +30,7 @@ import {
 } from "./screens";
 import "./App.css";
 import CartContext from "./context/CartContext";
+import { decodeJWT } from "./services/authenticationService";
 
 function App() {
   // ** REMOVE THIS AFTER TESTING **
@@ -46,6 +47,10 @@ function App() {
   });
 
   // const [currentUser, setCurrentUser] = useState(null);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) setCurrentUser(decodeJWT(token));
+  // }, []);
 
   const [cart, setCart] = useState([]);
   return (

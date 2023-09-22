@@ -4,18 +4,19 @@ import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
 
 import { getAllBranches } from "../../services/branchService";
-import { getEmployee, addEmployee } from "../../services/employeeService";
-import { getUserRoles } from "../../services/fakeAuthorizationService";
+import { getEmployee } from "../../services/employeeService";
+import { getUserRoles } from "../../services/authorizationService";
+import { registerEmployee } from "../../services/authenticationService";
 
 class EmployeeForm extends Form {
   state = {
     data: {
-      name: "",
-      userName: "",
-      email: "",
-      phone: "",
-      userRole: "",
-      branch: "",
+      employee_name: "",
+      employee_userName: "",
+      employee_email: "",
+      employee_phone: "",
+      role_id: "",
+      branch_id: "",
     },
     branches: [],
     userRoles: [],
@@ -24,29 +25,27 @@ class EmployeeForm extends Form {
   };
 
   schema = {
-    _id: Joi.string(),
-    name: Joi.string().required().label("Name"),
-    userName: Joi.string().required().label("User Name"),
-    email: Joi.string().required().label("Email").email(),
-    phone: Joi.number().required().label("Phone Number"),
-    branch: Joi.string().required().label("Branch"),
-    userRole: Joi.string().required().label("User Role"),
+    employee_name: Joi.string().required().label("Name"),
+    employee_userName: Joi.string().required().label("User Name"),
+    employee_email: Joi.string().required().label("Email").email(),
+    employee_phone: Joi.number().required().label("Phone Number"),
+    branch_id: Joi.required().label("Branch"),
+    role_id: Joi.required().label("User Role"),
   };
 
   fetchData = async () => {
     const { data: branches } = await getAllBranches();
-    const branchList = branches.map((b) => ({ _id: b.id, name: b.city }));
-    this.setState({ branches: branchList });
+    const { data: roles } = await getUserRoles();
+    const branchList = branches.map((b) => ({
+      _id: b.branch_id,
+      name: b.branch_city,
+    }));
+    const rolesList = roles.map((r) => ({ _id: r.role_id, name: r.role_name }));
+    this.setState({ branches: branchList, userRoles: rolesList });
   };
 
   componentDidMount() {
-    try {
-      this.fetchData();
-      this.setState({ userRoles: getUserRoles() });
-      console.log("state,", this.state);
-    } catch (ex) {
-      console.log("error,", ex);
-    }
+    this.fetchData();
 
     const employeeId = this.props.match.params.id;
     if (employeeId === "new") return;
@@ -89,10 +88,16 @@ class EmployeeForm extends Form {
     };
   }
 
-  doSubmit = () => {
-    console.log(this.state);
-    addEmployee(this.mapToDataModel(this.state.data));
-    this.props.history.goBack();
+  doSubmit = async () => {
+    try {
+      console.log(this.state.data);
+      const { data } = await registerEmployee(this.state.data);
+      return this.props.history.goBack();
+    } catch (e) {
+      console.log("Error Occured");
+      console.log(e.response.data);
+      this.setState({ errors: { ...e.response.data.error } });
+    }
   };
 
   render() {
@@ -104,12 +109,12 @@ class EmployeeForm extends Form {
         <div className="container my-3">
           <h1>Add New Employee</h1>
           <form onSubmit={this.handleSubmit}>
-            {this.renderInput("name", "Name")}
-            {this.renderInput("userName", "User Name")}
-            {this.renderInput("email", "Email")}
-            {this.renderInput("phone", "Contact")}
-            {this.renderSelect("branch", "Branch", this.state.branches)}
-            {this.renderSelect("userRole", "userRole", this.state.userRoles)}
+            {this.renderInput("employee_name", "Name")}
+            {this.renderInput("employee_userName", "User Name")}
+            {this.renderInput("employee_email", "Email")}
+            {this.renderInput("employee_phone", "Contact", "number")}
+            {this.renderSelect("branch_id", "Branch", this.state.branches)}
+            {this.renderSelect("role_id", "userRole", this.state.userRoles)}
             <div className="my-3">{this.renderButton("Save")}</div>
           </form>
         </div>
