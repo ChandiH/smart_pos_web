@@ -1,7 +1,7 @@
 import http from "./httpService";
 // import uploader from "./uploaderService";
 
-const ApiEndPoint = "http://localhost:4000/product";
+const ApiEndPoint = `${process.env.REACT_APP_BACKEND}/product`;
 
 export function getProducts() {
   return http.get(ApiEndPoint);

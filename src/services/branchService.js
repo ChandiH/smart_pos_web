@@ -1,6 +1,6 @@
 import http from "./httpService";
 
-const ApiEndPoint = "http://localhost:4000/branch";
+const ApiEndPoint = `${process.env.REACT_APP_BACKEND}/branch`;
 
 export function getAllBranches() {
   return http.get(ApiEndPoint);

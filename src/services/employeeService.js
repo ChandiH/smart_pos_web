@@ -1,6 +1,6 @@
 import http from "./httpService";
 
-const ApiEndPoint = "http://localhost:4000/employee";
+const ApiEndPoint = `${process.env.REACT_APP_BACKEND}/employee`;
 
 export function getEmployees() {
   return http.get(ApiEndPoint);

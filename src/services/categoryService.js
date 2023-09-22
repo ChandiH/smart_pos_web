@@ -1,6 +1,6 @@
 import http from "./httpService";
 
-const ApiEndPoint = "http://localhost:4000/inventory/category";
+const ApiEndPoint = `${process.env.REACT_APP_BACKEND}/category`;
 
 export function getCategories() {
   return http.get(ApiEndPoint);

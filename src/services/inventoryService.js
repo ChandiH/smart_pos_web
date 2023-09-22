@@ -1,6 +1,6 @@
 import http from "./httpService";
 
-const ApiEndPoint = "http://localhost:4000/inventory";
+const ApiEndPoint = `${process.env.REACT_APP_BACKEND}/inventory`;
 
 // will return each product with its stock quantity in each branch
 export function getInventory() {

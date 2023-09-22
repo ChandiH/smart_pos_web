@@ -1,6 +1,6 @@
 import http from "./httpService";
 
-const ApiEndPoint = "http://localhost:4000/supplier";
+const ApiEndPoint = `${process.env.REACT_APP_BACKEND}/supplier`;
 
 export function getSuppliers() {
   return http.get(ApiEndPoint);
