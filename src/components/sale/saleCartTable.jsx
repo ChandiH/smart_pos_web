@@ -27,12 +27,12 @@ const SaleCartTable = ({ onSort, sortColumn }) => {
   };
 
   const columns = [
-    { path: "barcode", label: "Barcode" },
+    { path: "product_barcode", label: "Barcode" },
     {
-      path: "name",
+      path: "product_name",
       label: "Name",
     },
-    { path: "retail_ppu", label: "Retail Price" },
+    { path: "retail_price", label: "Retail Price" },
     {
       key: "quantity",
       label: "Quantity",
@@ -74,7 +74,9 @@ const SaleCartTable = ({ onSort, sortColumn }) => {
       key: "total",
       label: "Total",
       content: (product) =>
-        `Rs. ${parseFloat((product.quantity * product.retail_ppu).toFixed(2))}`,
+        `Rs. ${parseFloat(
+          (product.quantity * product.retail_price).toFixed(2)
+        )}`,
     },
     {
       key: "delete",

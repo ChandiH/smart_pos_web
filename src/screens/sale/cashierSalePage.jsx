@@ -9,7 +9,8 @@ import _ from "lodash";
 import { getInventoryByBranch } from "../../services/inventoryService";
 import { getProducts } from "../../services/productService";
 import { getCustomers } from "../../services/customerService";
-import { saveOrder } from "../../services/fakeOrderService";
+import { submitOrder } from "../../services/orderService";
+
 import SummaryWindow from "../../components/sale/summaryWindow";
 
 const CashierSalePage = ({ history }) => {
@@ -74,9 +75,9 @@ const CashierSalePage = ({ history }) => {
   const handleCustomerSearch = (query) => {
     setCustomerSearchQuery(query);
     const guestCustomer = {
-      name: "Guest Customer",
-      contact: "0000000000",
-      pointCount: 0,
+      customer_name: "Guest Customer",
+      customer_contact: "0000000000",
+      rewards_points: 0,
     };
     if (query === "") {
       setCustomer(guestCustomer);
@@ -86,8 +87,8 @@ const CashierSalePage = ({ history }) => {
     if (query) {
       filterCustomer = customers.filter(
         (m) =>
-          m.name.toLowerCase().startsWith(query.toLowerCase()) ||
-          m.phone.toString() === query
+          m.customer_name.toLowerCase().startsWith(query.toLowerCase()) ||
+          m.customer_phone.toString() === query
       );
     }
     if (filterCustomer && filterCustomer.length > 0) {
@@ -132,7 +133,7 @@ const CashierSalePage = ({ history }) => {
     let totalPrice = 0;
     if (cart.length !== 0) {
       cart.forEach((product) => {
-        totalPrice += product.quantity * product.retail_ppu;
+        totalPrice += product.quantity * product.retail_price;
       });
     }
     return parseFloat(totalPrice).toFixed(2);
@@ -146,14 +147,27 @@ const CashierSalePage = ({ history }) => {
     return parseFloat(discount).toFixed(2);
   };
 
+  const getProfit = () => {
+    let profit = 0;
+    cart.forEach((product) => {
+      profit += parseFloat(
+        product.quantity * (product.retail_price - product.buying_price) -
+          product.discount
+      );
+    });
+    return parseFloat(profit).toFixed(2);
+  };
+
   const getPagedData = () => {
     const allProducts = products;
 
     let filtered = productSearchQuery
       ? allProducts.filter(
           (m) =>
-            m.name.toLowerCase().startsWith(productSearchQuery.toLowerCase()) ||
-            m.barcode.startsWith(productSearchQuery)
+            m.product_name
+              .toLowerCase()
+              .startsWith(productSearchQuery.toLowerCase()) ||
+            m.product_barcode.startsWith(productSearchQuery)
         )
       : [];
 
@@ -170,13 +184,39 @@ const CashierSalePage = ({ history }) => {
     return cart.length > 0 && paymentDetails;
   };
 
-  const placeOrder = () => {
-    console.log("order placed");
-    saveOrder(currentUser, customer, cart);
-    setCart([]);
-    handleCustomerSearch("");
-    setPaymentMethod("cash");
-    setPaymentDetails("");
+  const placeOrder = async () => {
+    const order = {
+      customer_id: customer.customer_id,
+      cashier_id: currentUser.id,
+      total_amount: getTotalPrice(),
+      profit: getProfit(),
+      payment_method_id: "1",
+      reference_id: paymentDetails,
+    };
+
+    const products = cart.map((product) => {
+      return {
+        product_id: product.product_id,
+        quantity: product.quantity,
+      };
+    });
+
+    try {
+      await submitOrder({
+        salesData: {
+          order,
+          products,
+        },
+      });
+      console.log("order placed");
+      setCart([]);
+      handleCustomerSearch("");
+      setPaymentMethod("cash");
+      setPaymentDetails("");
+    } catch (e) {
+      console.log("error ocured");
+      console.log(e.response.data);
+    }
   };
 
   const paymentHandler = (paymentType) => {
@@ -246,11 +286,11 @@ const CashierSalePage = ({ history }) => {
         />
         <div className="row mt-2">
           <dt className="col-5 ">Customer Name:</dt>
-          <dd className="col-7 align-right">{customer?.name}</dd>
-          {customer.name !== "Guest Customer" && (
+          <dd className="col-7 align-right">{customer?.customer_name}</dd>
+          {customer.customer_name !== "Guest Customer" && (
             <>
               <dt className="col-5 ">Contact:</dt>
-              <dd className="col-7 align-right">{customer?.phone}</dd>
+              <dd className="col-7 align-right">{customer?.customer_phone}</dd>
               <dt className="col-7">Total Loyalty Points:</dt>
               <dd className="col-5 align-right">{customer?.rewards_points}</dd>
             </>
@@ -384,7 +424,7 @@ const CashierSalePage = ({ history }) => {
           <SummaryWindow
             id={"popUpWindow"}
             cashierName={currentUser.name}
-            customerName={customer.name}
+            customerName={customer.customer_name}
             quantity={getTotalQuantity()}
             discount={getDiscount()}
             totalPrice={getTotalPrice()}

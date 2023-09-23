@@ -17,6 +17,7 @@ const accessLevels = [
   "supplierForm",
   "supplier",
   "supplierDetails",
+  //branch management access levels
 ];
 
 const userRoles = [
@@ -38,6 +39,7 @@ const userRoles = [
       "supplierForm",
       "supplier",
       "supplierDetails",
+      "addBranch",
     ],
     description:
       "The owner role has full control and authority over the business or organization. Owners make critical decisions and have access to all resources.",

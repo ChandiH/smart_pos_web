@@ -9,3 +9,7 @@ export function getAllBranches() {
 export function getBranch(id) {
   return http.get(`${ApiEndPoint}/${id}`);
 }
+
+export function addBranch(data) {
+  return http.post(ApiEndPoint, data);
+}

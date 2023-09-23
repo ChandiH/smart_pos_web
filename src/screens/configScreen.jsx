@@ -31,7 +31,7 @@ const ConfigScreen = ({ history }) => {
     const { data: suppliers } = await getSuppliers();
     const formatted = suppliers.map((s) => ({
       _id: s.supplier_id,
-      name: s.name,
+      name: s.supplier_name,
     }));
     setSearchQuery("");
     setData(formatted);
@@ -41,8 +41,8 @@ const ConfigScreen = ({ history }) => {
   const handleClickBranchView = async () => {
     const { data: branches } = await getAllBranches();
     const formatted = branches.map((s) => ({
-      _id: s.id,
-      name: s.city,
+      _id: s.branch_id,
+      name: s.branch_city,
       content: (branch) => (
         <button
           className="btn btn-danger mx-3"
@@ -94,6 +94,18 @@ const ConfigScreen = ({ history }) => {
       <div className="container my-3">
         <div className="row">
           <div className="col-5">
+            {/* Branch Configuration */}
+            <div className="card p-3 mb-3">
+              <h5 className="card-title mb-3">Branch</h5>
+              {optionButton("View Branch Details", () =>
+                console.log("branch configuration")
+              )}
+              {optionButton(
+                "Add new Branch",
+                () => history.push("/branch"),
+                handleClickBranchView
+              )}
+            </div>
             {/* Inventory Configuration */}
             <div className="card p-3 mb-3">
               <h5 className="card-title mb-3">Inventory</h5>
@@ -120,18 +132,6 @@ const ConfigScreen = ({ history }) => {
                 history.push("/employee/roles")
               )}
             </div>
-            {/* Branch Configuration */}
-            <div className="card p-3 mb-3">
-              <h5 className="card-title mb-3">Branch</h5>
-              {optionButton("View Branche Details", () =>
-                console.log("branch configuration")
-              )}
-              {optionButton(
-                "Add new Branch",
-                () => history.push("/branch"),
-                handleClickBranchView
-              )}
-            </div>
           </div>
 
           <div className="col-6">
@@ -146,8 +146,7 @@ const ConfigScreen = ({ history }) => {
                   {filteredData.map((data, index) => (
                     <li
                       key={index}
-                      className="list-group-item"
-                      style={{ justifyContent: "space-between" }}
+                      className="list-group-item d-flex justify-content-between align-items-center"
                     >
                       {data.name}
                       {data.content ? data.content(data) : ""}

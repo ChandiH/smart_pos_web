@@ -4,7 +4,7 @@ import Table from "../common/table";
 class UserRoleTable extends Component {
   columns = [
     {
-      path: "name",
+      path: "role_name",
       label: "Name",
     },
     {
