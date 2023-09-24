@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import SelectWithBtn from "../../components/common/selectWithBtn";
+import AccessFrame from "./../../components/accessFrame";
+
 import { getUserRoles } from "../../services/authorizationService";
 import { getAllBranches } from "../../services/branchService";
-import AccessFrame from "./../../components/accessFrame";
 import { updateEmployee } from "../../services/employeeService";
 
 const EmployeeProfile = ({ history, location }) => {
@@ -29,7 +30,7 @@ const EmployeeProfile = ({ history, location }) => {
 
   const saveChanges = async () => {
     try {
-      const { data } = await updateEmployee(employee.employee_id, {
+      await updateEmployee(employee.employee_id, {
         employee_name: employee.employee_name,
         employee_email: employee.employee_email,
         employee_phone: employee.employee_phone,
@@ -54,7 +55,7 @@ const EmployeeProfile = ({ history, location }) => {
   return (
     <AccessFrame
       accessLevel={"employeeDetails"}
-      onDenied={() => history.replace("/access-denied")}
+      onDenied={() => history.goBack()}
     >
       <div className="container my-3">
         <h2>Employee Profile</h2>

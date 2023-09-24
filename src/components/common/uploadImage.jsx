@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
-// import httpService from "../services/httpService";
 
 const UploadImage = ({ fileTypes, setFiles }) => {
   const [filePreview, setFilePreview] = useState([]);

@@ -130,10 +130,7 @@ const StockUpdateForm = ({ history, match, location }) => {
   );
 
   return (
-    <AccessFrame
-      accessLevel={accessLevel}
-      onDenied={() => history.replace("/access-denied")}
-    >
+    <AccessFrame accessLevel={accessLevel} onDenied={() => history.goBack()}>
       <div className="container my-3">
         <h2>Stock Update Form for {product.product_name}</h2>
       </div>

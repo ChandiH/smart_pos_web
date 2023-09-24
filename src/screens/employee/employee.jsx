@@ -7,7 +7,7 @@ import EmployeeTable from "./../../components/employee/employeeTable";
 import AccessFrame from "../../components/accessFrame";
 import _ from "lodash";
 
-import { getEmployees, getEmployee } from "../../services/employeeService";
+import { getEmployees } from "../../services/employeeService";
 
 class Employee extends Component {
   state = {
@@ -87,7 +87,7 @@ class Employee extends Component {
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}
-        onDenied={() => this.props.history.replace("/access-denied")}
+        onDenied={() => this.props.history.goBack()}
       >
         <div className="container my-3">
           <p>Showing {totalCount} Employees in the database.</p>

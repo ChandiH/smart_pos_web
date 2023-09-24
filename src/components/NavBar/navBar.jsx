@@ -81,7 +81,7 @@ const NavBar = () => {
             textAlign: "right",
           }}
         >
-          {currentUser.name}
+          {currentUser.employee_name}
         </span>
       </div>
 

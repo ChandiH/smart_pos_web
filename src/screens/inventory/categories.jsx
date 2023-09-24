@@ -3,11 +3,7 @@ import Joi from "joi-browser";
 import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
 
-import {
-  getCategories,
-  getCategory,
-  addCategory,
-} from "./../../services/categoryService";
+import { getCategory, addCategory } from "./../../services/categoryService";
 
 class Categories extends Form {
   state = {
@@ -46,7 +42,7 @@ class Categories extends Form {
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}
-        onDenied={() => this.props.history.replace("/access-denied")}
+        onDenied={() => this.props.history.goBack()}
       >
         <div className="container my-3">
           <h1>Add New Category</h1>

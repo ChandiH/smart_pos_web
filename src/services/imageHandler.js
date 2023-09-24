@@ -1,5 +1,3 @@
-import http from "./httpService";
-
 const ApiEndPoint = `${process.env.REACT_APP_BACKEND}/static`;
 
 export function getImageUrl(imageName) {

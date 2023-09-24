@@ -89,11 +89,10 @@ class ProductForm extends Form {
   };
 
   render() {
-    const { data, errors } = this.state;
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}
-        onDenied={() => this.props.history.replace("/access-denied")}
+        onDenied={() => this.props.history.goBack()}
       >
         <div className="container my-3">
           <h1>Add New Product</h1>

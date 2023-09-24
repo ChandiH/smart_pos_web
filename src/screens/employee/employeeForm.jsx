@@ -91,7 +91,7 @@ class EmployeeForm extends Form {
   doSubmit = async () => {
     try {
       console.log(this.state.data);
-      const { data } = await registerEmployee(this.state.data);
+      await registerEmployee(this.state.data);
       return this.props.history.goBack();
     } catch (e) {
       console.log("Error Occured");
@@ -104,7 +104,7 @@ class EmployeeForm extends Form {
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}
-        onDenied={() => this.props.history.replace("/access-denied")}
+        onDenied={() => this.props.history.goBack()}
       >
         <div className="container my-3">
           <h1>Add New Employee</h1>

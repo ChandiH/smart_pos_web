@@ -2,6 +2,7 @@ import React from "react";
 import Joi from "joi-browser";
 import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
+
 import { addBranch } from "../../services/branchService";
 
 class BranchForm extends Form {
@@ -26,7 +27,7 @@ class BranchForm extends Form {
   doSubmit = async () => {
     try {
       console.log(this.state.data);
-      const { data } = await addBranch(this.state.data);
+      await addBranch(this.state.data);
       return this.props.history.goBack();
     } catch (e) {
       console.log("Error Occured");
@@ -39,7 +40,7 @@ class BranchForm extends Form {
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}
-        onDenied={() => this.props.history.replace("/access-denied")}
+        onDenied={() => this.props.history.goBack()}
       >
         <div className="container my-3">
           <h1>Add New Branch</h1>

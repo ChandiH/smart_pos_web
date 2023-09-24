@@ -15,7 +15,7 @@ class ProductTable extends Component {
           }
           style={{ width: 40, aspectRatio: 1, marginLeft: 10, marginRight: 10 }}
           className="shadow-4 rounded"
-          alt="image"
+          alt="product_image"
         />
       ),
     },

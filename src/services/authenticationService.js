@@ -1,4 +1,5 @@
 import http from "./httpService";
+import jwtDecode from "jwt-decode";
 
 const ApiEndPoint = `${process.env.REACT_APP_BACKEND}/auth`;
 
@@ -28,5 +29,5 @@ export function registerEmployee({
 }
 
 export function decodeJWT(token) {
-  console.log(token);
+  return jwtDecode(token);
 }

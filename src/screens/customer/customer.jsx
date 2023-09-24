@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
-import CustomerTable from "../../components/customer/customerTable";
-import Pagination from "../../components/common/pagination";
-import { paginate } from "../../utils/paginate";
 import SearchBox from "../../components/common/searchBox";
+import Pagination from "../../components/common/pagination";
 import AccessFrame from "../../components/accessFrame";
+import CustomerTable from "../../components/customer/customerTable";
+import { paginate } from "../../utils/paginate";
 import _ from "lodash";
 
 import { getCustomers } from "../../services/customerService";
@@ -75,7 +75,7 @@ class Customers extends Component {
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}
-        onDenied={() => this.props.history.replace("/access-denied")}
+        onDenied={() => this.props.history.goBack()}
       >
         <div className="container my-3">
           <p>Showing {totalCount} Customers in the database.</p>

@@ -14,7 +14,7 @@ const tableColumn = [
         }
         style={{ width: 40, aspectRatio: 1, marginLeft: 10, marginRight: 10 }}
         className="shadow-4 rounded"
-        alt="image"
+        alt="product"
       />
     ),
   },
@@ -65,7 +65,7 @@ const SupplierProfile = ({ history, location }) => {
   return (
     <AccessFrame
       accessLevel={"supplierDetails"}
-      onDenied={() => history.replace("/access-denied")}
+      onDenied={() => history.goBack()}
     >
       <div className="container my-3">
         <h2>supplier Profile</h2>

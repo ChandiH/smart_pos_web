@@ -24,7 +24,7 @@ const UserRoles = () => {
 
   const fetchData = async () => {
     const { data: roles } = await getUserRoles();
-    const { data: access } = await accessList();
+    const access = accessList();
     setUserRoles(roles);
     setFilteredData(roles);
     setAccessLevels(access);

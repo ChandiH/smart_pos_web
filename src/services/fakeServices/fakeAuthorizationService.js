@@ -1,5 +1,6 @@
 const accessLevels = [
   "configuration",
+  "report",
   // employee management access levels
   "employee",
   "employeeDetails",
@@ -18,6 +19,7 @@ const accessLevels = [
   "supplier",
   "supplierDetails",
   //branch management access levels
+  "addBranch",
 ];
 
 const userRoles = [

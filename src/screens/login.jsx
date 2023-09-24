@@ -3,7 +3,7 @@ import Joi from "joi-browser";
 import Form from "../components/common/form";
 import UserContext from "../context/UserContext";
 
-import { authenticate } from "../services/authenticationService";
+import { authenticate, decodeJWT } from "../services/authenticationService";
 
 class Login extends Form {
   state = {
@@ -20,20 +20,28 @@ class Login extends Form {
     password: Joi.string().required().label("Password"),
   };
 
+  componentDidMount() {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    this.state.setUser(decodeJWT(token));
+    this.props.history.replace("/dashboard");
+  }
+
   doSubmit = async () => {
     try {
-      const { data } = await authenticate(this.state.data);
-      console.log("token", data.token);
-      localStorage.setItem("token", data.token);
+      const { data: response } = await authenticate(this.state.data);
+      localStorage.setItem("token", response.token);
+      this.state.setUser(decodeJWT(response.token));
+      this.props.history.replace("/dashboard");
     } catch (e) {
       console.log("Error Occured");
-      console.log(e.response.data);
       this.setState({ errors: { ...e.response.data.error } });
     }
+
     // if (user) {
     //   this.state.setUser({ ...user });
     //   console.log("user", user);
-    //   this.props.history.replace("/dashboard");
+    //
     // } else {
     //   const errors = { ...this.state.errors };
     //   const errorMessage = "user does not exist";

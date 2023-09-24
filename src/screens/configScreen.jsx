@@ -89,7 +89,7 @@ const ConfigScreen = ({ history }) => {
   return (
     <AccessFrame
       accessLevel={"configuration"}
-      onDenied={() => history.replace("/access-denied")}
+      onDenied={() => history.goBack()}
     >
       <div className="container my-3">
         <div className="row">

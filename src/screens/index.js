@@ -1,5 +1,4 @@
 //common screens
-import BranchDetails from "./branch/branchDetails";
 export { default as Login } from "./login";
 export { default as Dashboard } from "./dashboard";
 export { default as NotFound } from "./notFound";

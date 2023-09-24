@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import NavBar from "./components/NavBar/navBar";
+import CartContext from "./context/CartContext";
 import UserContext from "./context/UserContext";
 import {
   Login,
@@ -29,30 +30,33 @@ import {
   BranchForm,
 } from "./screens";
 import "./App.css";
-import CartContext from "./context/CartContext";
 import { decodeJWT } from "./services/authenticationService";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   // ** REMOVE THIS AFTER TESTING **
   // use when need to bypass login
-  const [currentUser, setCurrentUser] = useState({
-    id: 1,
-    name: "Somesh Chandimal",
-    userName: "Somesh",
-    email: "slahy0@trellian.com",
-    phone: "6953579061",
-    branch_id: 1,
-    userRole_id: 1,
-    branch_name: "Kandy",
-  });
+  // const [currentUser, setCurrentUser] = useState({
+  //   id: 1,
+  //   name: "Somesh Chandimal",
+  //   userName: "Somesh",
+  //   email: "slahy0@trellian.com",
+  //   phone: "6953579061",
+  //   branch_id: 1,
+  //   role_id: 1,
+  //   branch_name: "Kandy",
+  //   user_access: [1, 2, 3, 4, 5],
+  // });
+  const [currentUser, setCurrentUser] = useState(null);
 
-  // const [currentUser, setCurrentUser] = useState(null);
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) setCurrentUser(decodeJWT(token));
-  // }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    setCurrentUser(decodeJWT(token));
+  }, []);
 
   const [cart, setCart] = useState([]);
+
   return (
     <CartContext.Provider value={{ cart, setCart }}>
       <UserContext.Provider
@@ -101,7 +105,6 @@ function App() {
               {/* Common */}
               <Route path="/sale" component={CashierSalePage} />
               <Route path="/dashboard" component={Dashboard} />
-              <Route path="/login" component={Login} />
               <Route path="/user-profile" component={UserProfile} />
               <Route path="/config" component={ConfigScreen} />
               <Route path="/not-found" component={NotFound} />
@@ -113,6 +116,7 @@ function App() {
             {/* </div> */}
           </React.Fragment>
         )}
+        <Toaster position="bottom-right" reverseOrder={true} />
       </UserContext.Provider>
     </CartContext.Provider>
   );

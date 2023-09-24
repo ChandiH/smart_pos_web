@@ -85,7 +85,7 @@ class ProductCatalog extends Component {
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}
-        onDenied={() => this.props.history.replace("/access-denied")}
+        onDenied={() => this.props.history.goBack()}
       >
         <div className="container my-3">
           <p>Showing {totalCount} Products in the database.</p>

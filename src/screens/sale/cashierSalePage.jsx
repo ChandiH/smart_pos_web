@@ -14,7 +14,6 @@ import { submitOrder } from "../../services/orderService";
 import SummaryWindow from "../../components/sale/summaryWindow";
 
 const CashierSalePage = ({ history }) => {
-  const accessLevel = "cashierSalePage";
   const [sortColumn, setSortColumn] = useState({
     path: "name",
     order: "asc",
@@ -26,11 +25,11 @@ const CashierSalePage = ({ history }) => {
   const [products, setProducts] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [customer, setCustomer] = useState({
-    name: "Guest Customer",
-    contact: "guest",
-    pointCount: "not valid",
+    customer_name: "Guest Customer",
+    customer_contact: "0000000000",
+    rewards_points: 0,
   });
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
   const { cart, setCart } = useContext(CartContext);
   const [productSearchQuery, setPoductSearchQuery] = useState("");
   const [customerSearchQuery, setCustomerSearchQuery] = useState("");
@@ -187,7 +186,7 @@ const CashierSalePage = ({ history }) => {
   const placeOrder = async () => {
     const order = {
       customer_id: customer.customer_id,
-      cashier_id: currentUser.id,
+      cashier_id: currentUser.employee_id,
       total_amount: getTotalPrice(),
       profit: getProfit(),
       payment_method_id: "1",
@@ -304,7 +303,7 @@ const CashierSalePage = ({ history }) => {
           <div className="col mt-2">
             <div className="row">
               <dt className="col-5 ">Cashier Name:</dt>
-              <dd className="col-7 align-right">{currentUser.name}</dd>
+              <dd className="col-7 align-right">{currentUser.employee_name}</dd>
 
               <dt className="col-5 ">Total Quantity:</dt>
               <dd className="col-7 align-right">{getTotalQuantity()}</dd>
