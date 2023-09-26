@@ -50,28 +50,6 @@ const StockUpdateForm = ({ history, match, location }) => {
   useEffect(() => {
     setReorderLevel(product.reorder_level);
   }, [product]);
-  // componentDidMount() {
-  //   // this.setState({ product: { ...this.props.location.state } });
-  //   // const product = products(this.props.match.params.id);
-  //   // this.setState({
-  //   //   product: {
-  //   //     ...product,
-  //   //     lastUpdated: product.stock.length
-  //   //       ? product.stock[0].updatedAt
-  //   //       : "out of stock",
-  //   //     stock: product.stock.length
-  //   //       ? product.stock
-  //   //       : [
-  //   //           {
-  //   //             product_id: product.product_id,
-  //   //             quantity: 0,
-  //   //             updatedAt: "out of stock",
-  //   //           },
-  //   //         ],
-  //   //   },
-  //   // });
-  //   this.fetchData();
-  // }
 
   const handleIncrement = () => {
     setQuantity(quantity + 1);

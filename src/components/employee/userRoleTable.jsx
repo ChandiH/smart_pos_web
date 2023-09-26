@@ -7,15 +7,29 @@ class UserRoleTable extends Component {
       path: "role_name",
       label: "Name",
     },
+    // {
+    //   key: "space",
+    //   content: () => {},
+    // },
     {
       key: "select",
       content: (role) => (
-        <button
-          onClick={() => this.props.onSelect(role)}
-          className="btn btn-danger btn-sm"
-        >
-          Select
-        </button>
+        <>
+          <button
+            // style={{ width: 100 }}
+            onClick={() => this.props.onSelect(role)}
+            className="btn btn-primary btn-sm mx-3"
+          >
+            Select
+          </button>
+          <button
+            disabled={role.role_name.toLowerCase() === "owner"}
+            onClick={() => this.props.onDelete(role)}
+            className="btn btn-danger btn-sm mx-3"
+          >
+            Delete
+          </button>
+        </>
       ),
     },
   ];

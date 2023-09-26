@@ -6,7 +6,7 @@ const MonthlySaleChart = ({ height, width, branch_id }) => {
   const [saleSeries, setSaleSeries] = useState([
     {
       name: "September",
-      data: Array.from({ length: 30 }, () => 0),
+      data: Array.from({ length: 31 }, () => 0),
     },
   ]);
 
@@ -49,7 +49,7 @@ const MonthlySaleChart = ({ height, width, branch_id }) => {
       horizontalAlign: "left",
     },
     xaxis: {
-      categories: new Array(30).fill(0).map((_, i) => i + 1),
+      categories: new Array(31).fill(0).map((_, i) => i + 1),
     },
   };
 

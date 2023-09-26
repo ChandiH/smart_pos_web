@@ -63,23 +63,24 @@ const access = [
   },
 ];
 
-const ApiEndPoint = `${process.env.REACT_APP_BACKEND}/employee`;
+const ApiEndPoint = `${process.env.REACT_APP_BACKEND}/user-role`;
 
 export function getUserRoles() {
-  return http.get(`${ApiEndPoint}/roles`);
+  return http.get(ApiEndPoint);
 }
 
 export function changeUserAccess(role_id, access) {
-  return http.post(`${ApiEndPoint}/roles`, { role_id, access });
+  return http.post(`${ApiEndPoint}/update`, { role_id, access });
 }
 
 export function accessList() {
   return access;
 }
 
-export function checkAccess(role_id, access_name) {
-  return http.post(`${ApiEndPoint}/check-access`, {
-    role_id: role_id,
-    access_name: access_name,
-  });
+export function addNewUserRole(data) {
+  return http.post(ApiEndPoint, data);
+}
+
+export function deleteUserRole(role_id) {
+  return http.delete(`${ApiEndPoint}/${role_id}`);
 }

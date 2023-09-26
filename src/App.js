@@ -47,6 +47,13 @@ function App() {
   //   branch_name: "Kandy",
   //   user_access: [1, 2, 3, 4, 5],
   // });
+  useEffect(() => {
+    const pathname = window.location.pathname;
+    // Store the current page's pathname in session storage.
+    if (pathname !== "/login")
+      sessionStorage.setItem("lastVisitedPage", pathname);
+  }, [window.location.pathname]);
+
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {

@@ -24,6 +24,9 @@ class Login extends Form {
     const token = localStorage.getItem("token");
     if (!token) return;
     this.state.setUser(decodeJWT(token));
+    const lastVisitedPage = sessionStorage.getItem("lastVisitedPage");
+    console.log(lastVisitedPage);
+    if (lastVisitedPage) return this.props.history.replace(lastVisitedPage);
     this.props.history.replace("/dashboard");
   }
 

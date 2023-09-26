@@ -23,7 +23,7 @@ const EmployeeProfile = ({ history, location }) => {
   };
 
   useEffect(() => {
-    if (!location.state) return history.replace("/not-found");
+    if (!location.state) return history.replace("/employee");
     setEmployee(location.state);
     fetchData();
   }, [history, location.state]);

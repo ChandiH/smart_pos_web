@@ -4,8 +4,11 @@ import AccessFrame from "../components/accessFrame";
 import { getCategories } from "../services/categoryService";
 import { getSuppliers } from "../services/supplierService";
 import { getAllBranches } from "./../services/branchService";
+import { useContext } from "react";
+import UserContext from "../context/UserContext";
 
 const ConfigScreen = ({ history }) => {
+  const { currentUser } = useContext(UserContext);
   const [searchQuery, setSearchQuery] = useState("");
   const [placeHolder] = useState("Search ...");
   const [data, setData] = useState([]);
@@ -98,7 +101,7 @@ const ConfigScreen = ({ history }) => {
             <div className="card p-3 mb-3">
               <h5 className="card-title mb-3">Branch</h5>
               {optionButton("View Branch Details", () =>
-                console.log("branch configuration")
+                history.push(`/branch/${currentUser.branch_id}`)
               )}
               {optionButton(
                 "Add new Branch",

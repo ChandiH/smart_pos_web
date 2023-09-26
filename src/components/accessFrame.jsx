@@ -3,9 +3,14 @@ import UserContext from "../context/UserContext";
 import { accessList } from "../services/authorizationService";
 import toast from "react-hot-toast";
 
-const AccessFrame = ({ accessLevel, onDenied, children }) => {
+const AccessFrame = ({
+  accessLevel,
+  onDenied,
+  children,
+  toastHidden = false,
+}) => {
   const checkAccess = (user_access, accessLevel) => {
-    console.log(user_access, accessLevel, accessList);
+    // console.log(user_access, accessLevel, accessList);
     const access = accessList().find((item) => item.access_name == accessLevel);
     return user_access.includes(access.access_type_id);
   };
@@ -13,14 +18,23 @@ const AccessFrame = ({ accessLevel, onDenied, children }) => {
   const onAccessDenied = () => {
     console.log("Access Denied");
     onDenied();
-    toast("Access Denied", {
-      position: "top-center",
-      style: {
-        padding: "16px",
-        backgroundColor: "red",
-        fontSize: "30px",
-      },
-    });
+    if (!toastHidden)
+      toast(
+        (t) => (
+          <span className="col" onClick={() => toast.dismiss(t.id)}>
+            <h1>AccessDenied</h1>
+            <hr />
+            <p>Contact your branch manager or owner</p>
+          </span>
+        ),
+        {
+          position: "top-center",
+          style: {
+            padding: "16px",
+            backgroundColor: "red",
+          },
+        }
+      );
   };
 
   return (

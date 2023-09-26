@@ -39,26 +39,13 @@ const Dashboard = ({ history }) => {
     <AccessFrame
       accessLevel={"report"}
       onDenied={() => history.replace("/sale")}
+      toastHidden={true}
     >
       <div className="container">
         <div className="row">
           <DashBoardTile label="Gross Sale" />
           <DashBoardTile label="Gross Profit" />
           <DashBoardTile label="Total Product Sale" />
-          <button
-            onClick={() =>
-              toast("Access Denied", {
-                position: "top-center",
-                style: {
-                  padding: "16px",
-                  backgroundColor: "red",
-                  fontSize: "30px",
-                },
-              })
-            }
-          >
-            Toast
-          </button>
         </div>
         <div className="col">
           <div className="mb-3 p-2 rounded border">
