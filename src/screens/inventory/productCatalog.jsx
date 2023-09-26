@@ -6,8 +6,12 @@ import ProductTable from "../../components/inventory/productTable";
 import SearchBox from "../../components/common/searchBox";
 import AccessFrame from "./../../components/accessFrame";
 import _ from "lodash";
+import toast from "react-hot-toast";
 
-import { getProductWithCategory } from "../../services/productService";
+import {
+  deleteProduct,
+  getProductWithCategory,
+} from "../../services/productService";
 
 class ProductCatalog extends Component {
   state = {
@@ -21,20 +25,29 @@ class ProductCatalog extends Component {
 
   fetchProducts = async () => {
     const { data: products } = await getProductWithCategory();
-    this.setState({ products });
+    const availableProducts = products.filter((product) => !product.removed);
+    this.setState({ products: availableProducts });
   };
 
   componentDidMount() {
     this.fetchProducts();
   }
 
-  handleDelete = (product) => {
-    const products = this.state.products.filter(
-      (m) => m.product_id !== product.product_id
-    );
-    this.setState({ products });
-
-    // deleteProduct(product.id);
+  handleDelete = async (product_id) => {
+    try {
+      const promise = deleteProduct(product_id);
+      toast.promise(promise, {
+        pending: "Deleting Product...",
+        success: "Product Deleted",
+        error: (err) => `${err.response.data.error}`,
+      });
+      console.log(promise);
+      await promise;
+      this.fetchProducts();
+      this.handleSearch("");
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   handlePageChange = (page) => {

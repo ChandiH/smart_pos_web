@@ -46,7 +46,8 @@ const CashierSalePage = ({ history }) => {
     );
 
     const { data: products } = await getProducts();
-    const updatedInventory = products.map((product) => {
+    const availableProducts = products.filter((product) => !product.removed);
+    const updatedInventory = availableProducts.map((product) => {
       const stock = inventory.find(
         (item) => item.product_id === product.product_id
       );

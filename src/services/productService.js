@@ -44,3 +44,7 @@ export function saveProduct(data, files) {
   // console.log(images);
   // return http.post(ApiEndPoint, data);
 }
+
+export function deleteProduct(product_id) {
+  return http.delete(`${ApiEndPoint}/${product_id}`);
+}

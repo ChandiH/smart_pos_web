@@ -9,7 +9,7 @@ class ProductTable extends Component {
       content: (product) => (
         <img
           src={
-            product.product_image[0].startsWith("http")
+            product.product_image[0]?.startsWith("http")
               ? "https://placehold.co/200x200/png"
               : getImageUrl(product.product_image[0])
           }
@@ -28,6 +28,17 @@ class ProductTable extends Component {
     { path: "retail_price", label: "Retail Price" },
     { path: "product_barcode", label: "Barcode" },
     { path: "supplier_id", label: "Supplier ID" },
+    {
+      key: "Delete",
+      content: (product) => (
+        <button
+          onClick={() => this.props.onDelete(product.product_id)}
+          className="btn btn-danger btn-sm"
+        >
+          Delete
+        </button>
+      ),
+    },
   ];
 
   render() {
