@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchBox from "../components/common/searchBox";
 import AccessFrame from "../components/accessFrame";
 import { getCategories } from "../services/categoryService";
@@ -6,6 +6,7 @@ import { getSuppliers } from "../services/supplierService";
 import { getAllBranches } from "./../services/branchService";
 import { useContext } from "react";
 import UserContext from "../context/UserContext";
+import Input from "../components/common/input";
 
 const ConfigScreen = ({ history }) => {
   const { currentUser } = useContext(UserContext);
@@ -13,6 +14,20 @@ const ConfigScreen = ({ history }) => {
   const [placeHolder] = useState("Search ...");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [showTable, setShowTable] = useState(false);
+
+  // states relates to reward point
+  const [rewardWindow, setRewardWindow] = useState(false);
+  const [rewardPoint, setRewardPoint] = useState(0);
+  const [pointChanges, setPointChanges] = useState(false);
+
+  const fetchData = () => {
+    // fetch reward point precentage from datavbase and set in rewardPoint
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -20,6 +35,8 @@ const ConfigScreen = ({ history }) => {
   };
 
   const handleClickCategoryView = async () => {
+    setShowTable(true);
+    setRewardWindow(false);
     const { data: categories } = await getCategories();
     const formatted = categories.map((c) => ({
       _id: c.category_id,
@@ -31,6 +48,8 @@ const ConfigScreen = ({ history }) => {
   };
 
   const handleClickSupplierView = async () => {
+    setShowTable(true);
+    setRewardWindow(false);
     const { data: suppliers } = await getSuppliers();
     const formatted = suppliers.map((s) => ({
       _id: s.supplier_id,
@@ -42,6 +61,8 @@ const ConfigScreen = ({ history }) => {
   };
 
   const handleClickBranchView = async () => {
+    setShowTable(true);
+    setRewardWindow(false);
     const { data: branches } = await getAllBranches();
     const formatted = branches.map((s) => ({
       _id: s.branch_id,
@@ -71,9 +92,23 @@ const ConfigScreen = ({ history }) => {
     setFilteredData(filtered);
   };
 
+  const handleRewardPointChange = (e) => {
+    const value = parseFloat(e.target.value);
+    if (value < 0 || value > 100) return;
+    setRewardPoint(e.target.value);
+    setPointChanges(true);
+  };
+
+  const OptionFrame = ({ title, children }) => (
+    <div className="card p-3 mb-3">
+      <h5 className="card-title mb-3">{title}</h5>
+      {children}
+    </div>
+  );
+
   const optionButton = (name, onBtnClick, onViewClick) => {
     return (
-      <div className="row mb-3 mx-3">
+      <div className="row mb-2 mx-3">
         <button className="col btn btn-primary shadow-0" onClick={onBtnClick}>
           {name}
         </button>
@@ -98,8 +133,7 @@ const ConfigScreen = ({ history }) => {
         <div className="row">
           <div className="col-5">
             {/* Branch Configuration */}
-            <div className="card p-3 mb-3">
-              <h5 className="card-title mb-3">Branch</h5>
+            <OptionFrame title="Branch">
               {optionButton("View Branch Details", () =>
                 history.push(`/branch/${currentUser.branch_id}`)
               )}
@@ -108,56 +142,98 @@ const ConfigScreen = ({ history }) => {
                 () => history.push("/branch"),
                 handleClickBranchView
               )}
-            </div>
-            {/* Inventory Configuration */}
-            <div className="card p-3 mb-3">
-              <h5 className="card-title mb-3">Inventory</h5>
+            </OptionFrame>
+            {/* Emmployee Management*/}
+            <OptionFrame title="Employee Management">
+              {optionButton("View Employee Details", () =>
+                history.push(`/employee`)
+              )}
+              {optionButton("Track Employee Working Hour", () =>
+                history.push(`/employee/working`)
+              )}
+              {optionButton("Add new Employee", () =>
+                history.push("/employee/new")
+              )}
+            </OptionFrame>
+            {/* Inventory Management*/}
+            <OptionFrame title="Inventory Management">
               {optionButton(
                 "Add new Category",
                 () => history.push("/inventory/categories/new"),
                 handleClickCategoryView
               )}
-            </div>
-            {/* Suppliers*/}
-            <div className="card p-3 mb-3">
-              <h5 className="card-title mb-3">Suppliers</h5>
+            </OptionFrame>
+            {/* Customer Management */}
+            <OptionFrame title="Loyalty Program">
+              {optionButton("Set Rewards Precentage", () => {
+                setShowTable(false);
+                setRewardWindow(!rewardWindow);
+              })}
+            </OptionFrame>
+            {/* Suppliers Management*/}
+            <OptionFrame title="Suppliers Management">
               {optionButton("View Suppliers", () => history.push("/suppliers"))}
               {optionButton(
                 "Add new Supplier",
                 () => history.push("/suppliers/new"),
                 handleClickSupplierView
               )}
-            </div>
+            </OptionFrame>
             {/* Access Setting */}
-            <div className="card p-3 mb-3">
-              <h5 className="card-title mb-3">Access Rights</h5>
+            <OptionFrame title="Access Rights">
               {optionButton("Edit User Roles", () =>
                 history.push("/employee/roles")
               )}
-            </div>
+            </OptionFrame>
           </div>
 
           <div className="col-6">
-            <div className="card p-3">
-              <SearchBox
-                value={searchQuery}
-                placeholder={placeHolder}
-                onChange={handleSearch}
-              />
-              <div className="card p-3 mt-3">
-                <ul className="list-group list-group-flush">
-                  {filteredData.map((data, index) => (
-                    <li
-                      key={index}
-                      className="list-group-item d-flex justify-content-between align-items-center"
-                    >
-                      {data.name}
-                      {data.content ? data.content(data) : ""}
-                    </li>
-                  ))}
-                </ul>
+            {filteredData.length > 0 && showTable && (
+              <div className="card p-3">
+                <SearchBox
+                  value={searchQuery}
+                  placeholder={placeHolder}
+                  onChange={handleSearch}
+                />
+                <div className="card p-3 mt-3">
+                  <ul className="list-group list-group-flush">
+                    {filteredData.map((data, index) => (
+                      <li
+                        key={index}
+                        className="list-group-item d-flex justify-content-between align-items-center"
+                      >
+                        {data.name}
+                        {data.content ? data.content(data) : ""}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
+            )}
+            {rewardWindow && (
+              <div className="card p-3">
+                <h5 className="card-title mb-3">Loyalty rewards</h5>
+                <p class="card-text">
+                  set loyalty rewards point for customers
+                  <br />
+                  1% mean add 1% to reward point from the total bill
+                </p>
+                <Input
+                  type="number"
+                  name={"rewards"}
+                  value={rewardPoint}
+                  label={"Rewards Point Precentage(%)"}
+                  onChange={handleRewardPointChange}
+                />
+                <button
+                  disabled={!pointChanges}
+                  className="btn btn-primary mt-3"
+                  // save changes to database
+                >
+                  Save Changes
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

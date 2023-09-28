@@ -13,6 +13,8 @@ import { getProducts } from "../../services/productService";
 class UpdateInventory extends Component {
   state = {
     products: [],
+    lowStock: [],
+    showLowStock: false,
     currentPage: 1,
     pageSize: 20,
     searchQuery: "",
@@ -20,6 +22,10 @@ class UpdateInventory extends Component {
     accessLevel: "inventory",
     user: {},
   };
+
+  checkLowStock = (product) =>
+    parseInt(product.reorder_level) > parseInt(product.quantity) ||
+    parseInt(product.quantity) === 0;
 
   fetchData = async () => {
     const { data: inventory } = await getInventoryByBranch(1);
@@ -39,18 +45,16 @@ class UpdateInventory extends Component {
     this.setState({ products: [...updatedInventory] });
   };
 
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  handleDelete = (product) => {
-    const products = this.state.products.filter(
-      (m) => m.product_id !== product.product_id
-    );
-    this.setState({ products });
-
-    // deleteProduct(product.id);
+  filterLowStock = () => {
+    const { products } = this.state;
+    const lowStock = products.filter(this.checkLowStock);
+    this.setState({ lowStock });
   };
+
+  async componentDidMount() {
+    await this.fetchData();
+    this.filterLowStock();
+  }
 
   handleSelect = (product) => {
     this.props.history.push(`/inventory/update/${product.product_id}`, product);
@@ -75,9 +79,10 @@ class UpdateInventory extends Component {
       sortColumn,
       searchQuery,
       products: allProducts,
+      lowStock,
     } = this.state;
 
-    let filtered = allProducts;
+    let filtered = this.state.showLowStock ? lowStock : allProducts;
 
     if (searchQuery)
       filtered = allProducts.filter(
@@ -95,7 +100,8 @@ class UpdateInventory extends Component {
 
   render() {
     const { length: count } = this.state.products;
-    const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
+    const { pageSize, currentPage, sortColumn, searchQuery, showLowStock } =
+      this.state;
 
     if (count === 0) return <p>There are no Products in the database.</p>;
 
@@ -121,7 +127,17 @@ class UpdateInventory extends Component {
               Add new Product
             </NavLink>
 
-            <button className="col btn btn-secondary">Low Stock Alert</button>
+            <button
+              className="col btn btn-secondary position-relative"
+              onClick={() => this.setState({ showLowStock: !showLowStock })}
+            >
+              {showLowStock ? "Show All Products" : "Low Stock Alert"}
+              {!showLowStock && (
+                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  {this.state.lowStock.length}
+                </span>
+              )}
+            </button>
           </div>
           <StockTable
             products={products}
@@ -129,6 +145,7 @@ class UpdateInventory extends Component {
             onLike={this.handleLike}
             onSelect={this.handleSelect}
             onSort={this.handleSort}
+            checkLowStock={this.checkLowStock}
           />
           <Pagination
             itemsCount={totalCount}

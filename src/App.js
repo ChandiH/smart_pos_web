@@ -12,11 +12,11 @@ import {
   CustomerForm,
   ProductCatalog,
   ProductForm,
-  Discount,
   Categories,
   EmployeeList,
   EmployeeForm,
   EmployeeProfile,
+  EmployeeWorkingHour,
   UserRoles,
   UpdateInventory,
   StockUpdateForm,
@@ -90,11 +90,11 @@ function App() {
               {/* Employees Management */}
               <Route path="/employee/roles" component={UserRoles} />
               <Route path="/employee/profile" component={EmployeeProfile} />
+              <Route path="/employee/working" component={EmployeeWorkingHour} />
               <Route path="/employee/:id" component={EmployeeForm} />
               <Route path="/employee" component={EmployeeList} />
               {/* Inventory Management */}
               <Route path="/inventory/catalog" component={ProductCatalog} />
-              <Route path="/inventory/discounts" component={Discount} />
               <Route path="/inventory/categories/:id" component={Categories} />
               <Route path="/inventory/update/:id" component={StockUpdateForm} />
               <Route path="/inventory/update" component={UpdateInventory} />

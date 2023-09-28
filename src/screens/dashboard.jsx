@@ -11,7 +11,6 @@ import MonthlyBranchChart from "../components/charts/monthlyBranchChart";
 
 import Select from "../components/common/select";
 import { getAllBranches } from "../services/branchService";
-import toast from "react-hot-toast";
 
 const Dashboard = ({ history }) => {
   const { currentUser } = useContext(UserContext);

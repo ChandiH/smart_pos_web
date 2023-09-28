@@ -6,6 +6,7 @@ import AccessFrame from "../../components/accessFrame";
 import { getProduct, saveProduct } from "../../services/productService";
 import { getCategories } from "../../services/categoryService";
 import UploadImage from "../../components/common/uploadImage";
+import { getSuppliers } from "./../../services/supplierService";
 
 class ProductForm extends Form {
   state = {
@@ -21,6 +22,7 @@ class ProductForm extends Form {
     },
     images: [],
     categories: [],
+    suppliers: [],
     errors: {},
     accessLevel: "productForm",
   };
@@ -39,11 +41,19 @@ class ProductForm extends Form {
   async fetchData() {
     try {
       const { data: categories } = await getCategories();
-      const formatted = categories.map((category) => ({
+      const { data: suppliers } = await getSuppliers();
+      const formattedCategories = categories.map((category) => ({
         _id: category.category_id,
         name: category.category_name,
       }));
-      this.setState({ categories: formatted });
+      const formattedSuppliers = suppliers.map((supplier) => ({
+        _id: supplier.supplier_id,
+        name: supplier.supplier_name,
+      }));
+      this.setState({
+        categories: formattedCategories,
+        suppliers: formattedSuppliers,
+      });
     } catch (e) {
       console.log("Error in fetching Categories");
       alert(e.response.data);
@@ -115,7 +125,14 @@ class ProductForm extends Form {
               setFiles={(files) => this.setState({ images: [...files] })}
             />
             {this.renderInput("product_barcode", "Barcode")}
-            {this.renderInput("supplier_id", "Supplier ID", "number")}
+            {this.renderSelectWithBtn(
+              "supplier_id",
+              "Supplier",
+              "Select Supplier",
+              this.state.suppliers,
+              () => this.props.history.push("/suppliers/new"),
+              "Add New Supplier"
+            )}
             <div className="my-3">{this.renderButton("Save")}</div>{" "}
           </form>
         </div>

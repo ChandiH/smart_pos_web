@@ -45,6 +45,10 @@ export function saveProduct(data, files) {
   // return http.post(ApiEndPoint, data);
 }
 
+export function updateProductDiscount(product_id, discount) {
+  return http.put(`${ApiEndPoint}/discount/${product_id}`, { discount });
+}
+
 export function deleteProduct(product_id) {
   return http.delete(`${ApiEndPoint}/${product_id}`);
 }
