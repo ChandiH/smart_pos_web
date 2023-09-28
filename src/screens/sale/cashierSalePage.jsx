@@ -192,6 +192,7 @@ const CashierSalePage = ({ history }) => {
       profit: getProfit(),
       payment_method_id: "1",
       reference_id: paymentDetails,
+      branch_id: currentUser.branch_id,
     };
 
     const products = cart.map((product) => {
