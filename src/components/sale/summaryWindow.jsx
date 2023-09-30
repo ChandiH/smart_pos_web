@@ -10,6 +10,7 @@ const SummaryWindow = ({
   totalPrice,
   paymentDetails,
   placeOrder,
+  rewardsPoints,
 }) => {
   const calculateChanges = () => {
     return parseInt(paymentDetails - (totalPrice - discount));
@@ -66,6 +67,11 @@ const SummaryWindow = ({
                     {totalPrice - discount}
                   </b>
                 </dd>
+                <dt className="col-7">New Loyalty Points:</dt>
+                <dd className="col-5 align-right">
+                    Rs.
+                    {rewardsPoints}
+                </dd>
                 <dt className="col-7">Payment Method Type:</dt>
                 <dd className="col-5 align-right">{paymentMethod}</dd>
                 {paymentMethod === "cash" && (
@@ -115,7 +121,7 @@ const SummaryWindow = ({
               disabled={calculateChanges() < 0}
               className="btn btn-primary"
             >
-              Print Reciept
+              Print Receipt
             </button>
 
             <button
