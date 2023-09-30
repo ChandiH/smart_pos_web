@@ -9,7 +9,7 @@ import _ from "lodash";
 import { getInventoryByBranch } from "../../services/inventoryService";
 import { getProducts } from "../../services/productService";
 import { getCustomers } from "../../services/customerService";
-import { submitOrder} from "../../services/orderService";
+import { submitOrder, getRewardsPointsPercentage } from "../../services/orderService";
 
 import SummaryWindow from "../../components/sale/summaryWindow";
 
@@ -36,9 +36,13 @@ const CashierSalePage = ({ history }) => {
 
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [paymentDetails, setPaymentDetails] = useState(null);
-  
+
+  const [rewardsPointsPercentage, setRewardsPointsPercentage] = useState([]);
 
   const fetchData = async () => {
+    const { data: rewardsPointsPercentage } = await getRewardsPointsPercentage();
+    setRewardsPointsPercentage(rewardsPointsPercentage);
+
     const { data: customers } = await getCustomers();
     setCustomers(customers);
 
@@ -134,7 +138,8 @@ const CashierSalePage = ({ history }) => {
     let totalPrice = 0;
     if (cart.length !== 0) {
       cart.forEach((product) => {
-        totalPrice += product.quantity * product.retail_price;
+       // totalPrice += product.quantity * product.retail_price - product.discount;
+       totalPrice += product.quantity * product.retail_price;
       });
     }
     return parseFloat(totalPrice).toFixed(2);
@@ -145,7 +150,6 @@ const CashierSalePage = ({ history }) => {
     cart.forEach((product) => {
       discount += parseFloat(product.quantity * product.discount);
     });
-    
     return parseFloat(discount).toFixed(2);
   };
 
@@ -154,38 +158,34 @@ const CashierSalePage = ({ history }) => {
     cart.forEach((product) => {
       profit += parseFloat(
         product.quantity * (product.retail_price - product.buying_price) -
-          product.discount
+        product.discount
       );
     });
     return parseFloat(profit).toFixed(2);
   };
 
-  
-  const rewardsPointsPercentage = 0.5; //change this
   const getRewardsPoints = () => {
-    
     let rewardsPoints = 0;
     if (customer.customer_name !== "Guest Customer") {
-      rewardsPoints = (getTotalPrice() * rewardsPointsPercentage ) / 100;
+      rewardsPoints = (getTotalPrice() * rewardsPointsPercentage[0].variable_value) / 100;
     }
-   else {
-    rewardsPoints =  0.00;
-  }
+    else {
+      rewardsPoints = 0.00;
+    }
     return parseFloat(rewardsPoints).toFixed(2);
   };
-  
 
   const getPagedData = () => {
     const allProducts = products;
 
     let filtered = productSearchQuery
       ? allProducts.filter(
-          (m) =>
-            m.product_name
-              .toLowerCase()
-              .startsWith(productSearchQuery.toLowerCase()) ||
-            m.product_barcode.startsWith(productSearchQuery)
-        )
+        (m) =>
+          m.product_name
+            .toLowerCase()
+            .startsWith(productSearchQuery.toLowerCase()) ||
+          m.product_barcode.startsWith(productSearchQuery)
+      )
       : [];
 
     const sorted = _.orderBy(
@@ -354,9 +354,9 @@ const CashierSalePage = ({ history }) => {
               </dd>
             </div>
             <div className="row">
-            <dt className="col-7">Total Loyalty Points:</dt>
-            <dd className="col-5 align-right">{getRewardsPoints()}</dd>
-          </div>
+              <dt className="col-7">Total Loyalty Points:</dt>
+              <dd className="col-5 align-right">{getRewardsPoints()}</dd>
+            </div>
           </div>
           <hr />
         </div>

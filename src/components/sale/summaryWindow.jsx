@@ -69,8 +69,7 @@ const SummaryWindow = ({
                 </dd>
                 <dt className="col-7">New Loyalty Points:</dt>
                 <dd className="col-5 align-right">
-                    Rs.
-                    {rewardsPoints}
+                  {rewardsPoints}
                 </dd>
                 <dt className="col-7">Payment Method Type:</dt>
                 <dd className="col-5 align-right">{paymentMethod}</dd>
