@@ -9,3 +9,7 @@ export function submitOrder(data) {
 export function getRewardsPointsPercentage() {
   return http.get(ApiEndPoint + "/rewards-points-percentage");
 }
+
+export function updateRewardsPointsPercentage(data) {
+  return http.put(ApiEndPoint + "/rewards-points-percentage", data);
+}
