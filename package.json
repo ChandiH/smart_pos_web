@@ -63,5 +63,8 @@
         "statements": 50
       }
     }
+  },
+  "engines": {
+    "node": "18.16.1"
   }
 }
