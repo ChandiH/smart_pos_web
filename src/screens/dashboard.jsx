@@ -1,6 +1,4 @@
 import React, { useEffect, useContext, useState } from "react";
-import SaleHistoryView from "../components/sale/saleHistortView";
-import DashBoardTile from "../components/charts/dashboardTile";
 import AccessFrame from "../components/accessFrame";
 
 import UserContext from "./../context/UserContext";
@@ -11,6 +9,11 @@ import MonthlyBranchChart from "../components/charts/monthlyBranchChart";
 
 import Select from "../components/common/select";
 import { getAllBranches } from "../services/branchService";
+
+import DashBoardTile from "../components/charts/dashboardTile";
+import { MdDataExploration, MdAddShoppingCart } from "react-icons/md";
+import { getMonthlySummary } from "../services/reportService";
+
 
 const Dashboard = ({ history }) => {
   const { currentUser } = useContext(UserContext);
@@ -42,10 +45,31 @@ const Dashboard = ({ history }) => {
     >
       <div className="container">
         <div className="row">
-          <DashBoardTile label="Gross Sale" />
-          <DashBoardTile label="Gross Profit" />
-          <DashBoardTile label="Total Product Sale" />
+          <div className="col">
+            <DashBoardTile
+              label="Gross Sale"
+              value={200}
+              icon={<MdDataExploration />}
+              prefix="LKR"
+            />
+          </div>
+          <div className="col">
+            <DashBoardTile
+              label="Gross Profit"
+              value={2132}
+              icon={<MdDataExploration />}
+              prefix="LKR"
+            />
+          </div>
+          <div className="col">
+            <DashBoardTile
+              label="Total Orders"
+              value={2132}
+              icon={<MdAddShoppingCart />}
+            />
+          </div>
         </div>
+
         <div className="col">
           <div className="mb-3 p-2 rounded border">
             <div className="d-flex justify-content-between align-items-center">
@@ -77,7 +101,6 @@ const Dashboard = ({ history }) => {
           </div>
           <div className="row my-3 p-2 rounded border">
             <h3 className="mx-3">Sales Today on {currentUser.branch_name}</h3>
-            <SaleHistoryView />
           </div>
         </div>
       </div>
