@@ -4,9 +4,14 @@ import AccessFrame from "../components/accessFrame";
 import { getCategories } from "../services/categoryService";
 import { getSuppliers } from "../services/supplierService";
 import { getAllBranches } from "./../services/branchService";
+import {
+  updateRewardsPointsPercentage,
+  getRewardsPointsPercentage,
+} from "./../services/orderService";
 import { useContext } from "react";
 import UserContext from "../context/UserContext";
 import Input from "../components/common/input";
+import toast from "react-hot-toast";
 
 const ConfigScreen = ({ history }) => {
   const { currentUser } = useContext(UserContext);
@@ -20,9 +25,15 @@ const ConfigScreen = ({ history }) => {
   const [rewardWindow, setRewardWindow] = useState(false);
   const [rewardPoint, setRewardPoint] = useState(0);
   const [pointChanges, setPointChanges] = useState(false);
+  const [rewardPercentage, setRewardPercentage] = useState(0);
 
-  const fetchData = () => {
-    // fetch reward point precentage from datavbase and set in rewardPoint
+  const fetchData = async () => {
+    try {
+      const { data: rewardPercentage } = await getRewardsPointsPercentage();
+      setRewardPercentage(rewardPercentage);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -97,6 +108,24 @@ const ConfigScreen = ({ history }) => {
     if (value < 0 || value > 100) return;
     setRewardPoint(e.target.value);
     setPointChanges(true);
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      const promise = updateRewardsPointsPercentage({
+        rewardsPointsPercentage: rewardPoint,
+      });
+      toast.promise(promise, {
+        pending: "Updating Rewards Points..",
+        success: "Rewards Point Percentage Updated",
+        error: (err) => `${err.response.data.error}`,
+      });
+      await promise;
+      fetchData();
+      // setRewardWindow(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const OptionFrame = ({ title, children }) => (
@@ -214,6 +243,9 @@ const ConfigScreen = ({ history }) => {
               <div className="card p-3">
                 <h5 className="card-title mb-3">Loyalty rewards</h5>
                 <p class="card-text">
+                  current rewards point percentage is{" "}
+                  <b>{rewardPercentage[0].variable_value}%</b>
+                  <br />
                   set loyalty rewards point for customers
                   <br />
                   1% mean add 1% to reward point from the total bill
@@ -222,13 +254,13 @@ const ConfigScreen = ({ history }) => {
                   type="number"
                   name={"rewards"}
                   value={rewardPoint}
-                  label={"Rewards Point Precentage(%)"}
+                  label={"Rewards Point Percentage(%)"}
                   onChange={handleRewardPointChange}
                 />
                 <button
                   disabled={!pointChanges}
                   className="btn btn-primary mt-3"
-                  // save changes to database
+                  onClick={handleSaveChanges}
                 >
                   Save Changes
                 </button>

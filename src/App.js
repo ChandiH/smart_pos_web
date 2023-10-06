@@ -123,7 +123,11 @@ function App() {
             {/* </div> */}
           </React.Fragment>
         )}
-        <Toaster position="bottom-right" reverseOrder={true} />
+        <Toaster
+          position="bottom-right"
+          reverseOrder={true}
+          toastOptions={{ duration: 3000 }}
+        />
       </UserContext.Provider>
     </CartContext.Provider>
   );
