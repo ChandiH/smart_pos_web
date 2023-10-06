@@ -23,6 +23,17 @@ export function updateEmployee(id, data) {
   return http.put(`${ApiEndPoint}/${id}`, data);
 }
 
+export function updateEmployeeImage(id, file) {
+  const formData = new FormData();
+  formData.append("file", file);
+  const config = {
+    headers: {
+      "content-type": "multipart/form-data",
+    },
+  };
+  return http.put(`${ApiEndPoint}/image/${id}`, formData, config);
+}
+
 // const employeeHour = [
 // {
 //   employee_id: 2,

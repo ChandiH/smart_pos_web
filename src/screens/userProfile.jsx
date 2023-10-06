@@ -1,119 +1,157 @@
 import React, { useContext, useState } from "react";
+import UploadImageWindow from "../components/employee/uploadImageWindow";
+import VerifyUserWindow from "../components/employee/verifyUserWindow";
+import ChangePasswordWindow from "../components/employee/passwordChangeWindow";
 import UserContext from "../context/UserContext";
+import { getImageUrl } from "../services/imageHandler";
+import { updateEmployeeImage } from "../services/employeeService";
 
 const UserProfile = () => {
   const { currentUser } = useContext(UserContext);
   const [editing, setEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({ ...currentUser });
+  const [userVerified, setUserVerified] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedUser({ ...editedUser, [name]: value });
   };
 
+  const handleImageChange = async (file) => {
+    try {
+      const { data } = await updateEmployeeImage(currentUser.employee_id, file);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleSave = () => {
     //saving logic
+    setUserVerified(false);
     setEditing(false);
   };
 
+  const renderDetails = (label, value) => (
+    <>
+      <dt className="col-5">{label}:</dt>
+      <dd className="col-7 mb-0">{value}</dd>
+    </>
+  );
+
   return (
     <div className="container my-3">
-      <h1 >User Profile</h1>
-      <aside className = "col-lg-4">
+      <h1>User Profile</h1>
+      <aside className="col-lg-4">
         <div className="profile-rounded-4 mb-3 mt-3 d-flex justify-content-ceter">
           <img
-            src={editedUser.image ? editedUser.image : "https://placehold.co/400x400/png"}
+            src={getImageUrl(editedUser.employee_image)}
             alt="Profile"
-            style={{ width: "60%", aspectRatio: 1, margin: "auto" }}
+            style={{
+              width: "60%",
+              aspectRatio: 1,
+              margin: "auto",
+              objectFit: "scale-down",
+            }}
             className="rounded-4 fit"
           />
         </div>
       </aside>
-      <div className = "col-lg-8">
-        <div className="row g-3">
-          <div className="mb-3">
-          <label className="form-label">Name:</label>
-          {editing ? (
-            <input
-              type="text"
-              className="form-control"
-              name="name"
-              value={editedUser.name}
-              onChange={handleInputChange}
-            />
-          ) : (
-            <span style={{marginLeft: "10rem"}}>{editedUser.name}</span>
-          )}
-        </div>
-        
-        <div className="mb-3">
-          <label className="form-label">User role:</label>
-          
-            <span style={{marginLeft: "10rem"}}>{editedUser.userRole}</span>
+      <div className="col-lg-6">
+        <div className="row g-3 my-3">
+          <div className="row my-2">
+            {editing
+              ? renderDetails(
+                  "Username",
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="employee_username"
+                    value={editedUser.employee_username}
+                    onChange={handleInputChange}
+                  />
+                )
+              : renderDetails("Username", editedUser.employee_username)}
+          </div>
 
+          <div className="row my-2">
+            {editing
+              ? renderDetails(
+                  "Name",
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="employee_name"
+                    value={editedUser.employee_name}
+                    onChange={handleInputChange}
+                  />
+                )
+              : renderDetails("Name", editedUser.employee_name)}
+          </div>
+
+          <div className="row my-2">
+            {renderDetails("User Role", editedUser.role_name)}
+          </div>
+
+          <div className="row my-2">
+            {renderDetails("Branch", editedUser.branch_name)}
+          </div>
+
+          <div className="row my-2">
+            {editing
+              ? renderDetails(
+                  "Telephone Number",
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="employee_phone"
+                    value={editedUser.employee_phone}
+                    onChange={handleInputChange}
+                  />
+                )
+              : renderDetails("Telephone Number", editedUser.employee_phone)}
+          </div>
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Branch:</label>
-          
-            <span style={{marginLeft: "10rem"}}>{editedUser.branch}</span>
-          
-        </div>
+        <div className="row">
+          {editing && (
+            <button className="btn btn-primary my-1" onClick={handleSave}>
+              Save Changes
+            </button>
+          )}
+          {!userVerified && (
+            <button
+              className="btn btn-primary my-1"
+              data-toggle="modal"
+              data-target="#verifyUserWindow"
+            >
+              Edit Details
+            </button>
+          )}
+          <button
+            className="btn btn-primary my-1"
+            data-toggle="modal"
+            data-target="#uploadImageWindow"
+          >
+            Upload New Image
+          </button>
 
-        <div className="mb-3">
-          <label className="form-label">Telephone Number:</label>
-          {editing ? (
-            <input
-              type="text"
-              className="form-control"
-              name="telephoneNumber"
-              value={editedUser.telephoneNumber}
-              onChange={handleInputChange}
-            />
-          ) : (
-            <span style={{marginLeft: "10rem"}}>{editedUser.telephoneNumber}</span>
-          )}
-        </div>
-        
-        <div className="mb-3">
-          <label className="form-label">Address:</label>
-          {editing ? (
-            <input
-              type="text"
-              className="form-control"
-              name="address"
-              value={editedUser.address}
-              onChange={handleInputChange}
-            />
-          ) : (
-            <span style={{marginLeft: "10rem"}}>{editedUser.address}</span>
-          )}
-        </div>
-        <div className="mb-3">
-          <label>Username:</label>
-          {editing ? (
-            <input
-              type="text"
-              className="form-control"
-              name="username"
-              value={editedUser.username}
-              onChange={handleInputChange}
-            />
-          ) : (
-            <span style={{marginLeft: "10rem"}}>{editedUser.username}</span>
-          )}
-        </div>
+          <button
+            className="btn btn-primary my-1"
+            data-toggle="modal"
+            data-target="#changePasswordWindow"
+          >
+            Change Password
+          </button>
         </div>
       </div>
-
-
-      {editing && (
-        <button className = "btn btn-primary"onClick={handleSave}>Save Changes</button>
-      )}
-
-      {!editing && (
-        <button className = "btn btn-primary" onClick={() => setEditing(!editing)}>Edit Details</button>
-      )}
+      <VerifyUserWindow
+        id={"verifyUserWindow"}
+        setVerified={setUserVerified}
+        verify={() => setEditing(true)}
+      />
+      <ChangePasswordWindow id="changePasswordWindow" />
+      <UploadImageWindow id={"uploadImageWindow"} update={handleImageChange} />
     </div>
   );
 };

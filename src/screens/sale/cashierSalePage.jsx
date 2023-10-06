@@ -9,7 +9,10 @@ import _ from "lodash";
 import { getInventoryByBranch } from "../../services/inventoryService";
 import { getProducts } from "../../services/productService";
 import { getCustomers } from "../../services/customerService";
-import { submitOrder, getRewardsPointsPercentage } from "../../services/orderService";
+import {
+  submitOrder,
+  getRewardsPointsPercentage,
+} from "../../services/orderService";
 
 import SummaryWindow from "../../components/sale/summaryWindow";
 
@@ -40,7 +43,8 @@ const CashierSalePage = ({ history }) => {
   const [rewardsPointsPercentage, setRewardsPointsPercentage] = useState([]);
 
   const fetchData = async () => {
-    const { data: rewardsPointsPercentage } = await getRewardsPointsPercentage();
+    const { data: rewardsPointsPercentage } =
+      await getRewardsPointsPercentage();
     setRewardsPointsPercentage(rewardsPointsPercentage);
 
     const { data: customers } = await getCustomers();
@@ -138,8 +142,8 @@ const CashierSalePage = ({ history }) => {
     let totalPrice = 0;
     if (cart.length !== 0) {
       cart.forEach((product) => {
-       // totalPrice += product.quantity * product.retail_price - product.discount;
-       totalPrice += product.quantity * product.retail_price;
+        // totalPrice += product.quantity * product.retail_price - product.discount;
+        totalPrice += product.quantity * product.retail_price;
       });
     }
     return parseFloat(totalPrice).toFixed(2);
@@ -158,7 +162,7 @@ const CashierSalePage = ({ history }) => {
     cart.forEach((product) => {
       profit += parseFloat(
         product.quantity * (product.retail_price - product.buying_price) -
-        product.discount
+          product.discount
       );
     });
     return parseFloat(profit).toFixed(2);
@@ -167,10 +171,10 @@ const CashierSalePage = ({ history }) => {
   const getRewardsPoints = () => {
     let rewardsPoints = 0;
     if (customer.customer_name !== "Guest Customer") {
-      rewardsPoints = (getTotalPrice() * rewardsPointsPercentage[0].variable_value) / 100;
-    }
-    else {
-      rewardsPoints = 0.00;
+      rewardsPoints =
+        (getTotalPrice() * rewardsPointsPercentage[0].variable_value) / 100;
+    } else {
+      rewardsPoints = 0.0;
     }
     return parseFloat(rewardsPoints).toFixed(2);
   };
@@ -180,12 +184,12 @@ const CashierSalePage = ({ history }) => {
 
     let filtered = productSearchQuery
       ? allProducts.filter(
-        (m) =>
-          m.product_name
-            .toLowerCase()
-            .startsWith(productSearchQuery.toLowerCase()) ||
-          m.product_barcode.startsWith(productSearchQuery)
-      )
+          (m) =>
+            m.product_name
+              .toLowerCase()
+              .startsWith(productSearchQuery.toLowerCase()) ||
+            m.product_barcode.startsWith(productSearchQuery)
+        )
       : [];
 
     const sorted = _.orderBy(
@@ -233,6 +237,7 @@ const CashierSalePage = ({ history }) => {
       handleCustomerSearch("");
       setPaymentMethod("cash");
       setPaymentDetails("");
+      fetchData();
     } catch (e) {
       console.log("error ocured");
       console.log(e.response.data);
@@ -334,7 +339,6 @@ const CashierSalePage = ({ history }) => {
 
               <dt className="col-7">Discount:</dt>
               <dd className="col-5 align-right">{getDiscount()}</dd>
-
             </div>
           </div>
           <hr />
