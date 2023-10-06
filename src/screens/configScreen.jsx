@@ -27,6 +27,9 @@ const ConfigScreen = ({ history }) => {
   const [pointChanges, setPointChanges] = useState(false);
   const [rewardPercentage, setRewardPercentage] = useState(0);
 
+  // states relates to QR code
+  const [qrCodeWindow, setQrCodeWindow] = useState(true);
+
   const fetchData = async () => {
     try {
       const { data: rewardPercentage } = await getRewardsPointsPercentage();
@@ -211,6 +214,12 @@ const ConfigScreen = ({ history }) => {
             {/* Access Setting */}
             <OptionFrame title="Access Rights">
               {optionButton("Edit User Roles", () =>
+                history.push("/employee/roles")
+              )}
+            </OptionFrame>
+            {/* Mobile Application */}
+            <OptionFrame title="Mobile Application">
+              {optionButton("Download Mobile Application", () =>
                 history.push("/employee/roles")
               )}
             </OptionFrame>
