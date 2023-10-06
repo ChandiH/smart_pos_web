@@ -4,10 +4,14 @@ import AccessFrame from "../components/accessFrame";
 import { getCategories } from "../services/categoryService";
 import { getSuppliers } from "../services/supplierService";
 import { getAllBranches } from "./../services/branchService";
-import { updateRewardsPointsPercentage, getRewardsPointsPercentage } from "./../services/orderService";
+import {
+  updateRewardsPointsPercentage,
+  getRewardsPointsPercentage,
+} from "./../services/orderService";
 import { useContext } from "react";
 import UserContext from "../context/UserContext";
 import Input from "../components/common/input";
+import toast from "react-hot-toast";
 
 const ConfigScreen = ({ history }) => {
   const { currentUser } = useContext(UserContext);
@@ -108,8 +112,17 @@ const ConfigScreen = ({ history }) => {
 
   const handleSaveChanges = async () => {
     try {
-      await updateRewardsPointsPercentage({ rewardsPointsPercentage: rewardPoint });
-      setRewardWindow(false);
+      const promise = updateRewardsPointsPercentage({
+        rewardsPointsPercentage: rewardPoint,
+      });
+      toast.promise(promise, {
+        pending: "Updating Rewards Points..",
+        success: "Rewards Point Percentage Updated",
+        error: (err) => `${err.response.data.error}`,
+      });
+      await promise;
+      fetchData();
+      // setRewardWindow(false);
     } catch (error) {
       console.error(error);
     }
@@ -230,12 +243,12 @@ const ConfigScreen = ({ history }) => {
               <div className="card p-3">
                 <h5 className="card-title mb-3">Loyalty rewards</h5>
                 <p class="card-text">
-                  current rewards point percentage is <b>{rewardPercentage[0].variable_value}%</b>
+                  current rewards point percentage is{" "}
+                  <b>{rewardPercentage[0].variable_value}%</b>
                   <br />
                   set loyalty rewards point for customers
                   <br />
                   1% mean add 1% to reward point from the total bill
-
                 </p>
                 <Input
                   type="number"
