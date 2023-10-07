@@ -5,11 +5,18 @@ const UserProfile = () => {
   const { currentUser } = useContext(UserContext);
   const [editing, setEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({ ...currentUser });
+  const [newProfilePicture, setNewProfilePicture] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedUser({ ...editedUser, [name]: value });
   };
+
+  const handlePictureChange = (e) => {
+    const file = e.target.files[0];
+    setNewProfilePicture(file);
+  };
+
 
   const handleSave = () => {
     //saving logic
@@ -21,11 +28,21 @@ const UserProfile = () => {
       <h1 >User Profile</h1>
       <aside className = "col-lg-4">
         <div className="profile-rounded-4 mb-3 mt-3 d-flex justify-content-ceter">
+          <label htmlFor="profilePictureInput">
           <img
-            src={editedUser.image ? editedUser.image : "https://placehold.co/400x400/png"}
-            alt="Profile"
-            style={{ width: "60%", aspectRatio: 1, margin: "auto" }}
-            className="rounded-4 fit"
+              src={newProfilePicture ? URL.createObjectURL(newProfilePicture) : (editedUser.image ? editedUser.image : "https://placehold.co/400x400/png")}
+              alt="Profile"
+              style={{ width: "60%", aspectRatio: 1, margin: "auto", cursor: editing ? "pointer" : "default" }}
+              className="rounded-4 fit"
+            />
+          </label>
+          <input
+            type="file"
+            id="profilePictureInput"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handlePictureChange}
+            disabled={!editing}
           />
         </div>
       </aside>
