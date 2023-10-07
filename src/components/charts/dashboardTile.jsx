@@ -31,7 +31,7 @@ const DashBoardTile = ({ label, value, icon, prefix,decimals }) => {
         </div>
       </div>
       <div className="column">
-        {icon && React.cloneElement(icon, { color: "purple", size: "5rem" })}
+        {icon && React.cloneElement(icon, { color: "blue", size: "5rem" })}
       </div>
     </div>
   );

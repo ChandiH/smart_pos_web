@@ -3,36 +3,22 @@ import Chart from "react-apexcharts";
 import { getMonthlySale } from "../../services/reportService";
 
 const MonthlySaleChart = ({ height, width, branch_id }) => {
-  const [saleSeries, setSaleSeries] = useState([
-    {
-      name: "September",
-      data: Array.from({ length: 31 }, () => 0),
-    },
-  ]);
-
-  const [loading, setLoading] = useState(false);
+  const [saleSeries, setSaleSeries] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const saleChartOptions = {
     chart: {
       type: "area",
-      stacked: true,
+      stacked: false,
       animations: {
         enabled: true,
         easing: "linear",
         speed: 1800,
-        animateGradually: {
-          enabled: true,
-          delay: 150,
-        },
-        dynamicAnimation: {
-          enabled: true,
-          speed: 350,
-        },
       },
     },
-    colors: ["#CED4DC", "#00E396", "#008FFB"],
+    colors: ['#0090FF','#FEB019','#00E396' ],
     dataLabels: {
-      enabled: true,
+      enabled: false,
     },
     stroke: {
       curve: "smooth",
@@ -40,23 +26,45 @@ const MonthlySaleChart = ({ height, width, branch_id }) => {
     fill: {
       type: "gradient",
       gradient: {
-        opacityFrom: 0.6,
+        opacityFrom: 0.1,
         opacityTo: 0.8,
       },
+      colors: ['#0090FF','#FEB019','#00E396' ],
     },
     legend: {
       position: "top",
       horizontalAlign: "left",
     },
     xaxis: {
-      categories: new Array(31).fill(0).map((_, i) => i + 1),
+      categories: Array.from({ length: 31 }, (_, i) => i + 1),
+      title: {
+        text: "Day",
+      },
+    
     },
+    yaxis: {
+      title: {
+        text: "Sales  (Rs.)",
+      },
+    },
+    markers: {
+      size: 0,
+      strokeColor: "#fff",
+      strokeWidth: 3,
+      strokeOpacity: 1,
+      fillOpacity: 1,
+      hover: {
+        size: 6
+      }
+    },
+    
+    
   };
 
   async function fetchMonthlySale(yearMonth) {
     try {
       const { data } = await getMonthlySale(yearMonth, branch_id);
-      let dayArray = Array.from({ length: 30 }, () => 0);
+      let dayArray = Array.from({ length: 31 }, () => 0);
       data.forEach((item) => {
         dayArray[item.day.slice(8, 10) - 1] = item.total_sales;
       });
@@ -68,34 +76,45 @@ const MonthlySaleChart = ({ height, width, branch_id }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const july = await fetchMonthlySale("2023-07");
-      setSaleSeries([...saleSeries, { name: "July", month: 7, data: july }]);
-      const august = await fetchMonthlySale("2023-08");
-      setSaleSeries([
-        ...saleSeries,
-        { name: "August", month: 8, data: august },
-      ]);
-      const september = await fetchMonthlySale("2023-09");
-      setSaleSeries([
-        { name: "July", month: 7, data: july },
-        { name: "August", month: 8, data: august },
-        { name: "September", month: 9, data: september },
-      ]);
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth() + 1; // January is 0
+      const monthsToFetch = [currentMonth, currentMonth - 1, currentMonth - 2];
+      const seriesData = [];
+
+      for (const month of monthsToFetch) {
+        const yearMonth = `${currentYear}-${month.toString().padStart(2, "0")}`;
+        const monthData = await fetchMonthlySale(yearMonth);
+        const monthName = new Date(currentYear, month - 1, 1).toLocaleString(
+          "default",
+          { month: "long" }
+        );
+
+        seriesData.push({
+          name: monthName,
+          data: monthData,
+        });
+      }
+
+      setSaleSeries(seriesData);
       setLoading(false);
     };
     fetchData();
   }, [branch_id]);
 
-  const loadChart = () => (
-    <Chart
-      options={saleChartOptions}
-      series={saleSeries}
-      height={height}
-      width={width}
-    />
-  );
+  if (loading) return <div>Loading...</div>;
 
-  return loading ? <div>Loading...</div> : loadChart();
+  return (
+    <div className="area">
+      <Chart
+        options={saleChartOptions}
+        series={saleSeries}
+        type="area"
+        height={height}
+        width={width}
+      />
+    </div>
+  );
 };
 
 export default MonthlySaleChart;
