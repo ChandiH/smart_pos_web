@@ -7,9 +7,9 @@ export function getMonthlySale(yearMonth, branchId) {
 }
 
 
-// export function getSalesHistoryToday(branchId) {
-//   return http.get(ApiEndPoint + "/sales_history");
-// }
+export function getSalesHistoryToday(branch_id) {
+  return http.get(`${ApiEndPoint}/sale_history/${branch_id}`);
+}
 
 export function getMonthlySummary() {
   return http.get(`${ApiEndPoint}/monthly_summary`);

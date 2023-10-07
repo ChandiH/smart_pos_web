@@ -14,11 +14,13 @@ import DashBoardTile from "../components/charts/dashboardTile";
 import { MdDataExploration, MdAddShoppingCart } from "react-icons/md";
 import { getMonthlySummary } from "../services/reportService";
 
+import SaleHistoryToday from "../components/charts/saleHistoryToday";
 
 const Dashboard = ({ history }) => {
   const { currentUser } = useContext(UserContext);
   const [branches, setBranches] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState(currentUser.branch_id);
+  const [monthlySummary, setMonthlySummary] = useState(null);
 
   const fetchData = async () => {
     const { data: branches } = await getAllBranches();
@@ -27,6 +29,8 @@ const Dashboard = ({ history }) => {
       name: b.branch_city,
     }));
     setBranches(branchList);
+    const { data: monthlySummary } = await getMonthlySummary();
+    setMonthlySummary(monthlySummary);
   };
 
   useEffect(() => {
@@ -44,33 +48,38 @@ const Dashboard = ({ history }) => {
       toastHidden={true}
     >
       <div className="container">
-        <div className="row">
-          <div className="col">
-            <DashBoardTile
-              label="Gross Sale"
-              value={200}
-              icon={<MdDataExploration />}
-              prefix="LKR"
-            />
-          </div>
-          <div className="col">
-            <DashBoardTile
-              label="Gross Profit"
-              value={2132}
-              icon={<MdDataExploration />}
-              prefix="LKR"
-            />
-          </div>
-          <div className="col">
-            <DashBoardTile
-              label="Total Orders"
-              value={2132}
-              icon={<MdAddShoppingCart />}
-            />
-          </div>
-        </div>
-
         <div className="col">
+          <div className="row mb-3 p-2 rounded border">
+            <h3 className="mx-3">Monthly Summary</h3>
+
+            <div className="col">
+              <DashBoardTile
+                label="Gross Sale"
+                decimals={2}
+                value={monthlySummary ? monthlySummary[0].net_sale : 0}
+                icon={<MdDataExploration />}
+                prefix="Rs. "
+              />
+            </div>
+            <div className="col">
+              <DashBoardTile
+                label="Gross Profit"
+                value={monthlySummary ? monthlySummary[0].gross_profit : 0}
+                decimals={2}
+                icon={<MdDataExploration />}
+                prefix="Rs. "
+              />
+            </div>
+            <div className="col">
+              <DashBoardTile
+                label="Total Orders"
+                decimals={0}
+                value={monthlySummary ? monthlySummary[0].total_orders : 0}
+                icon={<MdAddShoppingCart />}
+              />
+            </div>
+          </div>
+
           <div className="mb-3 p-2 rounded border">
             <div className="d-flex justify-content-between align-items-center">
               <h3 className="mx-3">Sales by Day</h3>
@@ -89,6 +98,7 @@ const Dashboard = ({ history }) => {
               branch_id={selectedBranch}
             />
           </div>
+
           <div className="row">
             <div className="col p-2 rounded border">
               <h3 className="mx-3">Top Selling Branches</h3>
@@ -101,6 +111,7 @@ const Dashboard = ({ history }) => {
           </div>
           <div className="row my-3 p-2 rounded border">
             <h3 className="mx-3">Sales Today on {currentUser.branch_name}</h3>
+            <SaleHistoryToday branch_id={currentUser.branch_id} />
           </div>
         </div>
       </div>
