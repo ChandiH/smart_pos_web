@@ -14,3 +14,11 @@ export function getSalesHistoryToday(branch_id) {
 export function getMonthlySummary() {
   return http.get(`${ApiEndPoint}/monthly_summary`);
 }
+
+export function getTopBranches(target_month) {
+  return http.get(`${ApiEndPoint}/${target_month}`);
+}
+
+export function getThreeMonths(){
+  return http.get(`${ApiEndPoint}/three/months/now`);
+}

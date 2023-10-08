@@ -5,7 +5,7 @@ import UserContext from "./../context/UserContext";
 
 import MonthlyProductChart from "./../components/charts/monthlyProductChart";
 import MonthlySaleChart from "../components/charts/monthlySaleChart";
-import MonthlyBranchChart from "../components/charts/monthlyBranchChart";
+import TopSellingBranch from "../components/charts/topSellingBranch";
 
 import Select from "../components/common/select";
 import { getAllBranches } from "../services/branchService";
@@ -15,12 +15,16 @@ import { MdDataExploration, MdAddShoppingCart } from "react-icons/md";
 import { getMonthlySummary } from "../services/reportService";
 
 import SaleHistoryToday from "../components/charts/saleHistoryToday";
+import { getThreeMonths } from "../services/reportService";
 
 const Dashboard = ({ history }) => {
   const { currentUser } = useContext(UserContext);
   const [branches, setBranches] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState(currentUser.branch_id);
   const [monthlySummary, setMonthlySummary] = useState(null);
+
+  const [threeMonths, setThreeMonths] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState("2023-10");
 
   const fetchData = async () => {
     const { data: branches } = await getAllBranches();
@@ -31,6 +35,14 @@ const Dashboard = ({ history }) => {
     setBranches(branchList);
     const { data: monthlySummary } = await getMonthlySummary();
     setMonthlySummary(monthlySummary);
+
+    const { data: threeMonths } = await getThreeMonths();
+    console.log(threeMonths[0].month_name);
+    const monthList = threeMonths.map((m) => ({
+      name: m.month_name,
+    }));
+    setThreeMonths(monthList);
+    console.log(threeMonths);
   };
 
   useEffect(() => {
@@ -39,6 +51,10 @@ const Dashboard = ({ history }) => {
 
   const handleBranchSelect = (e) => {
     setSelectedBranch(e.currentTarget.value);
+  };
+
+  const handleMonthSelect = (m) => {
+    setSelectedMonth(m.currentTarget.value);
   };
 
   return (
@@ -101,8 +117,23 @@ const Dashboard = ({ history }) => {
 
           <div className="row">
             <div className="col p-2 rounded border">
-              <h3 className="mx-3">Top Selling Branches</h3>
-              <MonthlyBranchChart height={250} width="100%" />
+              <div className="d-flex justify-content-between align-items-center">
+                <h3 className="mx-3">Top Selling Branches</h3>
+                <Select
+                  name={"month"}
+                  value={selectedMonth}
+                  label={"Month"}
+                  options={threeMonths}
+                  onChange={handleMonthSelect}
+                />
+              </div>
+
+              {/* <MonthlyBranchChart height={250} width="100%" targetMonth={selectedMonth} /> */}
+              <TopSellingBranch
+                height={250}
+                width="100%"
+                targetMonths={selectedMonth}
+              />
             </div>
             <div className="col p-2 rounded border">
               <h3 className="mx-3">Top Selling Products</h3>
