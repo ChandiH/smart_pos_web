@@ -3,9 +3,9 @@ import AccessFrame from "../components/accessFrame";
 
 import UserContext from "./../context/UserContext";
 
-import MonthlyProductChart from "./../components/charts/monthlyProductChart";
 import MonthlySaleChart from "../components/charts/monthlySaleChart";
 import TopSellingBranch from "../components/charts/topSellingBranch";
+import TopSellingProducts from "../components/charts/topSellingProducts";
 
 import Select from "../components/common/select";
 import { getAllBranches } from "../services/branchService";
@@ -74,7 +74,7 @@ const Dashboard = ({ history }) => {
                 decimals={2}
                 value={monthlySummary ? monthlySummary[0].net_sale : 0}
                 icon={<MdDataExploration />}
-                prefix="Rs. "
+                prefix="Rs "
               />
             </div>
             <div className="col">
@@ -83,7 +83,7 @@ const Dashboard = ({ history }) => {
                 value={monthlySummary ? monthlySummary[0].gross_profit : 0}
                 decimals={2}
                 icon={<MdDataExploration />}
-                prefix="Rs. "
+                prefix="Rs "
               />
             </div>
             <div className="col">
@@ -127,17 +127,12 @@ const Dashboard = ({ history }) => {
                   onChange={handleMonthSelect}
                 />
               </div>
-
-              {/* <MonthlyBranchChart height={250} width="100%" targetMonth={selectedMonth} /> */}
-              <TopSellingBranch
-                height={250}
-                width="100%"
-                targetMonths={selectedMonth}
-              />
+              <TopSellingBranch targetMonths={selectedMonth} />
             </div>
             <div className="col p-2 rounded border">
               <h3 className="mx-3">Top Selling Products</h3>
-              <MonthlyProductChart height={250} width="100%" />
+              <div> <br></br></div>
+              <TopSellingProducts />
             </div>
           </div>
           <div className="row my-3 p-2 rounded border">

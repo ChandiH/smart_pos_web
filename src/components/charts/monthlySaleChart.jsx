@@ -44,7 +44,7 @@ const MonthlySaleChart = ({ height, width, branch_id }) => {
     },
     yaxis: {
       title: {
-        text: "Sales  (Rs.)",
+        text: "Sales  (Rs)",
       },
     },
     markers: {

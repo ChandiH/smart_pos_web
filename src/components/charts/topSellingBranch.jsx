@@ -20,7 +20,6 @@ const TopSellingBranch = ({ targetMonths }) => {
     },
     chart: {
       type: "bar",
-      height: 350,
       stacked: false,
     },
     stroke: {
@@ -55,7 +54,7 @@ const TopSellingBranch = ({ targetMonths }) => {
     tooltip: {
       y: {
         formatter: function (val) {
-          return "Rs. " + parseFloat(val).toFixed(2);
+          return "Rs " + parseFloat(val).toFixed(2);
         },
       },
     },
@@ -98,7 +97,7 @@ const TopSellingBranch = ({ targetMonths }) => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <Chart options={chartOptions} series={salesData} type="bar" height={350} />
+    <Chart options={chartOptions} series={salesData} type="bar" height={250} />
   );
 };
 
