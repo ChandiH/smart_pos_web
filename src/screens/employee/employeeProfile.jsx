@@ -5,6 +5,7 @@ import AccessFrame from "./../../components/accessFrame";
 import { getUserRoles } from "../../services/authorizationService";
 import { getAllBranches } from "../../services/branchService";
 import { updateEmployee } from "../../services/employeeService";
+import { getImageUrl } from "./../../services/imageHandler";
 
 const EmployeeProfile = ({ history, location }) => {
   const [employee, setEmployee] = useState({});
@@ -71,7 +72,7 @@ const EmployeeProfile = ({ history, location }) => {
                   className="rounded-4 fit"
                   src={
                     employee.employee_image
-                      ? employee.employee_image
+                      ? getImageUrl(employee.employee_image)
                       : "https://placehold.co/400x400/png"
                   }
                 />

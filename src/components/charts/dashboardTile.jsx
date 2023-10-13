@@ -2,20 +2,20 @@ import React from "react";
 import CountUp from "react-countup";
 import PropTypes from "prop-types";
 
-const DashBoardTile = ({ label, value, icon, prefix,decimals }) => {
+const DashBoardTile = ({ label, value, icon, prefix, decimals }) => {
   return (
     <div
-      className="m-3 rounded border"
+      className="rounded border"
       style={{
         width: "100%",
-        aspectRatio: 3,
+        aspectRatio: 4,
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
         border: "1px solid black",
         borderRadius: 10,
-        boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.5)",
+        boxShadow: "0px 0px 5px 0px rgba(0,0,0,0.5)",
       }}
     >
       <div className="row">
@@ -26,7 +26,12 @@ const DashBoardTile = ({ label, value, icon, prefix,decimals }) => {
         </div>
         <div>
           <h1>
-            <CountUp end={value} duration={1} prefix={prefix} decimals={decimals} />
+            <CountUp
+              end={value}
+              duration={1}
+              prefix={prefix}
+              decimals={decimals}
+            />
           </h1>
         </div>
       </div>

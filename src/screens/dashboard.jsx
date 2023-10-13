@@ -37,7 +37,6 @@ const Dashboard = ({ history }) => {
     setMonthlySummary(monthlySummary);
 
     const { data: threeMonths } = await getThreeMonths();
-    console.log(threeMonths[0].month_name);
     const monthList = threeMonths.map((m) => ({
       name: m.month_name,
     }));
@@ -67,12 +66,11 @@ const Dashboard = ({ history }) => {
         <div className="col">
           <div className="row mb-3 p-2 rounded border">
             <h3 className="mx-3">Monthly Summary</h3>
-
             <div className="col">
               <DashBoardTile
                 label="Gross Sale"
                 decimals={2}
-                value={monthlySummary ? monthlySummary[0].net_sale : 0}
+                value={monthlySummary ? monthlySummary[0]?.net_sale : 0}
                 icon={<MdDataExploration />}
                 prefix="Rs "
               />
@@ -80,7 +78,7 @@ const Dashboard = ({ history }) => {
             <div className="col">
               <DashBoardTile
                 label="Gross Profit"
-                value={monthlySummary ? monthlySummary[0].gross_profit : 0}
+                value={monthlySummary ? monthlySummary[0]?.gross_profit : 0}
                 decimals={2}
                 icon={<MdDataExploration />}
                 prefix="Rs "
@@ -90,13 +88,13 @@ const Dashboard = ({ history }) => {
               <DashBoardTile
                 label="Total Orders"
                 decimals={0}
-                value={monthlySummary ? monthlySummary[0].total_orders : 0}
+                value={monthlySummary ? monthlySummary[0]?.total_orders : 0}
                 icon={<MdAddShoppingCart />}
               />
             </div>
           </div>
 
-          <div className="mb-3 p-2 rounded border">
+          <div className="row mb-3 p-2 rounded border">
             <div className="d-flex justify-content-between align-items-center">
               <h3 className="mx-3">Sales by Day</h3>
               <Select
@@ -131,7 +129,10 @@ const Dashboard = ({ history }) => {
             </div>
             <div className="col p-2 rounded border">
               <h3 className="mx-3">Top Selling Products</h3>
-              <div> <br></br></div>
+              <div>
+                {" "}
+                <br></br>
+              </div>
               <TopSellingProducts />
             </div>
           </div>

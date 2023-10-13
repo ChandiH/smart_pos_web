@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import Form from "../common/form";
 import Joi from "joi-browser";
+import { resetPassword } from "../../services/authenticationService";
 
 class ChangePasswordWindow extends Form {
   state = {
@@ -21,17 +22,32 @@ class ChangePasswordWindow extends Form {
   };
 
   doSubmit = async () => {
-    const button = document.getElementById("closeWindow");
-    button.click();
-    // try {
-    //   await authenticate({ username, password });
-    //   setVerified(true);
-    //   verify();
-    //   const button = document.getElementById("closeButton");
-    //   button.click();
-    // } catch (err) {
-    //   setError(err.response.data.error);
-    // }
+    const { data: details } = this.state;
+    if (details.newPassword != details.confirmNewPassword) {
+      return this.setState({
+        errors: { confirmNewPassword: "passwords didn't match " },
+      });
+    }
+    try {
+      const { data } = await resetPassword(
+        details.username,
+        details.password,
+        details.newPassword
+      );
+      const button = document.getElementById("closeWindow");
+      button.click();
+      this.setState({
+        data: {
+          username: "",
+          password: "",
+          newPassword: "",
+          confirmNewPassword: "",
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      this.setState({ errors: err.response.data.error });
+    }
   };
 
   render() {

@@ -7,7 +7,7 @@ import { getImageUrl } from "../services/imageHandler";
 import { updateEmployeeImage } from "../services/employeeService";
 
 const UserProfile = () => {
-  const { currentUser } = useContext(UserContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
   const [editing, setEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({ ...currentUser });
   const [userVerified, setUserVerified] = useState(false);
@@ -20,6 +20,8 @@ const UserProfile = () => {
   const handleImageChange = async (file) => {
     try {
       const { data } = await updateEmployeeImage(currentUser.employee_id, file);
+      setCurrentUser({ ...currentUser, employee_image: data.file.filename });
+
       console.log(data);
     } catch (err) {
       console.log(err);
@@ -45,7 +47,7 @@ const UserProfile = () => {
       <aside className="col-lg-4">
         <div className="profile-rounded-4 mb-3 mt-3 d-flex justify-content-ceter">
           <img
-            src={getImageUrl(editedUser.employee_image)}
+            src={getImageUrl(currentUser.employee_image)}
             alt="Profile"
             style={{
               width: "60%",

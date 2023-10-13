@@ -6,7 +6,6 @@ import {
   updateInventory,
 } from "../../services/inventoryService";
 import UserContext from "../../context/UserContext";
-import { getImageUrl } from "./../../services/imageHandler";
 import { getAllBranches } from "../../services/branchService";
 import { updateProductDiscount } from "../../services/productService";
 import toast from "react-hot-toast";
