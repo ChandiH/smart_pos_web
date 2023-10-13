@@ -9,7 +9,10 @@ import _ from "lodash";
 import { getInventoryByBranch } from "../../services/inventoryService";
 import { getProducts } from "../../services/productService";
 import { getCustomers } from "../../services/customerService";
-import { submitOrder } from "../../services/orderService";
+import {
+  submitOrder,
+  getRewardsPointsPercentage,
+} from "../../services/orderService";
 
 import SummaryWindow from "../../components/sale/summaryWindow";
 
@@ -31,13 +34,19 @@ const CashierSalePage = ({ history }) => {
   });
   const { currentUser } = useContext(UserContext);
   const { cart, setCart } = useContext(CartContext);
-  const [productSearchQuery, setPoductSearchQuery] = useState("");
+  const [productSearchQuery, setProductSearchQuery] = useState("");
   const [customerSearchQuery, setCustomerSearchQuery] = useState("");
 
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [paymentDetails, setPaymentDetails] = useState(null);
 
+  const [rewardsPointsPercentage, setRewardsPointsPercentage] = useState([]);
+
   const fetchData = async () => {
+    const { data: rewardsPointsPercentage } =
+      await getRewardsPointsPercentage();
+    setRewardsPointsPercentage(rewardsPointsPercentage);
+
     const { data: customers } = await getCustomers();
     setCustomers(customers);
 
@@ -69,7 +78,7 @@ const CashierSalePage = ({ history }) => {
   };
 
   const handleProductSearch = (query) => {
-    setPoductSearchQuery(query);
+    setProductSearchQuery(query);
   };
 
   const handleCustomerSearch = (query) => {
@@ -99,7 +108,7 @@ const CashierSalePage = ({ history }) => {
   };
 
   const onAddToCart = (product) => {
-    setPoductSearchQuery("");
+    setProductSearchQuery("");
     const cartCopy = [...cart];
     //check if product already in the cart
     const oldProduct = cartCopy.find(
@@ -133,6 +142,7 @@ const CashierSalePage = ({ history }) => {
     let totalPrice = 0;
     if (cart.length !== 0) {
       cart.forEach((product) => {
+        // totalPrice += product.quantity * product.retail_price - product.discount;
         totalPrice += product.quantity * product.retail_price;
       });
     }
@@ -156,6 +166,17 @@ const CashierSalePage = ({ history }) => {
       );
     });
     return parseFloat(profit).toFixed(2);
+  };
+
+  const getRewardsPoints = () => {
+    let rewardsPoints = 0;
+    if (customer.customer_name !== "Guest Customer") {
+      rewardsPoints =
+        (getTotalPrice() * rewardsPointsPercentage[0].variable_value) / 100;
+    } else {
+      rewardsPoints = 0.0;
+    }
+    return parseFloat(rewardsPoints).toFixed(2);
   };
 
   const getPagedData = () => {
@@ -193,6 +214,8 @@ const CashierSalePage = ({ history }) => {
       payment_method_id: "1",
       reference_id: paymentDetails,
       branch_id: currentUser.branch_id,
+      rewards_points: getRewardsPoints(),
+      product_count: getTotalQuantity(),
     };
 
     const products = cart.map((product) => {
@@ -214,6 +237,7 @@ const CashierSalePage = ({ history }) => {
       handleCustomerSearch("");
       setPaymentMethod("cash");
       setPaymentDetails("");
+      fetchData();
     } catch (e) {
       console.log("error ocured");
       console.log(e.response.data);
@@ -333,6 +357,10 @@ const CashierSalePage = ({ history }) => {
                 </h5>
               </dd>
             </div>
+            <div className="row">
+              <dt className="col-7">Total Loyalty Points:</dt>
+              <dd className="col-5 align-right">{getRewardsPoints()}</dd>
+            </div>
           </div>
           <hr />
         </div>
@@ -432,6 +460,7 @@ const CashierSalePage = ({ history }) => {
             paymentMethod={paymentMethod}
             paymentDetails={parseInt(paymentDetails)}
             placeOrder={placeOrder}
+            rewardsPoints={getRewardsPoints()}
           />
         </div>
       </div>

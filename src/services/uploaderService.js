@@ -2,7 +2,7 @@ import http from "./httpService";
 
 const ApiEndPoint = `${process.env.REACT_APP_BACKEND}/upload`;
 
-// will return each product with its stock quantity in each branch
+// will return imageURL
 export function uploadImage(file) {
   const formData = new FormData();
   formData.append("file", file);

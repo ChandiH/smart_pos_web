@@ -34,27 +34,14 @@ import { decodeJWT } from "./services/authenticationService";
 import { Toaster } from "react-hot-toast";
 
 function App() {
-  // ** REMOVE THIS AFTER TESTING **
-  // use when need to bypass login
-  // const [currentUser, setCurrentUser] = useState({
-  //   id: 1,
-  //   name: "Somesh Chandimal",
-  //   userName: "Somesh",
-  //   email: "slahy0@trellian.com",
-  //   phone: "6953579061",
-  //   branch_id: 1,
-  //   role_id: 1,
-  //   branch_name: "Kandy",
-  //   user_access: [1, 2, 3, 4, 5],
-  // });
+  const [currentUser, setCurrentUser] = useState(null);
+
   useEffect(() => {
     const pathname = window.location.pathname;
     // Store the current page's pathname in session storage.
     if (pathname !== "/login")
       sessionStorage.setItem("lastVisitedPage", pathname);
   }, [window.location.pathname]);
-
-  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -123,7 +110,11 @@ function App() {
             {/* </div> */}
           </React.Fragment>
         )}
-        <Toaster position="bottom-right" reverseOrder={true} />
+        <Toaster
+          position="bottom-right"
+          reverseOrder={true}
+          toastOptions={{ duration: 3000 }}
+        />
       </UserContext.Provider>
     </CartContext.Provider>
   );

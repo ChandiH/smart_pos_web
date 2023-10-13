@@ -28,6 +28,14 @@ export function registerEmployee({
   });
 }
 
+export function resetPassword(username, password, newPassword) {
+  return http.put(`${ApiEndPoint}/resetPassword`, {
+    username,
+    password,
+    newPassword,
+  });
+}
+
 export function decodeJWT(token) {
   return jwtDecode(token);
 }

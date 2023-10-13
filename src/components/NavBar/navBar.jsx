@@ -1,20 +1,10 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import UserContext from "../../context/UserContext";
-
+import moment from "moment/moment";
+import { getImageUrl } from "./../../services/imageHandler";
 const NavBar = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
-
-  const date = new Date();
-  var days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -55,13 +45,13 @@ const NavBar = () => {
           className="row"
           style={{ color: "black", fontSize: 12, justifyContent: "end" }}
         >
-          {days[date.getDay()]}
+          {moment().format("dddd")}
         </span>
         <span
           className="row"
           style={{ color: "black", fontSize: 15, justifyContent: "end" }}
         >
-          {date.toUTCString().slice(5, 16)}
+          {moment().format("MMMM Do YYYY")}
         </span>
       </div>
 
@@ -87,7 +77,11 @@ const NavBar = () => {
 
       <NavLink className="nav-item nav-link" to="/user-profile">
         <img
-          src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+          src={
+            currentUser.employee_image
+              ? getImageUrl(currentUser.employee_image)
+              : "https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+          }
           style={{ width: 40, aspectRatio: 1, marginLeft: 10, marginRight: 10 }}
           className="rounded-circle shadow-4"
           alt="Avatar"
