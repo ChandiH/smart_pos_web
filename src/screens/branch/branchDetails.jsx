@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
-import _ from "lodash";
 
 import { getBranch } from "../../services/branchService";
-import {
-  getEmployee,
-  getEmployeeByBranch,
-} from "../../services/employeeService";
+import { getEmployeeByBranch } from "../../services/employeeService";
 
 const BranchDetails = ({ match }) => {
   const [branchDetails, setBranchDetails] = useState({});

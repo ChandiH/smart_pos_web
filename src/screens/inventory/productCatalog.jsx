@@ -5,8 +5,8 @@ import Pagination from "../../components/common/pagination";
 import ProductTable from "../../components/inventory/productTable";
 import SearchBox from "../../components/common/searchBox";
 import AccessFrame from "./../../components/accessFrame";
-import _ from "lodash";
 import toast from "react-hot-toast";
+import _ from "lodash";
 
 import {
   deleteProduct,

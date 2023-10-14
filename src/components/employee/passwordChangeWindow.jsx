@@ -1,6 +1,8 @@
 import React from "react";
 import Form from "../common/form";
 import Joi from "joi-browser";
+import toast from "react-hot-toast";
+
 import { resetPassword } from "../../services/authenticationService";
 
 class ChangePasswordWindow extends Form {
@@ -29,13 +31,14 @@ class ChangePasswordWindow extends Form {
       });
     }
     try {
-      const { data } = await resetPassword(
+      await resetPassword(
         details.username,
         details.password,
         details.newPassword
       );
       const button = document.getElementById("closeWindow");
       button.click();
+      toast.success("password changed");
       this.setState({
         data: {
           username: "",

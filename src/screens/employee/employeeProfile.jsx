@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SelectWithBtn from "../../components/common/selectWithBtn";
 import AccessFrame from "./../../components/accessFrame";
+import toast from "react-hot-toast";
 
 import { getUserRoles } from "../../services/authorizationService";
 import { getAllBranches } from "../../services/branchService";
@@ -31,13 +32,19 @@ const EmployeeProfile = ({ history, location }) => {
 
   const saveChanges = async () => {
     try {
-      await updateEmployee(employee.employee_id, {
+      const promise = updateEmployee(employee.employee_id, {
         employee_name: employee.employee_name,
         employee_email: employee.employee_email,
         employee_phone: employee.employee_phone,
         role_id: role ? role : employee.role_id,
         branch_id: branch ? branch : employee.branch_id,
       });
+      toast.promise(promise, {
+        loading: "updating employee...",
+        success: "Employee updated",
+        error: "Error Occured",
+      });
+      await promise;
       return history.goBack();
     } catch (e) {
       console.log("Error Occured");

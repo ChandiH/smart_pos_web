@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  getEmployeeByBranch,
-  getEmployeeHourRecord,
-  addEmployeeRecord,
-  getRecordByDateBranch,
-} from "./../../services/employeeService";
 import UserContext from "./../../context/UserContext";
 import Table from "../../components/common/table";
-import _ from "lodash";
 import Input from "./../../components/common/input";
 import moment from "moment/moment";
 import toast from "react-hot-toast";
+import _ from "lodash";
+
+import {
+  getEmployeeByBranch,
+  addEmployeeRecord,
+  getRecordByDateBranch,
+} from "./../../services/employeeService";
 
 const recordTableColumn = [
   { path: "employee_id", label: "ID" },
@@ -193,14 +193,24 @@ const EmployeeWorkingHour = () => {
   };
 
   const submitLeaveRecord = async (employee) => {
-    const employeeDetails = {
-      ...employee,
-      present: false,
-      shift_on: "00:00",
-      shift_off: "00:00",
-    };
-    await addEmployeeRecord(mapToDataModel(employeeDetails));
-    fetchData();
+    try {
+      const employeeDetails = {
+        ...employee,
+        present: false,
+        shift_on: "00:00",
+        shift_off: "00:00",
+      };
+      const promise = addEmployeeRecord(mapToDataModel(employeeDetails));
+      toast.promise(promise, {
+        pending: "Adding Record...",
+        success: "Record Added.",
+        error: "Error",
+      });
+      await promise;
+      fetchData();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const submitRecord = async (employee) => {

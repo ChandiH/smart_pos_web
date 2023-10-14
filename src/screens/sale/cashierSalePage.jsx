@@ -4,6 +4,8 @@ import CartContext from "../../context/CartContext";
 import SearchBox from "../../components/common/searchBox";
 import SaleStockTable from "../../components/sale/saleStockTable";
 import SaleCartTable from "../../components/sale/saleCartTable";
+import SummaryWindow from "../../components/sale/summaryWindow";
+import toast from "react-hot-toast";
 import _ from "lodash";
 
 import { getInventoryByBranch } from "../../services/inventoryService";
@@ -13,8 +15,6 @@ import {
   submitOrder,
   getRewardsPointsPercentage,
 } from "../../services/orderService";
-
-import SummaryWindow from "../../components/sale/summaryWindow";
 
 const CashierSalePage = ({ history }) => {
   const [sortColumn, setSortColumn] = useState({
@@ -226,12 +226,19 @@ const CashierSalePage = ({ history }) => {
     });
 
     try {
-      await submitOrder({
+      const promise = submitOrder({
         salesData: {
           order,
           products,
         },
       });
+      toast.promise(promise, {
+        pending: "...",
+        success: (res) =>
+          res.data.success ? res.data.success : "Order Placed",
+        error: (err) => `${err.response.data.error}`,
+      });
+      await promise;
       console.log("order placed");
       setCart([]);
       handleCustomerSearch("");

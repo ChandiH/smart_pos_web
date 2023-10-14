@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import UserContext from "../context/UserContext";
 import SearchBox from "../components/common/searchBox";
 import AccessFrame from "../components/accessFrame";
+import Input from "../components/common/input";
+import toast from "react-hot-toast";
+
 import { getCategories } from "../services/categoryService";
 import { getSuppliers } from "../services/supplierService";
 import { getAllBranches } from "./../services/branchService";
+import { getMobileAppQrURL } from "../services/imageHandler";
 import {
   updateRewardsPointsPercentage,
   getRewardsPointsPercentage,
 } from "./../services/orderService";
-import { useContext } from "react";
-import UserContext from "../context/UserContext";
-import Input from "../components/common/input";
-import toast from "react-hot-toast";
-import { getMobileAppQrURL } from "../services/imageHandler";
 
 const ConfigScreen = ({ history }) => {
   const { currentUser } = useContext(UserContext);
@@ -29,7 +29,7 @@ const ConfigScreen = ({ history }) => {
   const [rewardPercentage, setRewardPercentage] = useState(0);
 
   // states relates to QR code
-  const [qrCodeWindow, setQrCodeWindow] = useState(true);
+  const [qrCodeWindow, setQrCodeWindow] = useState(false);
 
   const fetchData = async () => {
     try {
