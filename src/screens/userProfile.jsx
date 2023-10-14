@@ -1,8 +1,10 @@
 import React, { useContext, useState } from "react";
+import UserContext from "../context/UserContext";
 import UploadImageWindow from "../components/employee/uploadImageWindow";
 import VerifyUserWindow from "../components/employee/verifyUserWindow";
 import ChangePasswordWindow from "../components/employee/passwordChangeWindow";
-import UserContext from "../context/UserContext";
+import toast from "react-hot-toast";
+
 import { getImageUrl } from "../services/imageHandler";
 import { updateEmployeeImage } from "../services/employeeService";
 
@@ -19,10 +21,21 @@ const UserProfile = () => {
 
   const handleImageChange = async (file) => {
     try {
-      const { data } = await updateEmployeeImage(currentUser.employee_id, file);
-      setCurrentUser({ ...currentUser, employee_image: data.file.filename });
+      const promise = updateEmployeeImage(currentUser.employee_id, file);
+      toast.promise(promise, {
+        pending: "Uploading Image...",
+        success: (res) =>
+          res.data.success ? res.data.success : "Image Uploaded",
+        error: (err) => `${err.response.data.error}`,
+      });
 
-      console.log(data);
+      const { data } = await promise;
+      await setCurrentUser({
+        ...currentUser,
+        employee_image: data.file.filename,
+      });
+
+      // window.location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -150,6 +163,7 @@ const UserProfile = () => {
       <VerifyUserWindow
         id={"verifyUserWindow"}
         setVerified={setUserVerified}
+        // token={setToken}
         verify={() => setEditing(true)}
       />
       <ChangePasswordWindow id="changePasswordWindow" />

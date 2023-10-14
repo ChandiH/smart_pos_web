@@ -2,6 +2,7 @@ import React from "react";
 import Joi from "joi-browser";
 import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
+import toast from "react-hot-toast";
 
 import { getAllBranches } from "../../services/branchService";
 import { getEmployee } from "../../services/employeeService";
@@ -91,7 +92,13 @@ class EmployeeForm extends Form {
   doSubmit = async () => {
     try {
       console.log(this.state.data);
-      await registerEmployee(this.state.data);
+      const promise = registerEmployee(this.state.data);
+      toast.promise(promise, {
+        loading: "Adding new Employee...",
+        success: "New Employee Added",
+        error: "Error Occured",
+      });
+      await promise;
       return this.props.history.goBack();
     } catch (e) {
       console.log("Error Occured");

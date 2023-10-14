@@ -2,6 +2,7 @@ import React from "react";
 import Joi from "joi-browser";
 import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
+import toast from "react-hot-toast";
 
 import { getProduct, saveProduct } from "../../services/productService";
 import { getCategories } from "../../services/categoryService";
@@ -88,8 +89,14 @@ class ProductForm extends Form {
     console.log("Submitted", { ...this.state.data, files: this.state.images });
 
     try {
-      const { data } = await saveProduct(this.state.data, this.state.images);
-      console.log("Product Added Successfully", data);
+      const promise = saveProduct(this.state.data, this.state.images);
+      toast.promise(promise, {
+        pending: "...",
+        success: (res) =>
+          res.data.success ? res.data.success : "Product Added Successfully.",
+        error: (err) => `${err.response.data.error}`,
+      });
+      await promise;
       return this.props.history.replace("/inventory/catalog");
     } catch (e) {
       console.log("Error Occured");

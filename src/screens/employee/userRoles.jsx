@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import SearchBox from "../../components/common/searchBox";
 import UserRoleTable from "./../../components/employee/userRoleTable";
+import Input from "../../components/common/input";
+import toast from "react-hot-toast";
 import _ from "lodash";
 
 import {
@@ -10,8 +12,6 @@ import {
   deleteUserRole,
   addNewUserRole,
 } from "../../services/authorizationService";
-import toast from "react-hot-toast";
-import Input from "../../components/common/input";
 
 const UserRoles = () => {
   const [accessLevels, setAccessLevels] = useState([]);

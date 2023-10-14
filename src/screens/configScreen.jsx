@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import UserContext from "../context/UserContext";
 import SearchBox from "../components/common/searchBox";
 import AccessFrame from "../components/accessFrame";
+import Input from "../components/common/input";
+import toast from "react-hot-toast";
+
 import { getCategories } from "../services/categoryService";
 import { getSuppliers } from "../services/supplierService";
 import { getAllBranches } from "./../services/branchService";
+import { getMobileAppQrURL } from "../services/imageHandler";
 import {
   updateRewardsPointsPercentage,
   getRewardsPointsPercentage,
 } from "./../services/orderService";
-import { useContext } from "react";
-import UserContext from "../context/UserContext";
-import Input from "../components/common/input";
-import toast from "react-hot-toast";
 
 const ConfigScreen = ({ history }) => {
   const { currentUser } = useContext(UserContext);
@@ -28,7 +29,7 @@ const ConfigScreen = ({ history }) => {
   const [rewardPercentage, setRewardPercentage] = useState(0);
 
   // states relates to QR code
-  const [qrCodeWindow, setQrCodeWindow] = useState(true);
+  const [qrCodeWindow, setQrCodeWindow] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -48,9 +49,16 @@ const ConfigScreen = ({ history }) => {
     filterData(query);
   };
 
-  const handleClickCategoryView = async () => {
-    setShowTable(true);
+  const hideAllWindows = () => {
+    setShowTable(false);
     setRewardWindow(false);
+    setQrCodeWindow(false);
+    window.scrollTo(0, 0);
+  };
+
+  const handleClickCategoryView = async () => {
+    hideAllWindows();
+    setShowTable(true);
     const { data: categories } = await getCategories();
     const formatted = categories.map((c) => ({
       _id: c.category_id,
@@ -161,9 +169,9 @@ const ConfigScreen = ({ history }) => {
       accessLevel={"configuration"}
       onDenied={() => history.goBack()}
     >
-      <div className="container my-3">
+      <div className="container-lg my-3">
         <div className="row">
-          <div className="col-5">
+          <div className="col-sm-5">
             {/* Branch Configuration */}
             <OptionFrame title="Branch">
               {optionButton("View Branch Details", () =>
@@ -195,10 +203,10 @@ const ConfigScreen = ({ history }) => {
                 handleClickCategoryView
               )}
             </OptionFrame>
-            {/* Customer Management */}
+            {/* Loyalty Program Management */}
             <OptionFrame title="Loyalty Program">
               {optionButton("Set Rewards Precentage", () => {
-                setShowTable(false);
+                hideAllWindows();
                 setRewardWindow(!rewardWindow);
               })}
             </OptionFrame>
@@ -219,13 +227,14 @@ const ConfigScreen = ({ history }) => {
             </OptionFrame>
             {/* Mobile Application */}
             <OptionFrame title="Mobile Application">
-              {optionButton("Download Mobile Application", () =>
-                history.push("/employee/roles")
-              )}
+              {optionButton("Download Mobile Application", () => {
+                hideAllWindows();
+                setQrCodeWindow(true);
+              })}
             </OptionFrame>
           </div>
 
-          <div className="col-6">
+          <div className="col-sm-6">
             {filteredData.length > 0 && showTable && (
               <div className="card p-3">
                 <SearchBox
@@ -253,7 +262,7 @@ const ConfigScreen = ({ history }) => {
                 <h5 className="card-title mb-3">Loyalty rewards</h5>
                 <p class="card-text">
                   current rewards point percentage is{" "}
-                  <b>{rewardPercentage[0].variable_value}%</b>
+                  <b>{rewardPercentage[0]?.variable_value}%</b>
                   <br />
                   set loyalty rewards point for customers
                   <br />
@@ -273,6 +282,36 @@ const ConfigScreen = ({ history }) => {
                 >
                   Save Changes
                 </button>
+              </div>
+            )}
+            {qrCodeWindow && (
+              <div className="card p-3">
+                <h5 className="card-title mb-3">
+                  Download Smart Pos Mobile App Here
+                </h5>
+                <p class="card-text">
+                  <b>Instruction</b>
+                  <br />
+                  1. Scan the QR code in your web application.
+                  <br />
+                  2. Tap the notification that appears on your screen..
+                  <br />
+                  3. Download the app from the relevant app store for your
+                  mobile device..
+                  <br />
+                  4. Install the app on your mobile device..
+                  <br />
+                  5. Login to the app using your employee username and password.
+                  <br />
+                </p>
+                <div className="rounded-4 mb-3 mt-3 d-flex justify-content-ceter">
+                  <img
+                    alt="display"
+                    style={{ width: "70%", aspectRatio: 1, margin: "auto" }}
+                    className="rounded-4 fit"
+                    src={getMobileAppQrURL()}
+                  />
+                </div>
               </div>
             )}
           </div>

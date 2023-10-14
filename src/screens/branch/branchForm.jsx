@@ -2,6 +2,7 @@ import React from "react";
 import Joi from "joi-browser";
 import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
+import toast from "react-hot-toast";
 
 import { addBranch } from "../../services/branchService";
 
@@ -27,7 +28,13 @@ class BranchForm extends Form {
   doSubmit = async () => {
     try {
       console.log(this.state.data);
-      await addBranch(this.state.data);
+      const promise = addBranch(this.state.data);
+      toast.promise(promise, {
+        loading: "updating employee...",
+        success: "Employee updated",
+        error: "Error Occured",
+      });
+      await promise;
       return this.props.history.goBack();
     } catch (e) {
       console.log("Error Occured");

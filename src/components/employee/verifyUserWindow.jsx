@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import Input from "../common/input";
-import { authenticate } from "../../services/authenticationService";
 
-const VerifyUserWindow = ({ id, verify, setVerified }) => {
+import { authenticate } from "../../services/authenticationService";
+import toast from "react-hot-toast";
+
+const VerifyUserWindow = ({ id, verify, setToken, setVerified }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleVerify = async () => {
     try {
-      await authenticate({ username, password });
+      const { data: response } = await authenticate({ username, password });
       setVerified(true);
+      if (setToken) setToken(response.token);
       verify();
+      toast.success("Verified");
       const button = document.getElementById("closeButton");
       button.click();
     } catch (err) {

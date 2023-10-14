@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
+import UserContext from "../../context/UserContext";
 import AccessFrame from "../../components/accessFrame";
+import UpdateBtn from "../../components/inventory/updateBtn";
+import ProductImages from "../../components/inventory/productImages";
+import toast from "react-hot-toast";
 
+import { getAllBranches } from "../../services/branchService";
+import { updateProductDiscount } from "../../services/productService";
 import {
   getInventoryByProduct,
   updateInventory,
 } from "../../services/inventoryService";
-import UserContext from "../../context/UserContext";
-import { getAllBranches } from "../../services/branchService";
-import { updateProductDiscount } from "../../services/productService";
-import toast from "react-hot-toast";
-import UpdateBtn from "../../components/inventory/updateBtn";
-import ProductImages from "../../components/inventory/productImages";
 
 const StockUpdateForm = ({ history, match, location }) => {
   const accessLevel = "stockUpdateForm";

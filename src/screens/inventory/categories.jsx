@@ -2,6 +2,7 @@ import React from "react";
 import Joi from "joi-browser";
 import Form from "../../components/common/form";
 import AccessFrame from "../../components/accessFrame";
+import toast from "react-hot-toast";
 
 import { getCategory, addCategory } from "./../../services/categoryService";
 
@@ -30,10 +31,15 @@ class Categories extends Form {
 
   doSubmit = async () => {
     try {
-      await addCategory(this.state.data.category_name);
+      const promise = addCategory(this.state.data.category_name);
+      toast.promise(promise, {
+        pending: "...",
+        success: "Category Added Successfully.",
+        error: "Error Occured",
+      });
+      await promise;
       this.props.history.goBack();
     } catch (e) {
-      console.log("Error Occured");
       console.log(e.response.data);
     }
   };

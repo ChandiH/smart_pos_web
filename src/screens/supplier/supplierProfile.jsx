@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import AccessFrame from "../../components/accessFrame";
-import { getProductsBySupplier } from "../../services/productService";
 import Table from "../../components/common/table";
 import _ from "lodash";
+
+import { getProductsBySupplier } from "../../services/productService";
 
 const tableColumn = [
   {
