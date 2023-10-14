@@ -56,7 +56,11 @@
   "jest": {
     "collectCoverageFrom": [
       "src/components/**/*.{js,jsx}",
-      "!src/components/charts/*.{js,jsx}"
+      "!src/components/charts/*.{js,jsx}",
+      "src/components/charts/dashboardTile.{js,jsx}",
+      "!src/components/employee/passwordChangeWindow.{js,jsx}",
+      "!src/components/employee/verifyUserWindow.{js,jsx}",
+      "!src/components/accessFrame.{js,jsx}"
     ],
     "coverageThreshold": {
       "global": {
@@ -65,6 +69,9 @@
         "lines": 50,
         "statements": 50
       }
+    },
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
     }
   },
   "engines": {

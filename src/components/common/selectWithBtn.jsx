@@ -24,7 +24,7 @@ const SelectWithBtn = ({
               {...rest}
               disabled={selectDisabled}
             >
-              <option selected value={""}>
+              <option defaultValue={""}>
                 {placeHolder ? placeHolder : "Select"}
               </option>
               {options.map((option, index) => (

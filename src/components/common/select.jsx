@@ -9,7 +9,7 @@ const Select = ({ name, label, options, error, ...rest }) => {
         {...rest}
         className="form-control form-select"
       >
-        <option selected value={""}>
+        <option selected defaultValue={""}>
           open this select menu
         </option>
         {options.map((option, index) => (
@@ -18,7 +18,7 @@ const Select = ({ name, label, options, error, ...rest }) => {
           </option>
         ))}
       </select>
-      <label for={name}>{label}</label>
+      <label htmlFor={name}>{label}</label>
       {error && (
         <div role="alert" className="alert alert-danger">
           {error}

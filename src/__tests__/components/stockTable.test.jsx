@@ -6,13 +6,14 @@ describe("StockTable", () => {
   const props = {
     sortColumn: { path: "name", order: "asc" },
     onSort: jest.fn(),
+    checkLowStock: jest.fn(),
     products: [
       {
         id: 1,
         name: "Muffin Chocolate Individual Wrap",
         description: "Pork - Tenderloin, Frozen",
         category: "Comedy|Drama|Romance",
-        image: "http://dummyimage.com/180x100.png/cc0000/ffffff",
+        product_image: ["http://dummyimage.com/180x100.png/cc0000/ffffff"],
         weight: "1.5",
         units: "10",
         buyingPrice: "$48.67",
@@ -25,7 +26,7 @@ describe("StockTable", () => {
         name: "Muffin Chocolate Individual Wrap",
         description: "Pork - Tenderloin, Frozen",
         category: "Comedy|Drama|Romance",
-        image: "http://dummyimage.com/180x100.png/cc0000/ffffff",
+        product_image: ["http://dummyimage.com/180x100.png/cc0000/ffffff"],
         weight: "1.5",
         units: "10",
         buyingPrice: "$48.67",

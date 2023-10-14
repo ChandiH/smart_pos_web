@@ -77,11 +77,7 @@ const NavBar = () => {
 
       <NavLink className="nav-item nav-link" to="/user-profile">
         <img
-          src={
-            currentUser.employee_image
-              ? getImageUrl(currentUser.employee_image)
-              : "https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
-          }
+          src={getImageUrl(currentUser.employee_image)}
           style={{ width: 40, aspectRatio: 1, marginLeft: 10, marginRight: 10 }}
           className="rounded-circle shadow-4"
           alt="Avatar"

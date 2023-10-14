@@ -8,11 +8,7 @@ class ProductTable extends Component {
       key: "image",
       content: (product) => (
         <img
-          src={
-            product.product_image[0]?.startsWith("http")
-              ? "https://placehold.co/200x200/png"
-              : getImageUrl(product.product_image[0])
-          }
+          src={getImageUrl(product.product_image[0])}
           style={{ width: 40, aspectRatio: 1, marginLeft: 10, marginRight: 10 }}
           className="shadow-4 rounded"
           alt="product_image"
