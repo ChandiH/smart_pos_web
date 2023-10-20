@@ -8,7 +8,6 @@ import _ from "lodash";
 
 import SupplierTable from "../../components/supplier/supplierTable";
 import { getSuppliers } from "../../services/supplierService";
-import toast from "react-hot-toast";
 
 class Supplier extends Component {
   state = {
@@ -21,12 +20,7 @@ class Supplier extends Component {
   };
 
   async fetchData() {
-    const promise = getSuppliers();
-    toast.promise(promise, {
-      loading: "Fetching Data...",
-      success: "Fetched",
-    });
-    const { data: suppliers } = await promise;
+    const { data: suppliers } = await getSuppliers();
     this.setState({ suppliers });
   }
 

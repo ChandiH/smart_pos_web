@@ -399,13 +399,13 @@ const CashierSalePage = ({ history }) => {
               </button>
               <button
                 className={getButtonProperties("loyalty")}
-                disabled={customer.name === "Guest Customer"}
+                disabled={customer.customer_name == "Guest Customer"}
                 onClick={() => paymentHandler("loyalty")}
               >
                 Loyalty
               </button>
             </div>
-            {paymentMethod === "cash" ? (
+            {paymentMethod === "cash" || paymentMethod === "loyalty" ? (
               <>
                 <dt>Cash Given: </dt>
                 <input
