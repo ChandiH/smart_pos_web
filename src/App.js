@@ -84,7 +84,12 @@ function App() {
               <Route path="/inventory/catalog" component={ProductCatalog} />
               <Route path="/inventory/categories/:id" component={Categories} />
               <Route path="/inventory/update/:id" component={StockUpdateForm} />
-              <Route path="/inventory/update" component={UpdateInventory} />
+              <Route
+                path="/inventory/update"
+                render={(props) => (
+                  <UpdateInventory {...props} user={currentUser} />
+                )}
+              />
               <Route path="/inventory/:id" component={ProductForm} />
               {/* Supplier Management */}
               <Route path="/suppliers/profile" component={SupplierProfile} />

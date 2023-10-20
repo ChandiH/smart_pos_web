@@ -8,6 +8,7 @@ import _ from "lodash";
 
 import SupplierTable from "../../components/supplier/supplierTable";
 import { getSuppliers } from "../../services/supplierService";
+import toast from "react-hot-toast";
 
 class Supplier extends Component {
   state = {
@@ -20,7 +21,12 @@ class Supplier extends Component {
   };
 
   async fetchData() {
-    const { data: suppliers } = await getSuppliers();
+    const promise = getSuppliers();
+    toast.promise(promise, {
+      loading: "Fetching Data...",
+      success: "Fetched",
+    });
+    const { data: suppliers } = await promise;
     this.setState({ suppliers });
   }
 
@@ -70,12 +76,7 @@ class Supplier extends Component {
 
   render() {
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
-
-    if (!this.state.suppliers)
-      return <p>There are no Suppliers in the database.</p>;
-
     const { totalCount, data: suppliers } = this.getPagedData();
-
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}

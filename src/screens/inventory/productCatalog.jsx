@@ -88,13 +88,8 @@ class ProductCatalog extends Component {
   };
 
   render() {
-    const { length: count } = this.state.products;
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
-
-    if (count === 0) return <p>There are no Products in the database.</p>;
-
     const { totalCount, data: products } = this.getPagedData();
-
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}

@@ -65,13 +65,8 @@ class Customers extends Component {
   };
 
   render() {
-    const { length: count } = this.state.customers;
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
-
-    if (count === 0) return <p>There are no Customers in the database.</p>;
-
     const { totalCount, data: customers } = this.getPagedData();
-
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}

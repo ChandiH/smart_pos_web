@@ -28,7 +28,9 @@ class UpdateInventory extends Component {
     parseInt(product.quantity) === 0;
 
   fetchData = async () => {
-    const { data: inventory } = await getInventoryByBranch(1);
+    const { data: inventory } = await getInventoryByBranch(
+      this.props.user.branch_id
+    );
     const { data: products } = await getProducts();
     const availableProducts = products.filter((product) => !product.removed);
     const updatedInventory = availableProducts.map((product) => {
@@ -99,12 +101,8 @@ class UpdateInventory extends Component {
   };
 
   render() {
-    const { length: count } = this.state.products;
     const { pageSize, currentPage, sortColumn, searchQuery, showLowStock } =
       this.state;
-
-    if (count === 0) return <p>There are no Products in the database.</p>;
-
     const { totalCount, data: products } = this.getPagedData();
 
     return (

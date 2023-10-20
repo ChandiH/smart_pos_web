@@ -78,12 +78,7 @@ class Employee extends Component {
 
   render() {
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
-
-    if (!this.state.employees)
-      return <p>There are no Employees in the database.</p>;
-
     const { totalCount, data: employees } = this.getPagedData();
-
     return (
       <AccessFrame
         accessLevel={this.state.accessLevel}
