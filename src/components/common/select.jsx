@@ -9,9 +9,7 @@ const Select = ({ name, label, options, error, ...rest }) => {
         {...rest}
         className="form-control form-select"
       >
-        <option selected defaultValue={""}>
-          open this select menu
-        </option>
+        <option defaultValue={""}>open this select menu</option>
         {options.map((option, index) => (
           <option key={index} value={option._id}>
             {option.name}

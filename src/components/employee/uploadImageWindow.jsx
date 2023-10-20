@@ -12,7 +12,7 @@ const UploadImageWindow = ({ id, update }) => {
       role="ModalBase"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
-      testId={"modalwindow"}
+      test-id={"modalwindow"}
     >
       <div className="modal-dialog" role="document">
         <div className="modal-content">

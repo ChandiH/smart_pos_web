@@ -3,7 +3,7 @@ import { MdAddShoppingCart } from "react-icons/md";
 import DashBoardTile from "../../components/charts/dashboardTile";
 
 describe("Dashboard Tile", () => {
-  const props = { label: "testLabel", icon: <MdAddShoppingCart /> };
+  const props = { label: "testLabel", icon: <MdAddShoppingCart />, value: 100 };
   test("should render an Tile properly", () => {
     render(<DashBoardTile {...props} />);
 

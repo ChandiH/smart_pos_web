@@ -8,11 +8,7 @@ describe("Upload Image", () => {
   };
 
   test("should render a uploadImage componenet properly", () => {
-    render(
-      <table>
-        <UploadImage {...props} />
-      </table>
-    );
+    render(<UploadImage {...props} />);
 
     const element = screen.getByText("Images:");
     expect(element).toBeInTheDocument();
