@@ -66,6 +66,7 @@ const VerifyUserWindow = ({ id, verify, setToken, setVerified }) => {
                 name={"password"}
                 value={password}
                 onChange={(e) => setPassword(e.currentTarget.value)}
+                type="password"
               />
             </div>
           </div>
