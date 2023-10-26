@@ -24,7 +24,7 @@ const Dashboard = ({ history }) => {
   const [monthlySummary, setMonthlySummary] = useState(null);
 
   const [threeMonths, setThreeMonths] = useState([]);
-  const [selectedMonth, setSelectedMonth] = useState("2023-10");
+  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
 
   const fetchData = async () => {
     const { data: branches } = await getAllBranches();
