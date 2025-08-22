@@ -1,70 +1,124 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Smart POS Web
 
-## Available Scripts
+Smart POS Web is a comprehensive Point-of-Sale (POS) frontend application built with React. It provides a modern, responsive interface for managing sales, inventory, employees, customers, suppliers, and more. This project is designed for retail businesses seeking an efficient and user-friendly POS solution.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Dashboard**: Visualize sales data, top-selling products, and branches with interactive charts.
+- **Sales Management**: Create, view, and manage sales transactions, including cart and history views.
+- **Inventory Management**: Track products, stock levels, and categories.
+- **Customer & Supplier Management**: Add, edit, and view customer and supplier information.
+- **Employee Management**: Manage employee records, roles, and profile images.
+- **Authentication & Authorization**: Secure login, user roles, and access control.
+- **Image Uploads**: Upload product and employee images.
+- **Pagination & Search**: Efficiently navigate large datasets with built-in pagination and search components.
+- **Responsive Design**: Works seamlessly on desktops, tablets, and mobile devices.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technologies Used
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **React**: UI library for building interactive interfaces.
+- **React Context API**: State management for cart and user data.
+- **Jest**: Unit testing for components and utilities.
+- **Custom Services**: API communication and business logic abstraction.
+- **CSS**: Custom styles for a modern look and feel.
 
-### `npm test`
+## Project Structure
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+smart_pos_web/
+├── public/                # Static assets and index.html
+├── src/
+│   ├── components/        # Reusable UI components
+│   ├── context/           # React Contexts for global state
+│   ├── screens/           # Main application screens/pages
+│   ├── services/          # API and business logic services
+│   ├── utils/             # Utility functions
+│   ├── __tests__/         # Unit tests for components
+│   ├── App.js             # Main app component
+│   ├── index.js           # Entry point
+│   └── ...
+├── package.json           # Project metadata and dependencies
+├── README.md              # Project documentation
+└── ...
+```
 
-### `npm run build`
+## Getting Started
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
+- Node.js (v16 or higher recommended)
+- npm or yarn
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. **Clone the repository:**
+	```bash
+	git clone https://github.com/ChandiH/smart_pos_web.git
+	cd smart_pos_web
+	```
+2. **Install dependencies:**
+	```bash
+	npm install
+	# or
+	yarn install
+	```
+3. **Start the development server:**
+	```bash
+	npm start
+	# or
+	yarn start
+	```
+	The app will run at `http://localhost:3000`.
 
-### `npm run eject`
+### Running Tests
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Unit tests are located in the `src/__tests__/` directory. To run tests:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm test
+# or
+yarn test
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Usage
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- Log in with your credentials.
+- Navigate through the dashboard, sales, inventory, employee, customer, and supplier screens using the navigation bar.
+- Add, edit, or delete records as needed.
+- Upload images for products and employees.
+- Use search and pagination to find and manage records efficiently.
 
-## Learn More
+## Folder Overview
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- `src/components/`: UI elements like tables, forms, charts, and navigation.
+- `src/screens/`: Main pages (dashboard, login, profile, etc.).
+- `src/services/`: Handles API requests and business logic.
+- `src/context/`: Global state management (cart, user).
+- `src/utils/`: Helper functions (e.g., pagination).
+- `src/__tests__/`: Jest tests for components.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Customization
 
-### Code Splitting
+- **API Endpoints**: Update service files in `src/services/` to match your backend API.
+- **Styling**: Modify CSS files in `src/` for custom themes.
+- **Components**: Extend or replace components in `src/components/` as needed.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Contributing
 
-### Analyzing the Bundle Size
+Contributions are welcome! Please fork the repository and submit a pull request.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. Fork the repo
+2. Create your feature branch (`git checkout -b feature/my-feature`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push to the branch (`git push origin feature/my-feature`)
+5. Open a pull request
 
-### Making a Progressive Web App
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+ISC © Somesh Chandimal
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Contact
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For questions or support, please contact the repository owner via GitHub.
