@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import UserContext from "../../context/UserContext";
 import CartContext from "../../context/CartContext";
 import SearchBox from "../../components/common/searchBox";
@@ -41,6 +41,10 @@ const CashierSalePage = ({ history }) => {
   const [paymentDetails, setPaymentDetails] = useState(null);
 
   const [rewardsPointsPercentage, setRewardsPointsPercentage] = useState([]);
+  const barcodeBufferRef = useRef("");
+  const lastKeyTimeRef = useRef(0);
+  const productsRef = useRef(products);
+  const addToCartRef = useRef(null);
 
   const fetchData = async () => {
     const { data: rewardsPointsPercentage } =
@@ -72,6 +76,63 @@ const CashierSalePage = ({ history }) => {
   useEffect(() => {
     fetchData();
   }, [currentUser.branch_id]);
+
+  useEffect(() => {
+    productsRef.current = products;
+  }, [products]);
+
+  useEffect(() => {
+    // Treat rapid key sequences ending with Enter as a barcode scan.
+    const SCAN_TIMEOUT = 50;
+    const MIN_BARCODE_LENGTH = 4;
+
+    const handleKeyDown = (event) => {
+      const now = Date.now();
+
+      if (event.key === "Enter") {
+        const isPotentialScan =
+          barcodeBufferRef.current.length >= MIN_BARCODE_LENGTH &&
+          now - lastKeyTimeRef.current <= SCAN_TIMEOUT;
+
+        if (isPotentialScan) {
+          event.preventDefault();
+          const scannedBarcode = barcodeBufferRef.current;
+          const product = productsRef.current.find(
+            (item) => item.product_barcode === scannedBarcode
+          );
+
+          if (product) {
+            addToCartRef.current?.(product);
+          } else if (scannedBarcode) {
+            toast.error(`No product found for barcode ${scannedBarcode}`);
+          }
+        }
+
+        barcodeBufferRef.current = "";
+        return;
+      }
+
+      if (event.key === "Backspace") {
+        barcodeBufferRef.current = "";
+        return;
+      }
+
+      if (now - lastKeyTimeRef.current > SCAN_TIMEOUT) {
+        barcodeBufferRef.current = "";
+      }
+
+      if (event.key && event.key.length === 1 && !event.ctrlKey && !event.metaKey) {
+        barcodeBufferRef.current += event.key;
+        lastKeyTimeRef.current = now;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   const handleSort = (sortColumn) => {
     setSortColumn({ sortColumn });
@@ -129,6 +190,10 @@ const CashierSalePage = ({ history }) => {
     setCart(cartCopy);
     console.log("add to cart", updatedProduct);
   };
+
+  useEffect(() => {
+    addToCartRef.current = onAddToCart;
+  }, [onAddToCart]);
 
   const getTotalQuantity = () => {
     let totalQuantity = 0;
