@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import UserContext from "../../context/UserContext";
 import CartContext from "../../context/CartContext";
 import SearchBox from "../../components/common/searchBox";
@@ -15,6 +15,8 @@ import {
   submitOrder,
   getRewardsPointsPercentage,
 } from "../../services/orderService";
+
+const DEFAULT_BAUD_RATE = 9600;
 
 const CashierSalePage = ({ history }) => {
   const [sortColumn, setSortColumn] = useState({
@@ -41,6 +43,16 @@ const CashierSalePage = ({ history }) => {
   const [paymentDetails, setPaymentDetails] = useState(null);
 
   const [rewardsPointsPercentage, setRewardsPointsPercentage] = useState([]);
+
+  const decoderRef = useRef(new TextDecoder());
+  const readerRef = useRef(null);
+  const bufferRef = useRef("");
+  const portRef = useRef(null);
+  const reconnectIntervalRef = useRef(null);
+  const isConnectingRef = useRef(false);
+  const isReadingRef = useRef(false);
+  const serialUnsupportedNotifiedRef = useRef(false);
+  const automaticRequestBlockedRef = useRef(false);
 
   const fetchData = async () => {
     const { data: rewardsPointsPercentage } =
@@ -72,6 +84,169 @@ const CashierSalePage = ({ history }) => {
   useEffect(() => {
     fetchData();
   }, [currentUser.branch_id]);
+
+  async function ensurePortOpen(serialPort) {
+    if (!serialPort.readable) {
+      await serialPort.open({ baudRate: DEFAULT_BAUD_RATE });
+    }
+  }
+
+  async function connectPort() {
+    if (isConnectingRef.current || portRef.current) return;
+
+    if (typeof navigator === "undefined" || !navigator.serial) {
+      if (!serialUnsupportedNotifiedRef.current) {
+        toast.error("Web Serial API is not supported in this browser.");
+        serialUnsupportedNotifiedRef.current = true;
+      }
+      return;
+    }
+
+    isConnectingRef.current = true;
+    try {
+      const availablePorts = await navigator.serial.getPorts();
+      let serialPort = availablePorts.length > 0 ? availablePorts[0] : null;
+
+      if (!serialPort && !automaticRequestBlockedRef.current) {
+        try {
+          serialPort = await navigator.serial.requestPort();
+        } catch (error) {
+          automaticRequestBlockedRef.current = true;
+          console.warn("Serial port permission request failed:", error);
+          return;
+        }
+      }
+
+      if (!serialPort) {
+        return;
+      }
+
+      await ensurePortOpen(serialPort);
+      portRef.current = serialPort;
+      startReading(serialPort);
+    } catch (error) {
+      console.error("Failed to connect to serial port:", error);
+    } finally {
+      isConnectingRef.current = false;
+    }
+  }
+
+  async function disconnectPort() {
+    const activePort = portRef.current;
+    await stopReading();
+    if (activePort) {
+      try {
+        await activePort.close();
+      } catch (error) {
+        console.warn("Error closing port:", error);
+      }
+      portRef.current = null;
+    }
+  }
+
+  async function startReading(activePort = portRef.current) {
+    if (!activePort || !activePort.readable || isReadingRef.current) {
+      return;
+    }
+    bufferRef.current = "";
+    isReadingRef.current = true;
+    let reader;
+    try {
+      reader = activePort.readable.getReader();
+      readerRef.current = reader;
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        if (value) {
+          const chunk = decoderRef.current.decode(value);
+          handleIncomingChunk(chunk);
+        }
+      }
+    } catch (error) {
+      console.error("Read loop error:", error);
+    } finally {
+      if (reader) {
+        try {
+          reader.releaseLock();
+        } catch (error) {
+          console.warn("Error releasing reader lock:", error);
+        }
+      }
+      readerRef.current = null;
+      isReadingRef.current = false;
+      if (!activePort.readable && portRef.current === activePort) {
+        portRef.current = null;
+        if (reconnectIntervalRef.current) {
+          connectPort();
+        }
+      }
+    }
+  }
+
+  async function stopReading() {
+    const reader = readerRef.current;
+    readerRef.current = null;
+    bufferRef.current = "";
+    isReadingRef.current = false;
+    if (reader) {
+      try {
+        await reader.cancel();
+      } catch (error) {
+        console.warn("Error cancelling reader:", error);
+      }
+      try {
+        reader.releaseLock();
+      } catch (error) {
+        console.warn("Error releasing reader lock:", error);
+      }
+    }
+  }
+
+  function handleIncomingChunk(chunk) {
+    bufferRef.current += chunk;
+    const normalized = bufferRef.current.replace(/\r\n/g, "\n");
+    const parts = normalized.split(/\r|\n/);
+    for (let i = 0; i < parts.length - 1; i++) {
+      const line = parts[i].trim();
+      if (line) {
+        handleBarcodeMatch(line);
+      }
+    }
+    bufferRef.current = parts[parts.length - 1];
+  }
+
+  function handleBarcodeMatch(rawValue) {
+    const barcode = rawValue.trim();
+    if (!barcode) return;
+    handleProductSearch(barcode);
+  }
+
+  useEffect(() => {
+    if (
+      typeof navigator === "undefined" ||
+      typeof window === "undefined" ||
+      !navigator.serial
+    ) {
+      return () => {};
+    }
+
+    connectPort();
+
+    const intervalId = window.setInterval(() => {
+      if (!portRef.current) {
+        connectPort();
+      }
+    }, 30000);
+    reconnectIntervalRef.current = intervalId;
+
+    return () => {
+      if (reconnectIntervalRef.current) {
+        clearInterval(reconnectIntervalRef.current);
+        reconnectIntervalRef.current = null;
+      }
+      disconnectPort();
+    };
+  }, []);
 
   const handleSort = (sortColumn) => {
     setSortColumn({ sortColumn });
